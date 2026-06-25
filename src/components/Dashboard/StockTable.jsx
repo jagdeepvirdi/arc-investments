@@ -2,24 +2,35 @@ import { useCallback, useRef } from 'react'
 import { ChevronUp, ChevronDown, ChevronsUpDown, TrendingUp, TrendingDown } from 'lucide-react'
 import useAppStore from '../../store/useAppStore.js'
 
-const COLUMNS = [
-  { key: 'ticker',       label: 'Ticker',       align: 'left' },
-  { key: 'name',         label: 'Company',      align: 'left' },
-  { key: 'currentPrice', label: 'Price (THB)',  align: 'right' },
-  { key: 'changePct',    label: 'Change %',     align: 'right' },
-  { key: 'volume',       label: 'Volume',       align: 'right' },
-  { key: 'pe',           label: 'P/E',          align: 'right' },
-  { key: 'de',           label: 'D/E',          align: 'right' },
-  { key: 'roe',          label: 'ROE',          align: 'right' },
-  { key: 'fcf',          label: 'FCF (B)',       align: 'right' },
-  { key: 'marketCap',    label: 'Mkt Cap (B)',  align: 'right' },
-  { key: 'trend',        label: 'Trend',        align: 'right' },
-]
+const TREND_START_LABELS = {
+  launch: 'IPO Price',
+  ytd:    'Jan 1 Price',
+  '1y':   '1Y Ago Price',
+  '5y':   '5Y Ago Price',
+}
+
+function buildColumns(trendHorizon) {
+  return [
+    { key: 'ticker',          label: 'Ticker',                              align: 'left',  sortable: true },
+    { key: 'name',            label: 'Company',                             align: 'left',  sortable: true },
+    { key: 'currentPrice',    label: 'Price (THB)',                         align: 'right', sortable: true },
+    { key: 'trendBasePrice',  label: TREND_START_LABELS[trendHorizon] ?? 'Start Price', align: 'right', sortable: false },
+    { key: 'changePct',       label: 'Change %',                            align: 'right', sortable: true },
+    { key: 'volume',          label: 'Volume',                              align: 'right', sortable: true },
+    { key: 'pe',              label: 'P/E',                                 align: 'right', sortable: true },
+    { key: 'de',              label: 'D/E',                                 align: 'right', sortable: true },
+    { key: 'roe',             label: 'ROE',                                 align: 'right', sortable: true },
+    { key: 'fcf',             label: 'FCF (B)',                             align: 'right', sortable: true },
+    { key: 'marketCap',       label: 'Mkt Cap (B)',                         align: 'right', sortable: true },
+    { key: 'trend',           label: 'Trend',                               align: 'right', sortable: true },
+  ]
+}
 
 function fmt(val, key) {
   if (val === null || val === undefined) return '—'
   switch (key) {
-    case 'currentPrice': return val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    case 'currentPrice':
+    case 'trendBasePrice': return val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     case 'changePct':    return (val >= 0 ? '+' : '') + val.toFixed(2) + '%'
     case 'volume':       return val >= 1_000_000 ? (val / 1_000_000).toFixed(1) + 'M' : val.toLocaleString()
     case 'pe':           return val <= 0 ? '—' : val.toFixed(1) + 'x'
@@ -45,7 +56,10 @@ export function StockTable({ stocks }) {
   const sortDir          = useAppStore(s => s.sortDir)
   const setSort          = useAppStore(s => s.setSort)
   const setSelectedStock = useAppStore(s => s.setSelectedStock)
+  const trendHorizon     = useAppStore(s => s.trendHorizon)
   const tbodyRef = useRef(null)
+
+  const COLUMNS = buildColumns(trendHorizon)
 
   const handleRowClick = useCallback((ticker) => {
     setSelectedStock(ticker)
@@ -85,22 +99,23 @@ export function StockTable({ stocks }) {
 
   return (
     <div className="overflow-auto flex-1">
-      <table className="w-full text-xs border-collapse min-w-[1100px]">
+      <table className="w-full text-xs border-collapse min-w-[1260px]">
         <thead className="sticky top-0 z-10 bg-surface border-b border-border">
           <tr>
             {COLUMNS.map(col => (
               <th
                 key={col.key}
-                onClick={() => setSort(col.key)}
+                onClick={() => col.sortable && setSort(col.key)}
                 className={`
                   px-4 py-2.5 text-muted font-medium tracking-wide uppercase text-[10px]
-                  cursor-pointer select-none whitespace-nowrap hover:text-body transition-colors
+                  select-none whitespace-nowrap transition-colors
+                  ${col.sortable ? 'cursor-pointer hover:text-body' : 'cursor-default'}
                   ${col.align === 'right' ? 'text-right' : 'text-left'}
                 `}
               >
                 <span className="inline-flex items-center gap-0.5">
                   {col.label}
-                  <SortIcon col={col.key} sortKey={sortKey} sortDir={sortDir} />
+                  {col.sortable && <SortIcon col={col.key} sortKey={sortKey} sortDir={sortDir} />}
                 </span>
               </th>
             ))}
@@ -140,6 +155,10 @@ export function StockTable({ stocks }) {
                 {/* Price */}
                 <td className="px-4 py-2.5 text-right font-price text-heading font-medium">
                   {fmt(stock.currentPrice, 'currentPrice')}
+                </td>
+                {/* Start Price (trend reference) */}
+                <td className="px-4 py-2.5 text-right font-price text-muted">
+                  {fmt(stock.trendBasePrice, 'trendBasePrice')}
                 </td>
                 {/* Change % */}
                 <td className={`px-4 py-2.5 text-right font-price font-medium ${isUp ? 'text-bullish' : 'text-bearish'}`}>

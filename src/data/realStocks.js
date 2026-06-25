@@ -2,8 +2,10 @@
  * Real data adapter — loaded after running fetch_data.py.
  *
  * Strategy:
- *   Stocks with real data  → real currentPrice, change, changePct, volume, name, ipoDate, ipoPrice
- *                            + mock pe, de, fcf, roe, dividendYield, marketCap, sectorAvgPE, volatility
+ *   Stocks with real data  → real price fields always
+ *                            + real fundamentals (pe, de, fcf, roe, dividendYield,
+ *                              payoutRatio, epsGrowth, revenueGrowth) when available
+ *                            + mock fallback for any missing fundamentals
  *   Skipped stocks (404)   → 100% mock data so the index count stays complete
  *
  * Charts use realPriceHistory.js for real candles; PRNG fallback for skipped stocks.
@@ -19,7 +21,10 @@ import { STOCKS as MOCK_SSET   } from './mockSset.js'
 import { STOCKS as MOCK_MAI    } from './mockMai.js'
 
 /**
- * Merge: keep all mock stocks; overlay real price fields where available.
+ * Merge: keep all mock stocks; overlay real fields where available.
+ * Price fields are always taken from real data.
+ * Fundamental fields are overlaid only when present in the real JSON —
+ * missing/null fields silently fall back to mock values.
  * @param {object[]} realArr - fetched from Yahoo Finance
  * @param {object[]} mockArr - full mock list (all stocks)
  * @returns {object[]}
@@ -32,8 +37,8 @@ function buildStocks(realArr, mockArr) {
     if (!real) return { ...mock, isRealData: false }
 
     return {
-      ...mock,                          // pe, de, fcf, roe, dividendYield, marketCap, sectorAvgPE, volatility
-      // override with real fields
+      ...mock,
+      // Price / identity — always from real
       name:         real.name         || mock.name,
       sector:       real.sector       || mock.sector,
       ipoDate:      real.ipoDate      || mock.ipoDate,
@@ -42,7 +47,16 @@ function buildStocks(realArr, mockArr) {
       change:       real.change,
       changePct:    real.changePct,
       volume:       real.volume,
-      isRealData:   true,
+      // Fundamentals — real when present, mock as fallback
+      ...(real.pe            != null && { pe:            real.pe }),
+      ...(real.de            != null && { de:            real.de }),
+      ...(real.fcf           != null && { fcf:           real.fcf }),
+      ...(real.roe           != null && { roe:           real.roe }),
+      ...(real.dividendYield != null && { dividendYield: real.dividendYield }),
+      ...(real.payoutRatio   != null && { payoutRatio:   real.payoutRatio }),
+      ...(real.epsGrowth     != null && { epsGrowth:     real.epsGrowth }),
+      ...(real.revenueGrowth != null && { revenueGrowth: real.revenueGrowth }),
+      isRealData: true,
     }
   })
 }

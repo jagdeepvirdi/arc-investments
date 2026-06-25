@@ -1,9 +1,11 @@
 {
-  "lastFetched": "2026-06-25T08:30:41.000Z",
+  "lastFetched": "2026-06-25T11:06:15.000Z",
   "set100Count": 96,
   "set100Total": 100,
   "ssetCount": 42,
   "ssetTotal": 50,
+  "maiCount": 26,
+  "maiTotal": 38,
   "skipped": {
     "SET100": [
       "PRUK",
@@ -20,6 +22,20 @@
       "STEC",
       "EASY",
       "JWD"
+    ],
+    "MAI": [
+      "JKN",
+      "NMG",
+      "ROBOT",
+      "HPMT",
+      "TYM",
+      "TWFP",
+      "UNIUN",
+      "PANKO",
+      "PDI",
+      "WFRESH",
+      "PRANDA",
+      "SLC"
     ]
   }
 }

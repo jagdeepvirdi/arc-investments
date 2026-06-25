@@ -4,21 +4,21 @@
     "name": "Planet Communications Asia Public Company Limited",
     "sector": "Technology",
     "ipoDate": "2014-06-23",
-    "ipoPrice": 3.86,
+    "ipoPrice": 2.86,
     "currentPrice": 0.75,
-    "change": 0.0,
-    "changePct": 0.0,
-    "volume": 1066402
+    "change": -2.11,
+    "changePct": -73.78,
+    "volume": 1094902
   },
   {
     "ticker": "MST",
     "name": "Maybank Securities (Thailand) Public Company Limited",
     "sector": "Technology",
     "ipoDate": "2003-12-03",
-    "ipoPrice": 59.0,
+    "ipoPrice": 12.9,
     "currentPrice": 7.2,
-    "change": 0.0,
-    "changePct": 0.0,
+    "change": -5.7,
+    "changePct": -44.19,
     "volume": 6700
   },
   {
@@ -26,120 +26,120 @@
     "name": "MFC Smart Fixed Income",
     "sector": "Technology",
     "ipoDate": "2014-10-02",
-    "ipoPrice": 1.93,
-    "currentPrice": 0.54,
-    "change": 0.0,
-    "changePct": 0.0,
-    "volume": 653525
+    "ipoPrice": 0.95,
+    "currentPrice": 0.53,
+    "change": -0.42,
+    "changePct": -44.21,
+    "volume": 654926
   },
   {
     "ticker": "UBIS",
     "name": "Ubis (Asia) Public Company Limited",
     "sector": "Technology",
     "ipoDate": "2007-05-09",
-    "ipoPrice": 1.39,
-    "currentPrice": 1.34,
-    "change": -0.03,
-    "changePct": -2.19,
-    "volume": 106500
+    "ipoPrice": 6.82,
+    "currentPrice": 1.37,
+    "change": -5.45,
+    "changePct": -79.95,
+    "volume": 161682
   },
   {
     "ticker": "SMT",
     "name": "Stars Microelectronics (Thailand) Public Company Limited",
     "sector": "Technology",
     "ipoDate": "2009-09-24",
-    "ipoPrice": 3.07,
-    "currentPrice": 3.56,
-    "change": 0.06,
-    "changePct": 1.71,
-    "volume": 623600
+    "ipoPrice": 6.65,
+    "currentPrice": 3.64,
+    "change": -3.01,
+    "changePct": -45.26,
+    "volume": 1062100
   },
   {
     "ticker": "DRT",
     "name": "Diamond Building Products Public Company Limited",
     "sector": "Manufacturing",
     "ipoDate": "2005-11-29",
-    "ipoPrice": 1.2,
+    "ipoPrice": 8.1,
     "currentPrice": 5.0,
-    "change": 0.0,
-    "changePct": 0.0,
-    "volume": 242271
+    "change": -3.1,
+    "changePct": -38.27,
+    "volume": 261271
   },
   {
     "ticker": "INOX",
     "name": "POSCO-Thainox Public Company Limited",
     "sector": "Manufacturing",
     "ipoDate": "2004-12-14",
-    "ipoPrice": 20.2,
+    "ipoPrice": 11.8,
     "currentPrice": 4.2,
-    "change": 0.0,
-    "changePct": 0.0,
-    "volume": 23641
+    "change": -7.6,
+    "changePct": -64.41,
+    "volume": 45441
   },
   {
     "ticker": "SIMAT",
     "name": "Simat Technologies Public Company Limited",
     "sector": "Manufacturing",
     "ipoDate": "2007-12-12",
-    "ipoPrice": 1.47,
-    "currentPrice": 1.35,
-    "change": 0.01,
-    "changePct": 0.75,
-    "volume": 1035300
+    "ipoPrice": 5.4,
+    "currentPrice": 1.34,
+    "change": -4.06,
+    "changePct": -75.19,
+    "volume": 1080900
   },
   {
     "ticker": "SNC",
     "name": "SNC Former Public Company Limited",
     "sector": "Manufacturing",
     "ipoDate": "2004-10-21",
-    "ipoPrice": 3.04,
+    "ipoPrice": 14.6,
     "currentPrice": 6.7,
-    "change": 0.05,
-    "changePct": 0.75,
-    "volume": 44501
+    "change": -7.9,
+    "changePct": -54.11,
+    "volume": 83601
   },
   {
     "ticker": "STANLY",
     "name": "Thai Stanley Electric Public Company Limited",
     "sector": "Manufacturing",
     "ipoDate": "2000-06-29",
-    "ipoPrice": 16.0,
+    "ipoPrice": 183.5,
     "currentPrice": 246.0,
-    "change": 1.0,
-    "changePct": 0.41,
-    "volume": 24144
+    "change": 62.5,
+    "changePct": 34.06,
+    "volume": 26546
   },
   {
     "ticker": "SYNTEC",
     "name": "Syntec Construction Public Company Limited",
     "sector": "Manufacturing",
     "ipoDate": "2003-05-26",
-    "ipoPrice": 3.26,
-    "currentPrice": 1.63,
-    "change": -0.02,
-    "changePct": -1.21,
-    "volume": 3698700
+    "ipoPrice": 2.02,
+    "currentPrice": 1.62,
+    "change": -0.4,
+    "changePct": -19.8,
+    "volume": 4181100
   },
   {
     "ticker": "CHO",
     "name": "Cho Thavee Public Company Limited",
     "sector": "Industrial",
     "ipoDate": "2013-05-13",
-    "ipoPrice": 31.76,
+    "ipoPrice": 18.29,
     "currentPrice": 0.03,
-    "change": 0.0,
-    "changePct": 0.0,
-    "volume": 880080
+    "change": -18.26,
+    "changePct": -99.84,
+    "volume": 885380
   },
   {
     "ticker": "GENCO",
     "name": "General Environmental Conservation Public Company Limited",
     "sector": "Industrial",
     "ipoDate": "2000-09-28",
-    "ipoPrice": 1.93,
+    "ipoPrice": 1.06,
     "currentPrice": 0.33,
-    "change": 0.0,
-    "changePct": 0.0,
+    "change": -0.73,
+    "changePct": -68.87,
     "volume": 30200
   },
   {
@@ -147,21 +147,21 @@
     "name": "Yong Concrete Public Company Limited",
     "sector": "Industrial",
     "ipoDate": "2022-08-02",
-    "ipoPrice": 2.52,
-    "currentPrice": 0.71,
-    "change": 0.01,
-    "changePct": 1.43,
-    "volume": 67500
+    "ipoPrice": 2.62,
+    "currentPrice": 0.72,
+    "change": -3.78,
+    "changePct": -84.0,
+    "volume": 84000
   },
   {
     "ticker": "SORKON",
     "name": "S. Khonkaen Foods Public Company Limited",
     "sector": "Property",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 0.17,
+    "ipoPrice": 4.66,
     "currentPrice": 3.54,
-    "change": 0.0,
-    "changePct": 0.0,
+    "change": -1.12,
+    "changePct": -24.03,
     "volume": 69910
   },
   {
@@ -169,120 +169,120 @@
     "name": "S.Kijchai Enterprise Public Company Limited",
     "sector": "Property",
     "ipoDate": "2017-09-26",
-    "ipoPrice": 9.4,
-    "currentPrice": 5.5,
-    "change": 0.15,
-    "changePct": 2.8,
-    "volume": 26102
+    "ipoPrice": 5.6,
+    "currentPrice": 5.55,
+    "change": -0.05,
+    "changePct": -0.89,
+    "volume": 28902
   },
   {
     "ticker": "MOONG",
     "name": "Moong Pattana International Public Company Limited",
     "sector": "Property",
     "ipoDate": "2009-10-01",
-    "ipoPrice": 0.96,
+    "ipoPrice": 2.55,
     "currentPrice": 2.3,
-    "change": 0.0,
-    "changePct": 0.0,
-    "volume": 57700
+    "change": -0.25,
+    "changePct": -9.8,
+    "volume": 58811
   },
   {
     "ticker": "TMI",
     "name": "Teera-Mongkol Industry Public Company Limited",
     "sector": "Property",
     "ipoDate": "2010-05-14",
-    "ipoPrice": 1.1,
+    "ipoPrice": 1.2,
     "currentPrice": 0.48,
-    "change": -0.01,
-    "changePct": -2.04,
-    "volume": 127908
+    "change": -0.72,
+    "changePct": -60.0,
+    "volume": 604308
   },
   {
     "ticker": "TIGER",
     "name": "Thai Enger Holding Public Company Limited",
     "sector": "Food & Beverage",
     "ipoDate": "2018-10-24",
-    "ipoPrice": 3.7,
+    "ipoPrice": 2.74,
     "currentPrice": 0.68,
-    "change": -0.02,
-    "changePct": -2.86,
-    "volume": 682967
+    "change": -2.06,
+    "changePct": -75.18,
+    "volume": 863767
   },
   {
     "ticker": "COCOCO",
     "name": "Thai Coconut Public Company Limited",
     "sector": "Food & Beverage",
     "ipoDate": "2023-09-14",
-    "ipoPrice": 9.25,
-    "currentPrice": 5.7,
-    "change": 0.15,
-    "changePct": 2.7,
-    "volume": 5864834
+    "ipoPrice": 7.9,
+    "currentPrice": 5.65,
+    "change": -2.35,
+    "changePct": -29.38,
+    "volume": 7212634
   },
   {
     "ticker": "VIBHA",
     "name": "Vibhavadi Medical Center Public Company Limited",
     "sector": "Healthcare",
     "ipoDate": "2000-01-20",
-    "ipoPrice": 0.05,
-    "currentPrice": 1.35,
-    "change": -0.01,
-    "changePct": -0.74,
-    "volume": 513783
+    "ipoPrice": 2.42,
+    "currentPrice": 1.36,
+    "change": -1.06,
+    "changePct": -43.8,
+    "volume": 743583
   },
   {
     "ticker": "BGC",
     "name": "BG Container Glass Public Company Limited",
     "sector": "Consumer",
     "ipoDate": "2018-10-18",
-    "ipoPrice": 12.3,
-    "currentPrice": 7.05,
-    "change": 0.0,
-    "changePct": 0.0,
-    "volume": 336500
+    "ipoPrice": 10.1,
+    "currentPrice": 7.0,
+    "change": -3.1,
+    "changePct": -30.69,
+    "volume": 344500
   },
   {
     "ticker": "TSE",
     "name": "Thai Solar Energy Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2014-10-30",
-    "ipoPrice": 8.24,
+    "ipoPrice": 2.98,
     "currentPrice": 0.71,
-    "change": 0.0,
-    "changePct": 0.0,
-    "volume": 3198600
+    "change": -2.27,
+    "changePct": -76.17,
+    "volume": 3687201
   },
   {
     "ticker": "TAE",
     "name": "Thai Agro Energy Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2014-06-05",
-    "ipoPrice": 4.24,
-    "currentPrice": 1.34,
-    "change": -0.09,
-    "changePct": -6.29,
-    "volume": 11171475
+    "ipoPrice": 2.46,
+    "currentPrice": 1.37,
+    "change": -1.09,
+    "changePct": -44.31,
+    "volume": 12238277
   },
   {
     "ticker": "PSTC",
     "name": "Power Solution Technologies Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2014-12-19",
-    "ipoPrice": 7.25,
-    "currentPrice": 0.33,
-    "change": 0.01,
-    "changePct": 3.12,
-    "volume": 240300
+    "ipoPrice": 2.68,
+    "currentPrice": 0.32,
+    "change": -2.36,
+    "changePct": -88.06,
+    "volume": 399500
   },
   {
     "ticker": "JCK",
     "name": "JCK International Public Company Limited",
     "sector": "Services",
     "ipoDate": "1991-05-15",
-    "ipoPrice": 2.84,
-    "currentPrice": 0.12,
-    "change": 0.01,
-    "changePct": 9.09,
-    "volume": 6581044
+    "ipoPrice": 1.16,
+    "currentPrice": 0.11,
+    "change": -1.05,
+    "changePct": -90.52,
+    "volume": 6691044
   }
 ]

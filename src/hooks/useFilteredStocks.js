@@ -137,7 +137,9 @@ export function useFilteredStocks({
         ? ((stock.currentPrice - basePrice) / basePrice) * 100
         : 0
 
-      return { ...stock, trend, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish, ...growth }
+      // Spread growth first so real stock fields (epsGrowth, revenueGrowth, payoutRatio
+      // from Yahoo Finance via realStocks.js) take priority over seeded mock values.
+      return { ...growth, ...stock, trend, trendBasePrice: basePrice ?? null, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish }
     })
 
     // Data quality
