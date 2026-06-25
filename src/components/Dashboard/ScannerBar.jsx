@@ -1,4 +1,4 @@
-import { TrendingUp, TrendingDown } from 'lucide-react'
+import { TrendingUp, TrendingDown, ShieldCheck } from 'lucide-react'
 import { Chip } from '../UI/Chip.jsx'
 import useAppStore from '../../store/useAppStore.js'
 
@@ -15,9 +15,11 @@ export function ScannerBar({ scannerCounts }) {
   const activeScanners  = useAppStore(s => s.activeScanners)
   const trendDirection  = useAppStore(s => s.trendDirection)
   const todayDirection  = useAppStore(s => s.todayDirection)
-  const toggleScanner   = useAppStore(s => s.toggleScanner)
+  const hideMockData      = useAppStore(s => s.hideMockData)
+  const toggleScanner     = useAppStore(s => s.toggleScanner)
   const setTrendDirection = useAppStore(s => s.setTrendDirection)
   const setTodayDirection = useAppStore(s => s.setTodayDirection)
+  const toggleHideMockData = useAppStore(s => s.toggleHideMockData)
 
   return (
     <div className="flex items-center flex-wrap gap-2 px-6 py-2.5 border-b border-border bg-bg shrink-0">
@@ -74,6 +76,18 @@ export function ScannerBar({ scannerCounts }) {
           {s.label}
         </Chip>
       ))}
+
+      {DIVIDER}
+
+      {/* ── Data quality ──────────────────────────────────────────────────── */}
+      <Chip
+        active={hideMockData}
+        onClick={toggleHideMockData}
+        variant="bullish"
+      >
+        <ShieldCheck size={11} />
+        Real Data Only
+      </Chip>
     </div>
   )
 }

@@ -70,6 +70,7 @@ export function useFilteredStocks({
   trendHorizon,
   trendDirection,
   todayDirection,
+  hideMockData,
   sortKey,
   sortDir,
 }) {
@@ -117,6 +118,8 @@ export function useFilteredStocks({
       return { ...stock, trend, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish }
     })
 
+    if (hideMockData) list = list.filter(s => s.isRealData !== false)
+
     if (q) {
       list = list.filter(s =>
         s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)
@@ -142,7 +145,7 @@ export function useFilteredStocks({
     })
 
     return list
-  }, [activeIndex, searchQuery, activeScanners, trendHorizon, trendDirection, todayDirection, sortKey, sortDir])
+  }, [activeIndex, searchQuery, activeScanners, trendHorizon, trendDirection, todayDirection, hideMockData, sortKey, sortDir])
 
   return { stocks, totalCount: allStocks.length, scannerCounts }
 }

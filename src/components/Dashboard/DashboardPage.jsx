@@ -18,6 +18,7 @@ export default function DashboardPage() {
   const sortKey        = useAppStore(s => s.sortKey)
   const sortDir        = useAppStore(s => s.sortDir)
   const activeIndex    = useAppStore(s => s.activeIndex)
+  const hideMockData   = useAppStore(s => s.hideMockData)
   const selectedStock  = useAppStore(s => s.selectedStock)
 
   const { stocks, totalCount, scannerCounts } = useFilteredStocks({
@@ -27,6 +28,7 @@ export default function DashboardPage() {
     trendHorizon,
     trendDirection,
     todayDirection,
+    hideMockData,
     sortKey,
     sortDir,
   })

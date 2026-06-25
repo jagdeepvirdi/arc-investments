@@ -24,6 +24,8 @@ const useAppStore = create((set) => ({
   trendDirection: null,
   /** @type {Direction} — filter by today's price change */
   todayDirection: null,
+  /** @type {boolean} — hide stocks whose prices are still mock (not fetched from Yahoo Finance) */
+  hideMockData: false,
 
   // Reset all filters when switching index so stale scanner results don't carry over
   setActiveIndex: (id) => set({
@@ -33,6 +35,7 @@ const useAppStore = create((set) => ({
     searchQuery: '',
     trendDirection: null,
     todayDirection: null,
+    hideMockData: false,
   }),
   setSelectedStock: (ticker) => set({ selectedStock: ticker }),
   setTrendHorizon: (horizon) => set({ trendHorizon: horizon }),
@@ -53,6 +56,7 @@ const useAppStore = create((set) => ({
   setTodayDirection: (dir) => set((state) => ({
     todayDirection: state.todayDirection === dir ? null : dir,
   })),
+  toggleHideMockData: () => set((state) => ({ hideMockData: !state.hideMockData })),
 }))
 
 export default useAppStore
