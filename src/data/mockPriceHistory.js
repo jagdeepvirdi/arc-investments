@@ -1,4 +1,5 @@
 import { ALL_STOCKS_MAP } from './indices.js'
+import { getStockHistory as getRealHistory } from './realPriceHistory.js'
 
 /**
  * Mulberry32 seeded PRNG — deterministic, fast, good distribution.
@@ -151,6 +152,13 @@ const _cache = new Map()
  */
 export function getStockHistory(ticker) {
   if (_cache.has(ticker)) return _cache.get(ticker)
+
+  // Real data takes priority; PRNG fallback for tickers not in Yahoo Finance
+  const real = getRealHistory(ticker)
+  if (real.length > 0) {
+    _cache.set(ticker, real)
+    return real
+  }
 
   const stock = ALL_STOCKS_MAP[ticker]
   if (!stock) return []

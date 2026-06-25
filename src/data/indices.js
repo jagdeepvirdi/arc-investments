@@ -1,5 +1,4 @@
-import { STOCKS as SET100_STOCKS, STOCKS_MAP as SET100_MAP, SECTORS as SET100_SECTORS } from './mockStocks.js'
-import { STOCKS as SSET_STOCKS, STOCKS_MAP as SSET_MAP, SECTORS as SSET_SECTORS } from './mockSset.js'
+import { SET100_STOCKS, SET100_MAP, SET100_SECTORS, SSET_STOCKS, SSET_MAP, SSET_SECTORS } from './realStocks.js'
 
 /**
  * @typedef {{ id: string, label: string, description: string, stocks: import('./mockStocks.js').Stock[], stocksMap: Object, sectors: string[] }} IndexDef

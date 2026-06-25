@@ -59,6 +59,12 @@ export default function StockTerminal() {
               <div>
                 <div className="flex items-center gap-2">
                   <span className="text-heading font-semibold text-base font-price">{stock.ticker}</span>
+                  {!stock.isRealData && (
+                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded
+                                     bg-amber-500/10 text-amber-500/80 border border-amber-500/25">
+                      MOCK DATA
+                    </span>
+                  )}
                   <span className={`font-price text-base font-medium ${isUp ? 'text-bullish' : 'text-bearish'}`}>
                     ฿{stock.currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </span>

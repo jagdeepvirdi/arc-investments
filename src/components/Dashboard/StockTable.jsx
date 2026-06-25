@@ -125,8 +125,15 @@ export function StockTable({ stocks }) {
                 `}
               >
                 {/* Ticker */}
-                <td className="px-4 py-2.5 font-price text-accent font-medium whitespace-nowrap">
-                  {stock.ticker}
+                <td className="px-4 py-2.5 font-price whitespace-nowrap">
+                  <span className="text-accent font-medium">{stock.ticker}</span>
+                  {!stock.isRealData && (
+                    <span className="ml-1.5 text-[9px] font-medium px-1 py-0.5 rounded
+                                     bg-amber-500/10 text-amber-500/80 border border-amber-500/20
+                                     align-middle">
+                      MOCK
+                    </span>
+                  )}
                 </td>
                 {/* Name */}
                 <td className="px-4 py-2.5 text-body max-w-[200px] truncate">{stock.name}</td>

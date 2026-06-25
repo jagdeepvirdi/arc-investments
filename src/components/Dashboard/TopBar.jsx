@@ -2,6 +2,7 @@ import { Search } from 'lucide-react'
 import { Dropdown } from '../UI/Dropdown.jsx'
 import useAppStore from '../../store/useAppStore.js'
 import { INDICES } from '../../data/indices.js'
+import dataStatus from '../../data/real/meta.json'
 
 const TREND_OPTIONS = [
   { value: 'ytd',    label: 'YTD' },
@@ -9,6 +10,9 @@ const TREND_OPTIONS = [
   { value: '5y',     label: '5-Year' },
   { value: 'launch', label: 'Since Launch' },
 ]
+
+const _fetched = new Date(dataStatus.lastFetched)
+const LAST_UPDATED = _fetched.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 
 export function TopBar() {
   const searchQuery    = useAppStore(s => s.searchQuery)
@@ -69,6 +73,14 @@ export function TopBar() {
           onChange={setTrendHorizon}
           options={TREND_OPTIONS}
         />
+
+        {/* Last data load timestamp */}
+        <div className="flex items-center gap-1.5 pl-2 border-l border-border">
+          <span className="w-1.5 h-1.5 rounded-full bg-bullish/70 shrink-0" aria-hidden="true" />
+          <span className="text-[10px] text-muted whitespace-nowrap">
+            {LAST_UPDATED}
+          </span>
+        </div>
       </div>
     </header>
   )

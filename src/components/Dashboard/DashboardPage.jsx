@@ -1,5 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { TopBar } from './TopBar.jsx'
+import { MarketOverviewBar } from './MarketOverviewBar.jsx'
 import { ScannerBar } from './ScannerBar.jsx'
 import { StockTable } from './StockTable.jsx'
 import { Spinner } from '../UI/Spinner.jsx'
@@ -33,6 +34,7 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col h-screen overflow-hidden">
       <TopBar />
+      <MarketOverviewBar />
       <ScannerBar scannerCounts={scannerCounts} />
 
       {/* Row count */}

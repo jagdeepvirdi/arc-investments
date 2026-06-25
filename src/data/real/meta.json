@@ -1,0 +1,25 @@
+{
+  "lastFetched": "2026-06-25T08:30:41.000Z",
+  "set100Count": 96,
+  "set100Total": 100,
+  "ssetCount": 42,
+  "ssetTotal": 50,
+  "skipped": {
+    "SET100": [
+      "PRUK",
+      "INTUCH",
+      "DMK",
+      "GL"
+    ],
+    "SSET": [
+      "OISHI",
+      "CS",
+      "NUSA",
+      "PACE",
+      "COTTO",
+      "STEC",
+      "EASY",
+      "JWD"
+    ]
+  }
+}
