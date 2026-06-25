@@ -21,7 +21,7 @@
 
 /** @type {Stock[]} */
 export const STOCKS = [
-  // ── Energy (12) ─────────────────────────────────────────────────────────────
+  // ── Energy (15) ─────────────────────────────────────────────────────────────
   {
     ticker: 'PTT', name: 'PTT Public Company Limited', sector: 'Energy',
     ipoDate: '2001-11-06', ipoPrice: 35,
@@ -83,19 +83,37 @@ export const STOCKS = [
     pe: 9.8, de: 0.6, fcf: 7.8, roe: 8.5, dividendYield: 5.2, sectorAvgPE: 13.5, volatility: 0.022,
   },
   {
-    ticker: 'ESSO', name: 'Esso (Thailand) PCL', sector: 'Energy',
-    ipoDate: '1997-07-01', ipoPrice: 10,
-    currentPrice: 14.20, change: -0.20, changePct: -1.39, volume: 12_000_000, marketCap: 24.0,
-    pe: 8.2, de: 0.4, fcf: 2.1, roe: 7.2, dividendYield: 3.5, sectorAvgPE: 13.5, volatility: 0.025,
-  },
-  {
     ticker: 'SPRC', name: 'Star Petroleum Refining PCL', sector: 'Energy',
     ipoDate: '2015-07-10', ipoPrice: 10,
     currentPrice: 8.95, change: 0.05, changePct: 0.56, volume: 22_000_000, marketCap: 21.5,
     pe: 7.5, de: 0.3, fcf: 2.8, roe: 9.4, dividendYield: 6.8, sectorAvgPE: 13.5, volatility: 0.026,
   },
+  {
+    ticker: 'PTTGC', name: 'PTT Global Chemical PCL', sector: 'Energy',
+    ipoDate: '2011-10-19', ipoPrice: 48,
+    currentPrice: 38.25, change: -0.75, changePct: -1.92, volume: 8_500_000, marketCap: 138.0,
+    pe: 11.2, de: 0.8, fcf: 8.5, roe: 7.5, dividendYield: 4.8, sectorAvgPE: 13.5, volatility: 0.022,
+  },
+  {
+    ticker: 'BANPU', name: 'Banpu PCL', sector: 'Energy',
+    ipoDate: '1993-01-01', ipoPrice: 10,
+    currentPrice: 5.50, change: -0.05, changePct: -0.90, volume: 42_000_000, marketCap: 24.5,
+    pe: 6.8, de: 1.5, fcf: 3.2, roe: 8.5, dividendYield: 5.5, sectorAvgPE: 13.5, volatility: 0.030,
+  },
+  {
+    ticker: 'BCP', name: 'Bangchak Corporation PCL', sector: 'Energy',
+    ipoDate: '1993-06-01', ipoPrice: 10,
+    currentPrice: 31.50, change: 0.25, changePct: 0.80, volume: 8_200_000, marketCap: 44.0,
+    pe: 8.5, de: 1.0, fcf: 5.5, roe: 10.5, dividendYield: 5.8, sectorAvgPE: 13.5, volatility: 0.022,
+  },
+  {
+    ticker: 'OR', name: 'PTT Oil and Retail Business PCL', sector: 'Energy',
+    ipoDate: '2021-02-11', ipoPrice: 18,
+    currentPrice: 15.80, change: -0.10, changePct: -0.63, volume: 42_000_000, marketCap: 237.0,
+    pe: 22.5, de: 0.5, fcf: 4.5, roe: 8.5, dividendYield: 2.5, sectorAvgPE: 13.5, volatility: 0.018,
+  },
 
-  // ── Banking (9) ──────────────────────────────────────────────────────────────
+  // ── Banking (8) ──────────────────────────────────────────────────────────────
   {
     ticker: 'KBANK', name: 'Kasikornbank PCL', sector: 'Banking',
     ipoDate: '1976-01-01', ipoPrice: 10,
@@ -144,19 +162,19 @@ export const STOCKS = [
     currentPrice: 38.50, change: 0.50, changePct: 1.32, volume: 4_200_000, marketCap: 32.0,
     pe: 7.2, de: 0.0, fcf: 5.8, roe: 9.5, dividendYield: 5.2, sectorAvgPE: 9.2, volatility: 0.017,
   },
-  {
-    ticker: 'BAY', name: 'Bank of Ayudhya PCL', sector: 'Banking',
-    ipoDate: '1977-01-01', ipoPrice: 10,
-    currentPrice: 29.25, change: -0.25, changePct: -0.85, volume: 18_000_000, marketCap: 182.0,
-    pe: 10.1, de: 0.0, fcf: 22.0, roe: 9.2, dividendYield: 3.4, sectorAvgPE: 9.2, volatility: 0.016,
-  },
 
-  // ── Property (10) ────────────────────────────────────────────────────────────
+  // ── Property (15) ────────────────────────────────────────────────────────────
   {
     ticker: 'CPN', name: 'Central Pattana PCL', sector: 'Property',
     ipoDate: '1995-09-01', ipoPrice: 5,
     currentPrice: 58.25, change: 0.75, changePct: 1.30, volume: 12_500_000, marketCap: 258.0,
     pe: 28.5, de: 0.9, fcf: 9.2, roe: 11.5, dividendYield: 2.8, sectorAvgPE: 20.5, volatility: 0.020,
+  },
+  {
+    ticker: 'AWC', name: 'Asset World Corp PCL', sector: 'Property',
+    ipoDate: '2019-10-10', ipoPrice: 6.50,
+    currentPrice: 4.62, change: -0.04, changePct: -0.86, volume: 38_000_000, marketCap: 178.0,
+    pe: 28.5, de: 1.2, fcf: 3.5, roe: 5.5, dividendYield: 1.2, sectorAvgPE: 20.5, volatility: 0.020,
   },
   {
     ticker: 'LH', name: 'Land and Houses PCL', sector: 'Property',
@@ -212,19 +230,37 @@ export const STOCKS = [
     currentPrice: 1.28, change: 0.01, changePct: 0.79, volume: 58_000_000, marketCap: 8.5,
     pe: 10.8, de: 2.2, fcf: 0.6, roe: 9.5, dividendYield: 5.5, sectorAvgPE: 20.5, volatility: 0.035,
   },
+  {
+    ticker: 'LPN', name: 'L.P.N. Development PCL', sector: 'Property',
+    ipoDate: '1994-01-01', ipoPrice: 5,
+    currentPrice: 6.45, change: 0.05, changePct: 0.78, volume: 22_000_000, marketCap: 8.5,
+    pe: 9.5, de: 0.6, fcf: 0.8, roe: 9.8, dividendYield: 7.5, sectorAvgPE: 20.5, volatility: 0.028,
+  },
+  {
+    ticker: 'PRUK', name: 'Pruksa Real Estate PCL', sector: 'Property',
+    ipoDate: '2013-01-01', ipoPrice: 22,
+    currentPrice: 19.80, change: -0.20, changePct: -1.00, volume: 12_000_000, marketCap: 26.5,
+    pe: 10.5, de: 1.2, fcf: 1.8, roe: 12.5, dividendYield: 5.8, sectorAvgPE: 20.5, volatility: 0.026,
+  },
+  {
+    ticker: 'AMATA', name: 'Amata Corporation PCL', sector: 'Property',
+    ipoDate: '1996-01-01', ipoPrice: 10,
+    currentPrice: 22.50, change: 0.25, changePct: 1.12, volume: 8_500_000, marketCap: 22.5,
+    pe: 14.5, de: 0.8, fcf: 1.5, roe: 10.5, dividendYield: 4.2, sectorAvgPE: 20.5, volatility: 0.024,
+  },
+  {
+    ticker: 'WHA', name: 'WHA Corporation PCL', sector: 'Property',
+    ipoDate: '2012-01-01', ipoPrice: 2,
+    currentPrice: 3.42, change: 0.02, changePct: 0.59, volume: 48_000_000, marketCap: 18.5,
+    pe: 18.5, de: 1.5, fcf: 0.8, roe: 8.5, dividendYield: 3.5, sectorAvgPE: 20.5, volatility: 0.028,
+  },
 
-  // ── Telecom (4) ──────────────────────────────────────────────────────────────
+  // ── Telecom (3) ──────────────────────────────────────────────────────────────
   {
     ticker: 'ADVANC', name: 'Advanced Info Service PCL', sector: 'Telecom',
     ipoDate: '1991-11-05', ipoPrice: 10,
     currentPrice: 195.00, change: -2.00, changePct: -1.02, volume: 8_500_000, marketCap: 570.0,
     pe: 24.5, de: 2.5, fcf: 28.5, roe: 38.5, dividendYield: 4.2, sectorAvgPE: 22.0, volatility: 0.015,
-  },
-  {
-    ticker: 'DTAC', name: 'Total Access Communication PCL', sector: 'Telecom',
-    ipoDate: '1995-01-01', ipoPrice: 10,
-    currentPrice: 46.25, change: 0.25, changePct: 0.54, volume: 5_200_000, marketCap: 108.0,
-    pe: 18.5, de: 1.8, fcf: 8.5, roe: 22.5, dividendYield: 5.8, sectorAvgPE: 22.0, volatility: 0.016,
   },
   {
     ticker: 'TRUE', name: 'True Corporation PCL', sector: 'Telecom',
@@ -239,7 +275,7 @@ export const STOCKS = [
     pe: 20.2, de: 0.5, fcf: 12.5, roe: 18.5, dividendYield: 5.6, sectorAvgPE: 22.0, volatility: 0.015,
   },
 
-  // ── Consumer (7) ─────────────────────────────────────────────────────────────
+  // ── Consumer (10) ────────────────────────────────────────────────────────────
   {
     ticker: 'CPALL', name: 'CP All PCL', sector: 'Consumer',
     ipoDate: '2003-12-16', ipoPrice: 5,
@@ -277,13 +313,31 @@ export const STOCKS = [
     pe: 15.8, de: 0.8, fcf: 1.2, roe: 12.5, dividendYield: 2.8, sectorAvgPE: 26.5, volatility: 0.025,
   },
   {
-    ticker: 'MAKRO', name: 'Siam Makro PCL', sector: 'Consumer',
+    ticker: 'CPAXT', name: 'CP Axtra PCL (formerly Makro)', sector: 'Consumer',
     ipoDate: '1994-01-01', ipoPrice: 10,
     currentPrice: 38.50, change: 0.50, changePct: 1.32, volume: 4_800_000, marketCap: 207.0,
     pe: 35.5, de: 1.1, fcf: 5.8, roe: 15.5, dividendYield: 1.8, sectorAvgPE: 26.5, volatility: 0.016,
   },
+  {
+    ticker: 'GLOBAL', name: 'Siam Global House PCL', sector: 'Consumer',
+    ipoDate: '2010-01-01', ipoPrice: 5,
+    currentPrice: 16.20, change: -0.20, changePct: -1.22, volume: 18_000_000, marketCap: 48.5,
+    pe: 18.5, de: 0.6, fcf: 2.8, roe: 16.5, dividendYield: 3.8, sectorAvgPE: 26.5, volatility: 0.022,
+  },
+  {
+    ticker: 'CBG', name: 'Carabao Group PCL', sector: 'Consumer',
+    ipoDate: '2014-05-21', ipoPrice: 20,
+    currentPrice: 68.50, change: 0.50, changePct: 0.74, volume: 5_200_000, marketCap: 55.5,
+    pe: 22.5, de: 0.5, fcf: 2.8, roe: 28.5, dividendYield: 3.5, sectorAvgPE: 26.5, volatility: 0.022,
+  },
+  {
+    ticker: 'OSP', name: 'Osotspa PCL', sector: 'Consumer',
+    ipoDate: '2019-06-21', ipoPrice: 35,
+    currentPrice: 37.25, change: 0.25, changePct: 0.67, volume: 6_800_000, marketCap: 58.0,
+    pe: 28.5, de: 0.8, fcf: 1.5, roe: 18.5, dividendYield: 2.8, sectorAvgPE: 26.5, volatility: 0.020,
+  },
 
-  // ── Healthcare (6) ───────────────────────────────────────────────────────────
+  // ── Healthcare (8) ───────────────────────────────────────────────────────────
   {
     ticker: 'BDMS', name: 'Bangkok Dusit Medical Services PCL', sector: 'Healthcare',
     ipoDate: '1990-01-01', ipoPrice: 3,
@@ -320,8 +374,20 @@ export const STOCKS = [
     currentPrice: 4.36, change: -0.04, changePct: -0.91, volume: 42_000_000, marketCap: 38.5,
     pe: 45.5, de: 0.6, fcf: 0.8, roe: 8.2, dividendYield: 1.5, sectorAvgPE: 38.0, volatility: 0.025,
   },
+  {
+    ticker: 'DMK', name: 'Dusit Medical Services PCL', sector: 'Healthcare',
+    ipoDate: '2010-01-01', ipoPrice: 6,
+    currentPrice: 20.50, change: 0.25, changePct: 1.23, volume: 8_500_000, marketCap: 18.5,
+    pe: 32.5, de: 0.6, fcf: 0.8, roe: 10.5, dividendYield: 2.5, sectorAvgPE: 38.0, volatility: 0.020,
+  },
+  {
+    ticker: 'RJH', name: 'Rajavithi Hospital PCL', sector: 'Healthcare',
+    ipoDate: '2018-01-01', ipoPrice: 12,
+    currentPrice: 18.40, change: -0.10, changePct: -0.54, volume: 5_800_000, marketCap: 8.5,
+    pe: 28.5, de: 0.3, fcf: 0.5, roe: 12.5, dividendYield: 2.2, sectorAvgPE: 38.0, volatility: 0.022,
+  },
 
-  // ── Industry / Materials (4) ─────────────────────────────────────────────────
+  // ── Industry / Materials (10) ─────────────────────────────────────────────────
   {
     ticker: 'SCC', name: 'Siam Cement Group PCL', sector: 'Industry',
     ipoDate: '1992-01-01', ipoPrice: 100,
@@ -329,10 +395,16 @@ export const STOCKS = [
     pe: 14.5, de: 1.2, fcf: 22.5, roe: 10.5, dividendYield: 4.0, sectorAvgPE: 15.5, volatility: 0.018,
   },
   {
-    ticker: 'SCCC', name: 'Siam City Cement PCL', sector: 'Industry',
-    ipoDate: '1979-01-01', ipoPrice: 25,
-    currentPrice: 168.00, change: 1.50, changePct: 0.90, volume: 1_200_000, marketCap: 42.5,
-    pe: 12.8, de: 0.8, fcf: 4.2, roe: 12.5, dividendYield: 5.5, sectorAvgPE: 15.5, volatility: 0.020,
+    ticker: 'IVL', name: 'Indorama Ventures PCL', sector: 'Industry',
+    ipoDate: '2010-02-05', ipoPrice: 28,
+    currentPrice: 30.75, change: -0.25, changePct: -0.81, volume: 12_000_000, marketCap: 110.0,
+    pe: 12.5, de: 1.8, fcf: 8.5, roe: 8.5, dividendYield: 4.2, sectorAvgPE: 15.5, volatility: 0.022,
+  },
+  {
+    ticker: 'SCGP', name: 'SCG Packaging PCL', sector: 'Industry',
+    ipoDate: '2020-10-09', ipoPrice: 35,
+    currentPrice: 44.25, change: 0.25, changePct: 0.57, volume: 8_500_000, marketCap: 175.0,
+    pe: 22.5, de: 1.2, fcf: 5.5, roe: 9.5, dividendYield: 2.8, sectorAvgPE: 15.5, volatility: 0.018,
   },
   {
     ticker: 'TPIPL', name: 'TPI Polene PCL', sector: 'Industry',
@@ -345,6 +417,36 @@ export const STOCKS = [
     ipoDate: '1998-01-01', ipoPrice: 10,
     currentPrice: 24.50, change: -0.25, changePct: -1.01, volume: 8_500_000, marketCap: 12.5,
     pe: 8.5, de: 0.5, fcf: 1.5, roe: 11.5, dividendYield: 6.5, sectorAvgPE: 15.5, volatility: 0.022,
+  },
+  {
+    ticker: 'HANA', name: 'Hana Microelectronics PCL', sector: 'Industry',
+    ipoDate: '1995-01-01', ipoPrice: 10,
+    currentPrice: 42.50, change: 0.50, changePct: 1.19, volume: 5_200_000, marketCap: 18.5,
+    pe: 12.5, de: 0.2, fcf: 2.5, roe: 18.5, dividendYield: 7.5, sectorAvgPE: 15.5, volatility: 0.022,
+  },
+  {
+    ticker: 'DELTA', name: 'Delta Electronics (Thailand) PCL', sector: 'Industry',
+    ipoDate: '1988-01-01', ipoPrice: 10,
+    currentPrice: 68.50, change: 1.00, changePct: 1.48, volume: 8_500_000, marketCap: 128.5,
+    pe: 28.5, de: 0.3, fcf: 4.5, roe: 22.5, dividendYield: 2.8, sectorAvgPE: 15.5, volatility: 0.020,
+  },
+  {
+    ticker: 'KCE', name: 'KCE Electronics PCL', sector: 'Industry',
+    ipoDate: '2001-01-01', ipoPrice: 5,
+    currentPrice: 42.75, change: -0.75, changePct: -1.72, volume: 4_800_000, marketCap: 28.5,
+    pe: 18.5, de: 0.5, fcf: 2.2, roe: 15.5, dividendYield: 4.5, sectorAvgPE: 15.5, volatility: 0.022,
+  },
+  {
+    ticker: 'CCET', name: 'Cal-Comp Electronics (Thailand) PCL', sector: 'Industry',
+    ipoDate: '2005-01-01', ipoPrice: 5,
+    currentPrice: 3.82, change: 0.04, changePct: 1.06, volume: 22_000_000, marketCap: 14.0,
+    pe: 12.5, de: 0.6, fcf: 1.2, roe: 8.5, dividendYield: 4.5, sectorAvgPE: 15.5, volatility: 0.025,
+  },
+  {
+    ticker: 'EASTW', name: 'Eastern Water Resources PCL', sector: 'Industry',
+    ipoDate: '1997-01-01', ipoPrice: 5,
+    currentPrice: 8.25, change: 0.05, changePct: 0.61, volume: 12_000_000, marketCap: 12.5,
+    pe: 14.5, de: 0.9, fcf: 0.8, roe: 10.5, dividendYield: 5.5, sectorAvgPE: 15.5, volatility: 0.018,
   },
 
   // ── Food & Agri (7) ──────────────────────────────────────────────────────────
@@ -391,7 +493,7 @@ export const STOCKS = [
     pe: 35.5, de: 1.5, fcf: 1.5, roe: 9.5, dividendYield: 1.5, sectorAvgPE: 22.0, volatility: 0.022,
   },
 
-  // ── Transport (6) ────────────────────────────────────────────────────────────
+  // ── Transport (8) ────────────────────────────────────────────────────────────
   {
     ticker: 'AOT', name: 'Airports of Thailand PCL', sector: 'Transport',
     ipoDate: '2004-06-30', ipoPrice: 10,
@@ -428,6 +530,18 @@ export const STOCKS = [
     currentPrice: 2.82, change: 0.04, changePct: 1.44, volume: 32_000_000, marketCap: 4.5,
     pe: 0.0, de: 8.5, fcf: -0.5, roe: -15.5, dividendYield: 0.0, sectorAvgPE: 30.0, volatility: 0.045,
   },
+  {
+    ticker: 'THAI', name: 'Thai Airways International PCL', sector: 'Transport',
+    ipoDate: '1991-01-01', ipoPrice: 10,
+    currentPrice: 5.35, change: 0.05, changePct: 0.94, volume: 62_000_000, marketCap: 22.5,
+    pe: 0.0, de: 12.5, fcf: -2.5, roe: -8.5, dividendYield: 0.0, sectorAvgPE: 30.0, volatility: 0.040,
+  },
+  {
+    ticker: 'TTA', name: 'Thoresen Thai Agencies PCL', sector: 'Transport',
+    ipoDate: '1994-01-01', ipoPrice: 10,
+    currentPrice: 16.80, change: 0.30, changePct: 1.82, volume: 8_500_000, marketCap: 14.5,
+    pe: 8.5, de: 1.2, fcf: 1.5, roe: 8.5, dividendYield: 3.5, sectorAvgPE: 30.0, volatility: 0.028,
+  },
 
   // ── Tech / Media (4) ─────────────────────────────────────────────────────────
   {
@@ -449,13 +563,13 @@ export const STOCKS = [
     pe: 12.5, de: 0.2, fcf: 0.5, roe: 12.5, dividendYield: 6.5, sectorAvgPE: 25.0, volatility: 0.030,
   },
   {
-    ticker: 'JMART', name: 'JMart PCL', sector: 'Tech / Media',
+    ticker: 'JMART', name: 'JMT Group PCL', sector: 'Tech / Media',
     ipoDate: '2011-01-01', ipoPrice: 10,
     currentPrice: 22.25, change: -0.25, changePct: -1.11, volume: 18_500_000, marketCap: 38.5,
     pe: 22.5, de: 1.2, fcf: 1.5, roe: 18.5, dividendYield: 3.5, sectorAvgPE: 25.0, volatility: 0.028,
   },
 
-  // ── Financials non-bank (5) ──────────────────────────────────────────────────
+  // ── Financials non-bank (12) ──────────────────────────────────────────────────
   {
     ticker: 'MTC', name: 'Muangthai Capital PCL', sector: 'Financials',
     ipoDate: '2015-07-21', ipoPrice: 20,
@@ -486,150 +600,6 @@ export const STOCKS = [
     currentPrice: 2.86, change: 0.04, changePct: 1.42, volume: 48_000_000, marketCap: 8.5,
     pe: 8.5, de: 6.5, fcf: 0.8, roe: 8.5, dividendYield: 2.5, sectorAvgPE: 18.0, volatility: 0.032,
   },
-
-  // ── Energy additional (3) ────────────────────────────────────────────────────
-  {
-    ticker: 'PTTGC', name: 'PTT Global Chemical PCL', sector: 'Energy',
-    ipoDate: '2011-10-19', ipoPrice: 48,
-    currentPrice: 38.25, change: -0.75, changePct: -1.92, volume: 8_500_000, marketCap: 138.0,
-    pe: 11.2, de: 0.8, fcf: 8.5, roe: 7.5, dividendYield: 4.8, sectorAvgPE: 13.5, volatility: 0.022,
-  },
-  {
-    ticker: 'BANPU', name: 'Banpu PCL', sector: 'Energy',
-    ipoDate: '1993-01-01', ipoPrice: 10,
-    currentPrice: 5.50, change: -0.05, changePct: -0.90, volume: 42_000_000, marketCap: 24.5,
-    pe: 6.8, de: 1.5, fcf: 3.2, roe: 8.5, dividendYield: 5.5, sectorAvgPE: 13.5, volatility: 0.030,
-  },
-  {
-    ticker: 'GLOW', name: 'GLOW Energy PCL', sector: 'Energy',
-    ipoDate: '2004-01-01', ipoPrice: 18,
-    currentPrice: 89.50, change: 0.50, changePct: 0.56, volume: 1_200_000, marketCap: 52.5,
-    pe: 18.5, de: 1.2, fcf: 3.8, roe: 12.5, dividendYield: 3.8, sectorAvgPE: 13.5, volatility: 0.018,
-  },
-
-  // ── Banking additional (1) ────────────────────────────────────────────────────
-  {
-    ticker: 'LHFG', name: 'LH Financial Group PCL', sector: 'Banking',
-    ipoDate: '2012-01-01', ipoPrice: 1.5,
-    currentPrice: 1.42, change: -0.01, changePct: -0.70, volume: 88_000_000, marketCap: 28.5,
-    pe: 8.5, de: 0.0, fcf: 2.2, roe: 8.2, dividendYield: 5.5, sectorAvgPE: 9.2, volatility: 0.020,
-  },
-
-  // ── Property additional (4) ──────────────────────────────────────────────────
-  {
-    ticker: 'LPN', name: 'L.P.N. Development PCL', sector: 'Property',
-    ipoDate: '1994-01-01', ipoPrice: 5,
-    currentPrice: 6.45, change: 0.05, changePct: 0.78, volume: 22_000_000, marketCap: 8.5,
-    pe: 9.5, de: 0.6, fcf: 0.8, roe: 9.8, dividendYield: 7.5, sectorAvgPE: 20.5, volatility: 0.028,
-  },
-  {
-    ticker: 'PRUK', name: 'Pruksa Real Estate PCL', sector: 'Property',
-    ipoDate: '2013-01-01', ipoPrice: 22,
-    currentPrice: 19.80, change: -0.20, changePct: -1.00, volume: 12_000_000, marketCap: 26.5,
-    pe: 10.5, de: 1.2, fcf: 1.8, roe: 12.5, dividendYield: 5.8, sectorAvgPE: 20.5, volatility: 0.026,
-  },
-  {
-    ticker: 'AMATA', name: 'Amata Corporation PCL', sector: 'Property',
-    ipoDate: '1996-01-01', ipoPrice: 10,
-    currentPrice: 22.50, change: 0.25, changePct: 1.12, volume: 8_500_000, marketCap: 22.5,
-    pe: 14.5, de: 0.8, fcf: 1.5, roe: 10.5, dividendYield: 4.2, sectorAvgPE: 20.5, volatility: 0.024,
-  },
-  {
-    ticker: 'WHA', name: 'WHA Corporation PCL', sector: 'Property',
-    ipoDate: '2012-01-01', ipoPrice: 2,
-    currentPrice: 3.42, change: 0.02, changePct: 0.59, volume: 48_000_000, marketCap: 18.5,
-    pe: 18.5, de: 1.5, fcf: 0.8, roe: 8.5, dividendYield: 3.5, sectorAvgPE: 20.5, volatility: 0.028,
-  },
-
-  // ── Consumer additional (3) ──────────────────────────────────────────────────
-  {
-    ticker: 'GLOBAL', name: 'Siam Global House PCL', sector: 'Consumer',
-    ipoDate: '2010-01-01', ipoPrice: 5,
-    currentPrice: 16.20, change: -0.20, changePct: -1.22, volume: 18_000_000, marketCap: 48.5,
-    pe: 18.5, de: 0.6, fcf: 2.8, roe: 16.5, dividendYield: 3.8, sectorAvgPE: 26.5, volatility: 0.022,
-  },
-  {
-    ticker: 'BEAUTY', name: 'Beauty Community PCL', sector: 'Consumer',
-    ipoDate: '2014-01-01', ipoPrice: 4,
-    currentPrice: 6.25, change: 0.05, changePct: 0.81, volume: 22_000_000, marketCap: 12.5,
-    pe: 22.5, de: 0.4, fcf: 0.8, roe: 18.5, dividendYield: 4.5, sectorAvgPE: 26.5, volatility: 0.028,
-  },
-  {
-    ticker: 'SINGER', name: 'Singer Thailand PCL', sector: 'Consumer',
-    ipoDate: '1993-01-01', ipoPrice: 10,
-    currentPrice: 12.50, change: 0.10, changePct: 0.81, volume: 5_200_000, marketCap: 4.5,
-    pe: 15.5, de: 2.8, fcf: 0.5, roe: 12.5, dividendYield: 5.5, sectorAvgPE: 26.5, volatility: 0.026,
-  },
-
-  // ── Healthcare additional (2) ─────────────────────────────────────────────────
-  {
-    ticker: 'DMK', name: 'Dusit Medical Services PCL', sector: 'Healthcare',
-    ipoDate: '2010-01-01', ipoPrice: 6,
-    currentPrice: 20.50, change: 0.25, changePct: 1.23, volume: 8_500_000, marketCap: 18.5,
-    pe: 32.5, de: 0.6, fcf: 0.8, roe: 10.5, dividendYield: 2.5, sectorAvgPE: 38.0, volatility: 0.020,
-  },
-  {
-    ticker: 'RJH', name: 'Rajavithi Hospital PCL', sector: 'Healthcare',
-    ipoDate: '2018-01-01', ipoPrice: 12,
-    currentPrice: 18.40, change: -0.10, changePct: -0.54, volume: 5_800_000, marketCap: 8.5,
-    pe: 28.5, de: 0.3, fcf: 0.5, roe: 12.5, dividendYield: 2.2, sectorAvgPE: 38.0, volatility: 0.022,
-  },
-
-  // ── Industry additional (4) ──────────────────────────────────────────────────
-  {
-    ticker: 'HANA', name: 'Hana Microelectronics PCL', sector: 'Industry',
-    ipoDate: '1995-01-01', ipoPrice: 10,
-    currentPrice: 42.50, change: 0.50, changePct: 1.19, volume: 5_200_000, marketCap: 18.5,
-    pe: 12.5, de: 0.2, fcf: 2.5, roe: 18.5, dividendYield: 7.5, sectorAvgPE: 15.5, volatility: 0.022,
-  },
-  {
-    ticker: 'DELTA', name: 'Delta Electronics (Thailand) PCL', sector: 'Industry',
-    ipoDate: '1988-01-01', ipoPrice: 10,
-    currentPrice: 68.50, change: 1.00, changePct: 1.48, volume: 8_500_000, marketCap: 128.5,
-    pe: 28.5, de: 0.3, fcf: 4.5, roe: 22.5, dividendYield: 2.8, sectorAvgPE: 15.5, volatility: 0.020,
-  },
-  {
-    ticker: 'KCE', name: 'KCE Electronics PCL', sector: 'Industry',
-    ipoDate: '2001-01-01', ipoPrice: 5,
-    currentPrice: 42.75, change: -0.75, changePct: -1.72, volume: 4_800_000, marketCap: 28.5,
-    pe: 18.5, de: 0.5, fcf: 2.2, roe: 15.5, dividendYield: 4.5, sectorAvgPE: 15.5, volatility: 0.022,
-  },
-  {
-    ticker: 'EASTW', name: 'Eastern Water Resources PCL', sector: 'Industry',
-    ipoDate: '1997-01-01', ipoPrice: 5,
-    currentPrice: 8.25, change: 0.05, changePct: 0.61, volume: 12_000_000, marketCap: 12.5,
-    pe: 14.5, de: 0.9, fcf: 0.8, roe: 10.5, dividendYield: 5.5, sectorAvgPE: 15.5, volatility: 0.018,
-  },
-
-  // ── Transport additional (2) ─────────────────────────────────────────────────
-  {
-    ticker: 'THAI', name: 'Thai Airways International PCL', sector: 'Transport',
-    ipoDate: '1991-01-01', ipoPrice: 10,
-    currentPrice: 5.35, change: 0.05, changePct: 0.94, volume: 62_000_000, marketCap: 22.5,
-    pe: 0.0, de: 12.5, fcf: -2.5, roe: -8.5, dividendYield: 0.0, sectorAvgPE: 30.0, volatility: 0.040,
-  },
-  {
-    ticker: 'TTA', name: 'Thoresen Thai Agencies PCL', sector: 'Transport',
-    ipoDate: '1994-01-01', ipoPrice: 10,
-    currentPrice: 16.80, change: 0.30, changePct: 1.82, volume: 8_500_000, marketCap: 14.5,
-    pe: 8.5, de: 1.2, fcf: 1.5, roe: 8.5, dividendYield: 3.5, sectorAvgPE: 30.0, volatility: 0.028,
-  },
-
-  // ── Tech / Media additional (2) ──────────────────────────────────────────────
-  {
-    ticker: 'INSET', name: 'Internet Thailand PCL', sector: 'Tech / Media',
-    ipoDate: '2002-01-01', ipoPrice: 3,
-    currentPrice: 4.82, change: -0.04, changePct: -0.82, volume: 28_000_000, marketCap: 8.5,
-    pe: 18.5, de: 0.4, fcf: 0.5, roe: 12.5, dividendYield: 3.5, sectorAvgPE: 25.0, volatility: 0.030,
-  },
-  {
-    ticker: 'JYSS', name: 'Jaymart PCL', sector: 'Tech / Media',
-    ipoDate: '2016-01-01', ipoPrice: 8,
-    currentPrice: 12.40, change: 0.10, changePct: 0.81, volume: 12_500_000, marketCap: 9.5,
-    pe: 14.5, de: 0.8, fcf: 0.6, roe: 14.5, dividendYield: 4.5, sectorAvgPE: 25.0, volatility: 0.030,
-  },
-
-  // ── Financials additional (5) ────────────────────────────────────────────────
   {
     ticker: 'TIDLOR', name: 'Ngern Tid Lor PCL', sector: 'Financials',
     ipoDate: '2021-05-28', ipoPrice: 36.5,
@@ -643,22 +613,34 @@ export const STOCKS = [
     pe: 9.5, de: 5.2, fcf: 0.8, roe: 12.5, dividendYield: 6.5, sectorAvgPE: 18.0, volatility: 0.024,
   },
   {
-    ticker: 'TMT', name: 'Thaimetal PCL', sector: 'Financials',
+    ticker: 'TMT', name: 'Thai Metal Trade PCL', sector: 'Financials',
     ipoDate: '2008-01-01', ipoPrice: 4,
     currentPrice: 3.68, change: -0.02, changePct: -0.54, volume: 18_000_000, marketCap: 4.5,
     pe: 10.5, de: 1.8, fcf: 0.4, roe: 9.5, dividendYield: 5.5, sectorAvgPE: 18.0, volatility: 0.030,
+  },
+  {
+    ticker: 'KTC', name: 'Krungthai Card PCL', sector: 'Financials',
+    ipoDate: '2002-11-27', ipoPrice: 5,
+    currentPrice: 54.25, change: 0.75, changePct: 1.40, volume: 8_500_000, marketCap: 65.0,
+    pe: 18.5, de: 4.5, fcf: 4.5, roe: 22.5, dividendYield: 3.8, sectorAvgPE: 18.0, volatility: 0.019,
+  },
+  {
+    ticker: 'TLI', name: 'Thai Life Insurance PCL', sector: 'Financials',
+    ipoDate: '2022-09-28', ipoPrice: 10,
+    currentPrice: 13.80, change: 0.20, changePct: 1.47, volume: 12_500_000, marketCap: 55.0,
+    pe: 18.5, de: 0.2, fcf: 5.5, roe: 8.5, dividendYield: 2.5, sectorAvgPE: 18.0, volatility: 0.017,
+  },
+  {
+    ticker: 'JMT', name: 'JMT Network Services PCL', sector: 'Financials',
+    ipoDate: '2017-02-16', ipoPrice: 5,
+    currentPrice: 22.50, change: -0.25, changePct: -1.10, volume: 18_000_000, marketCap: 28.0,
+    pe: 18.5, de: 2.5, fcf: 1.5, roe: 18.5, dividendYield: 2.8, sectorAvgPE: 18.0, volatility: 0.025,
   },
   {
     ticker: 'PHOL', name: 'Phol Dhanya PCL', sector: 'Financials',
     ipoDate: '2005-01-01', ipoPrice: 5,
     currentPrice: 8.25, change: 0.05, changePct: 0.61, volume: 8_500_000, marketCap: 6.5,
     pe: 12.5, de: 2.5, fcf: 0.6, roe: 11.5, dividendYield: 4.8, sectorAvgPE: 18.0, volatility: 0.026,
-  },
-  {
-    ticker: 'MTLS', name: 'Muangthai Leasing PCL', sector: 'Financials',
-    ipoDate: '2020-01-01', ipoPrice: 20,
-    currentPrice: 32.50, change: 0.50, changePct: 1.56, volume: 8_200_000, marketCap: 28.5,
-    pe: 22.5, de: 3.8, fcf: 2.2, roe: 18.5, dividendYield: 2.8, sectorAvgPE: 18.0, volatility: 0.022,
   },
 ]
 
