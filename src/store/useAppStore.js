@@ -10,7 +10,7 @@ const useAppStore = create((set) => ({
   /** @type {string|null} */
   selectedStock: null,
   /** @type {'launch'|'5y'|'1y'|'ytd'} */
-  trendHorizon: 'ytd',
+  trendHorizon: 'launch',
   /** @type {string} */
   searchQuery: '',
   /** @type {string} */
@@ -18,7 +18,7 @@ const useAppStore = create((set) => ({
   /** @type {'asc'|'desc'} */
   sortDir: 'desc',
   /** @type {boolean} */
-  hideMockData: false,
+  hideMockData: true,
   /** @type {boolean} */
   filterPanelOpen: false,
 
@@ -31,7 +31,7 @@ const useAppStore = create((set) => ({
     activeIndex: id,
     selectedStock: null,
     searchQuery: '',
-    hideMockData: false,
+    hideMockData: true,
     filterPanelOpen: false,
     ...FILTER_DEFAULTS,
   }),
@@ -69,7 +69,7 @@ const useAppStore = create((set) => ({
   },
 
   /** Clear all filters and search back to defaults */
-  clearAllFilters: () => set({ ...FILTER_DEFAULTS, searchQuery: '', hideMockData: false }),
+  clearAllFilters: () => set({ ...FILTER_DEFAULTS, searchQuery: '', hideMockData: true }),
 }))
 
 export default useAppStore
