@@ -58,12 +58,14 @@ const _signals = (() => {
  *   searchQuery: string,
  *   activeScanners: string[],
  *   trendHorizon: string,
+ *   trendDirection: 'up'|'down'|null,
+ *   todayDirection: 'up'|'down'|null,
  *   sortKey: string,
  *   sortDir: 'asc'|'desc'
  * }} filters
  * @returns {{ stocks: any[], scannerCounts: Object }}
  */
-export function useFilteredStocks({ searchQuery, activeScanners, trendHorizon, sortKey, sortDir }) {
+export function useFilteredStocks({ searchQuery, activeScanners, trendHorizon, trendDirection, todayDirection, sortKey, sortDir }) {
   const scannerCounts = useMemo(() => {
     const counts = { RSI_OVERSOLD: 0, RSI_OVERBOUGHT: 0, MACD_BULLISH: 0 }
     for (const stock of STOCKS) {
@@ -112,6 +114,14 @@ export function useFilteredStocks({ searchQuery, activeScanners, trendHorizon, s
       )
     }
 
+    // Direction filters (based on trend horizon %)
+    if (trendDirection === 'up')   list = list.filter(s => s.trend > 0)
+    if (trendDirection === 'down') list = list.filter(s => s.trend < 0)
+
+    // Today's change filter
+    if (todayDirection === 'up')   list = list.filter(s => s.changePct > 0)
+    if (todayDirection === 'down') list = list.filter(s => s.changePct < 0)
+
     // Scanner filters (AND logic)
     if (activeScanners.includes('RSI_OVERSOLD'))  list = list.filter(s => s.rsiLast < 30)
     if (activeScanners.includes('RSI_OVERBOUGHT')) list = list.filter(s => s.rsiLast > 70)
@@ -128,7 +138,7 @@ export function useFilteredStocks({ searchQuery, activeScanners, trendHorizon, s
     })
 
     return list
-  }, [searchQuery, activeScanners, trendHorizon, sortKey, sortDir])
+  }, [searchQuery, activeScanners, trendHorizon, trendDirection, todayDirection, sortKey, sortDir])
 
   return { stocks, scannerCounts }
 }

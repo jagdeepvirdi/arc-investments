@@ -12,6 +12,8 @@ export default function DashboardPage() {
   const searchQuery    = useAppStore(s => s.searchQuery)
   const activeScanners = useAppStore(s => s.activeScanners)
   const trendHorizon   = useAppStore(s => s.trendHorizon)
+  const trendDirection = useAppStore(s => s.trendDirection)
+  const todayDirection = useAppStore(s => s.todayDirection)
   const sortKey        = useAppStore(s => s.sortKey)
   const sortDir        = useAppStore(s => s.sortDir)
   const selectedStock  = useAppStore(s => s.selectedStock)
@@ -20,6 +22,8 @@ export default function DashboardPage() {
     searchQuery,
     activeScanners,
     trendHorizon,
+    trendDirection,
+    todayDirection,
     sortKey,
     sortDir,
   })

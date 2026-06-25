@@ -1,13 +1,20 @@
 /**
  * @param {{
  *   active?: boolean,
+ *   variant?: 'default'|'bullish'|'bearish',
  *   count?: number,
  *   onClick?: () => void,
  *   children: React.ReactNode,
  *   className?: string
  * }} props
  */
-export function Chip({ active = false, count, onClick, children, className = '' }) {
+export function Chip({ active = false, variant = 'default', count, onClick, children, className = '' }) {
+  const activeStyles = {
+    default:  'bg-accent border-accent text-white',
+    bullish:  'bg-bullish border-bullish text-white',
+    bearish:  'bg-bearish border-bearish text-white',
+  }
+
   return (
     <button
       type="button"
@@ -16,7 +23,7 @@ export function Chip({ active = false, count, onClick, children, className = '' 
         inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded
         border transition-colors duration-150 cursor-pointer
         ${active
-          ? 'bg-accent border-accent text-white'
+          ? activeStyles[variant]
           : 'bg-transparent border-border text-muted hover:border-accent/50 hover:text-body'
         } ${className}
       `}
