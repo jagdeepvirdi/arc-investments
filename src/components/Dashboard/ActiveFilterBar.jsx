@@ -4,7 +4,9 @@ import useAppStore from '../../store/useAppStore.js'
 function buildPills(state) {
   const {
     trendDirection, selectedSectors, peMin, peMax, deMin, deMax,
-    roeMin, roeMax, fcfFilter, rsiMin, rsiMax, macdFilter, hideMockData,
+    roeMin, roeMax, fcfFilter, rsiMin, rsiMax, macdFilter,
+    epsGrowthMin, revenueGrowthMin, divYieldMin, payoutRatioMax,
+    hideMockData,
     setFilter, setFilters, setSelectedSectors, toggleHideMockData,
   } = state
   const pills = []
@@ -71,6 +73,18 @@ function buildPills(state) {
       clear: () => setFilter('macdFilter', 'any'),
     })
   }
+  if (epsGrowthMin !== null) {
+    pills.push({ key: 'eps', label: `EPS ≥${epsGrowthMin}%`, clear: () => setFilter('epsGrowthMin', null) })
+  }
+  if (revenueGrowthMin !== null) {
+    pills.push({ key: 'rev', label: `Rev ≥${revenueGrowthMin}%`, clear: () => setFilter('revenueGrowthMin', null) })
+  }
+  if (divYieldMin !== null) {
+    pills.push({ key: 'divy', label: `Yield ≥${divYieldMin}%`, clear: () => setFilter('divYieldMin', null) })
+  }
+  if (payoutRatioMax !== null) {
+    pills.push({ key: 'payout', label: `Payout ≤${payoutRatioMax}%`, clear: () => setFilter('payoutRatioMax', null) })
+  }
   if (hideMockData) {
     pills.push({
       key: 'realdata',
@@ -97,6 +111,10 @@ export function ActiveFilterBar() {
   const rsiMin            = useAppStore(s => s.rsiMin)
   const rsiMax            = useAppStore(s => s.rsiMax)
   const macdFilter        = useAppStore(s => s.macdFilter)
+  const epsGrowthMin      = useAppStore(s => s.epsGrowthMin)
+  const revenueGrowthMin  = useAppStore(s => s.revenueGrowthMin)
+  const divYieldMin       = useAppStore(s => s.divYieldMin)
+  const payoutRatioMax    = useAppStore(s => s.payoutRatioMax)
   const hideMockData      = useAppStore(s => s.hideMockData)
   const setFilter         = useAppStore(s => s.setFilter)
   const setFilters        = useAppStore(s => s.setFilters)
@@ -105,7 +123,9 @@ export function ActiveFilterBar() {
 
   const pills = buildPills({
     trendDirection, selectedSectors, peMin, peMax, deMin, deMax,
-    roeMin, roeMax, fcfFilter, rsiMin, rsiMax, macdFilter, hideMockData,
+    roeMin, roeMax, fcfFilter, rsiMin, rsiMax, macdFilter,
+    epsGrowthMin, revenueGrowthMin, divYieldMin, payoutRatioMax,
+    hideMockData,
     setFilter, setFilters, setSelectedSectors, toggleHideMockData,
   })
 

@@ -31,13 +31,19 @@ export default function DashboardPage() {
   const rsiMin           = useAppStore(s => s.rsiMin)
   const rsiMax           = useAppStore(s => s.rsiMax)
   const macdFilter       = useAppStore(s => s.macdFilter)
+  const epsGrowthMin     = useAppStore(s => s.epsGrowthMin)
+  const revenueGrowthMin = useAppStore(s => s.revenueGrowthMin)
+  const divYieldMin      = useAppStore(s => s.divYieldMin)
+  const payoutRatioMax   = useAppStore(s => s.payoutRatioMax)
   const sortKey          = useAppStore(s => s.sortKey)
   const sortDir          = useAppStore(s => s.sortDir)
 
   const { stocks, totalCount } = useFilteredStocks({
     activeIndex, searchQuery, trendHorizon, trendDirection, hideMockData,
     selectedSectors, peMin, peMax, deMin, deMax, roeMin, roeMax,
-    fcfFilter, rsiMin, rsiMax, macdFilter, sortKey, sortDir,
+    fcfFilter, rsiMin, rsiMax, macdFilter,
+    epsGrowthMin, revenueGrowthMin, divYieldMin, payoutRatioMax,
+    sortKey, sortDir,
   })
 
   const handleExport = useCallback(() => {

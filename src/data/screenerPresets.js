@@ -69,6 +69,18 @@ export const PRESETS = [
     description: 'RSI > 70 — potential selling pressure',
     filters: { rsiMin: 70 },
   },
+  {
+    id: 'growth_stocks',
+    label: 'Growth Stocks',
+    description: 'EPS Growth > 10% and Revenue Growth > 10% — expanding Thai companies',
+    filters: { epsGrowthMin: 10, revenueGrowthMin: 10 },
+  },
+  {
+    id: 'dividend_stocks',
+    label: 'Dividend Stocks',
+    description: 'Dividend Yield > 4% with sustainable Payout Ratio < 70%',
+    filters: { divYieldMin: 4, payoutRatioMax: 70 },
+  },
 ]
 
 export const PRESETS_MAP = Object.fromEntries(PRESETS.map(p => [p.id, p]))
@@ -87,5 +99,9 @@ export const FILTER_DEFAULTS = {
   rsiMax: 100,
   macdFilter: 'any',      // 'any' | 'bullish'
   trendDirection: null,   // null | 'up' | 'down'
+  epsGrowthMin: null,     // % — EPS growth YoY minimum
+  revenueGrowthMin: null, // % — Revenue growth YoY minimum
+  divYieldMin: null,      // % — Dividend yield minimum
+  payoutRatioMax: null,   // % — Payout ratio maximum
   activePreset: null,
 }

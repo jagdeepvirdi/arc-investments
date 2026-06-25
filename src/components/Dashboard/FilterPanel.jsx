@@ -80,6 +80,10 @@ export function FilterPanel() {
   const rsiMin             = useAppStore(s => s.rsiMin)
   const rsiMax             = useAppStore(s => s.rsiMax)
   const macdFilter         = useAppStore(s => s.macdFilter)
+  const epsGrowthMin       = useAppStore(s => s.epsGrowthMin)
+  const revenueGrowthMin   = useAppStore(s => s.revenueGrowthMin)
+  const divYieldMin        = useAppStore(s => s.divYieldMin)
+  const payoutRatioMax     = useAppStore(s => s.payoutRatioMax)
   const hideMockData       = useAppStore(s => s.hideMockData)
   const setFilter          = useAppStore(s => s.setFilter)
   const setSelectedSectors = useAppStore(s => s.setSelectedSectors)
@@ -185,6 +189,28 @@ export function FilterPanel() {
             <p className="text-[10px] text-muted mb-1.5">Free Cash Flow</p>
             <RadioGroup name="fcf" value={fcfFilter} onChange={v => setFilter('fcfFilter', v)}
               options={[{ value: 'any', label: 'Any' }, { value: 'positive', label: 'Positive' }, { value: 'negative', label: 'Negative' }]} />
+          </div>
+        </Section>
+
+        <Section title="Growth (YoY)">
+          <div className="mb-2">
+            <p className="text-[10px] text-muted mb-1">EPS Growth % min</p>
+            <NumInput value={epsGrowthMin} onChange={v => setFilter('epsGrowthMin', v)} placeholder="e.g. 10" />
+          </div>
+          <div>
+            <p className="text-[10px] text-muted mb-1">Revenue Growth % min</p>
+            <NumInput value={revenueGrowthMin} onChange={v => setFilter('revenueGrowthMin', v)} placeholder="e.g. 10" />
+          </div>
+        </Section>
+
+        <Section title="Dividend">
+          <div className="mb-2">
+            <p className="text-[10px] text-muted mb-1">Yield % min</p>
+            <NumInput value={divYieldMin} onChange={v => setFilter('divYieldMin', v)} placeholder="e.g. 4" />
+          </div>
+          <div>
+            <p className="text-[10px] text-muted mb-1">Payout Ratio % max</p>
+            <NumInput value={payoutRatioMax} onChange={v => setFilter('payoutRatioMax', v)} placeholder="e.g. 70" />
           </div>
         </Section>
 

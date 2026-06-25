@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { INDICES_MAP } from '../data/indices.js'
 import { getStockHistory, getPriceAtDate } from '../data/mockPriceHistory.js'
 import { calcRSI, calcMACD } from '../data/indicators.js'
+import { getGrowthMetrics } from '../data/growthMetrics.js'
 
 function getYTDDate() {
   return `${new Date().getUTCFullYear()}-01-01`
@@ -15,6 +16,19 @@ function getDateYearsAgo(years) {
 
 // Lazy signal cache keyed by index ID -- computed once per index, never again
 const _signalCache = new Map()
+
+// Lazy growth-metrics cache keyed by index ID
+const _growthCache = new Map()
+
+function getGrowthMap(stocks, indexId) {
+  if (_growthCache.has(indexId)) return _growthCache.get(indexId)
+  const map = new Map()
+  for (const stock of stocks) {
+    map.set(stock.ticker, getGrowthMetrics(stock.ticker, stock.sector))
+  }
+  _growthCache.set(indexId, map)
+  return map
+}
 
 function getSignals(stocks, indexId) {
   if (_signalCache.has(indexId)) return _signalCache.get(indexId)
@@ -64,6 +78,10 @@ function getSignals(stocks, indexId) {
  *   fcfFilter: 'any'|'positive'|'negative',
  *   rsiMin: number, rsiMax: number,
  *   macdFilter: 'any'|'bullish',
+ *   epsGrowthMin: number|null,
+ *   revenueGrowthMin: number|null,
+ *   divYieldMin: number|null,
+ *   payoutRatioMax: number|null,
  *   sortKey: string,
  *   sortDir: 'asc'|'desc'
  * }} filters
@@ -82,12 +100,17 @@ export function useFilteredStocks({
   fcfFilter,
   rsiMin, rsiMax,
   macdFilter,
+  epsGrowthMin,
+  revenueGrowthMin,
+  divYieldMin,
+  payoutRatioMax,
   sortKey,
   sortDir,
 }) {
   const indexDef = INDICES_MAP[activeIndex]
   const allStocks = indexDef.stocks
-  const signals = getSignals(allStocks, activeIndex)
+  const signals   = getSignals(allStocks, activeIndex)
+  const growthMap = getGrowthMap(allStocks, activeIndex)
 
   const stocks = useMemo(() => {
     const q = searchQuery.toLowerCase()
@@ -102,7 +125,8 @@ export function useFilteredStocks({
     }
 
     let list = allStocks.map(stock => {
-      const sig = signals.get(stock.ticker) ?? { rsiLast: 50, macdBullish: false }
+      const sig    = signals.get(stock.ticker)  ?? { rsiLast: 50, macdBullish: false }
+      const growth = growthMap.get(stock.ticker) ?? { epsGrowth: 0, revenueGrowth: 0, payoutRatio: 50 }
 
       const baseDate = trendHorizon === 'launch' ? stock.ipoDate : refDate
       const basePrice = trendHorizon === 'launch'
@@ -113,7 +137,7 @@ export function useFilteredStocks({
         ? ((stock.currentPrice - basePrice) / basePrice) * 100
         : 0
 
-      return { ...stock, trend, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish }
+      return { ...stock, trend, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish, ...growth }
     })
 
     // Data quality
@@ -145,6 +169,12 @@ export function useFilteredStocks({
     if (rsiMin > 0 || rsiMax < 100) list = list.filter(s => s.rsiLast >= rsiMin && s.rsiLast <= rsiMax)
     if (macdFilter === 'bullish') list = list.filter(s => s.macdBullish)
 
+    // Growth metrics
+    if (epsGrowthMin    !== null) list = list.filter(s => s.epsGrowth     >= epsGrowthMin)
+    if (revenueGrowthMin !== null) list = list.filter(s => s.revenueGrowth >= revenueGrowthMin)
+    if (divYieldMin     !== null) list = list.filter(s => s.dividendYield  >= divYieldMin)
+    if (payoutRatioMax  !== null) list = list.filter(s => s.payoutRatio    <= payoutRatioMax)
+
     list.sort((a, b) => {
       const aVal = a[sortKey] ?? 0
       const bVal = b[sortKey] ?? 0
@@ -158,7 +188,9 @@ export function useFilteredStocks({
   }, [
     activeIndex, searchQuery, trendHorizon, trendDirection, hideMockData,
     selectedSectors, peMin, peMax, deMin, deMax, roeMin, roeMax,
-    fcfFilter, rsiMin, rsiMax, macdFilter, sortKey, sortDir,
+    fcfFilter, rsiMin, rsiMax, macdFilter,
+    epsGrowthMin, revenueGrowthMin, divYieldMin, payoutRatioMax,
+    sortKey, sortDir,
   ])
 
   return { stocks, totalCount: allStocks.length }
