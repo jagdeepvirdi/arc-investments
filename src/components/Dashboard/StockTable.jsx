@@ -5,21 +5,27 @@ import useAppStore from '../../store/useAppStore.js'
 const COLUMNS = [
   { key: 'ticker',       label: 'Ticker',       align: 'left' },
   { key: 'name',         label: 'Company',      align: 'left' },
-  { key: 'currentPrice', label: 'Price (THB)',   align: 'right' },
+  { key: 'currentPrice', label: 'Price (THB)',  align: 'right' },
   { key: 'changePct',    label: 'Change %',     align: 'right' },
   { key: 'volume',       label: 'Volume',       align: 'right' },
   { key: 'pe',           label: 'P/E',          align: 'right' },
+  { key: 'de',           label: 'D/E',          align: 'right' },
+  { key: 'roe',          label: 'ROE',          align: 'right' },
+  { key: 'fcf',          label: 'FCF (B)',       align: 'right' },
   { key: 'marketCap',    label: 'Mkt Cap (B)',  align: 'right' },
   { key: 'trend',        label: 'Trend',        align: 'right' },
 ]
 
 function fmt(val, key) {
-  if (val === null || val === undefined || val === 0 && key === 'pe') return '—'
+  if (val === null || val === undefined) return '—'
   switch (key) {
     case 'currentPrice': return val.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     case 'changePct':    return (val >= 0 ? '+' : '') + val.toFixed(2) + '%'
     case 'volume':       return val >= 1_000_000 ? (val / 1_000_000).toFixed(1) + 'M' : val.toLocaleString()
     case 'pe':           return val <= 0 ? '—' : val.toFixed(1) + 'x'
+    case 'de':           return val.toFixed(2) + 'x'
+    case 'roe':          return val.toFixed(1) + '%'
+    case 'fcf':          return (val >= 0 ? '+' : '') + val.toFixed(2) + 'B'
     case 'marketCap':    return val.toFixed(1)
     case 'trend':        return (val >= 0 ? '+' : '') + val.toFixed(1) + '%'
     default: return val
@@ -85,7 +91,7 @@ export function StockTable({ stocks }) {
 
   return (
     <div className="overflow-auto flex-1">
-      <table className="w-full text-xs border-collapse min-w-[800px]">
+      <table className="w-full text-xs border-collapse min-w-[1100px]">
         <thead className="sticky top-0 z-10 bg-surface border-b border-border">
           <tr>
             {COLUMNS.map(col => (
@@ -152,6 +158,18 @@ export function StockTable({ stocks }) {
                 {/* P/E */}
                 <td className="px-4 py-2.5 text-right font-price text-body">
                   {fmt(stock.pe, 'pe')}
+                </td>
+                {/* D/E */}
+                <td className={`px-4 py-2.5 text-right font-price ${stock.de > 2 ? 'text-bearish' : 'text-body'}`}>
+                  {fmt(stock.de, 'de')}
+                </td>
+                {/* ROE */}
+                <td className={`px-4 py-2.5 text-right font-price ${stock.roe >= 15 ? 'text-bullish' : stock.roe < 0 ? 'text-bearish' : 'text-body'}`}>
+                  {fmt(stock.roe, 'roe')}
+                </td>
+                {/* FCF */}
+                <td className={`px-4 py-2.5 text-right font-price ${stock.fcf >= 0 ? 'text-bullish' : 'text-bearish'}`}>
+                  {fmt(stock.fcf, 'fcf')}
                 </td>
                 {/* Market Cap */}
                 <td className="px-4 py-2.5 text-right font-price text-body">
