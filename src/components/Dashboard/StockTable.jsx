@@ -74,13 +74,7 @@ export function StockTable({ stocks }) {
         <span className="text-sm">No stocks match your filters.</span>
         <button
           type="button"
-          onClick={() => {
-            const store = useAppStore.getState()
-            store.setSearchQuery('')
-            // snapshot before mutating
-            const scanners = [...store.activeScanners]
-            scanners.forEach(t => store.toggleScanner(t))
-          }}
+          onClick={() => useAppStore.getState().clearAllFilters()}
           className="text-xs text-accent hover:underline"
         >
           Reset filters
@@ -193,3 +187,4 @@ export function StockTable({ stocks }) {
     </div>
   )
 }
+

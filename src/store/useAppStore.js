@@ -1,62 +1,75 @@
 import { create } from 'zustand'
 import { DEFAULT_INDEX_ID } from '../data/indices.js'
+import { PRESETS_MAP, FILTER_DEFAULTS } from '../data/screenerPresets.js'
 
-/** @typedef {'launch'|'5y'|'1y'|'ytd'} TrendHorizon */
-/** @typedef {'RSI_OVERSOLD'|'RSI_OVERBOUGHT'|'MACD_BULLISH'} ScannerTag */
 /** @typedef {'up'|'down'|null} Direction */
 
 const useAppStore = create((set) => ({
-  /** @type {string} — active index id */
+  /** @type {string} */
   activeIndex: DEFAULT_INDEX_ID,
   /** @type {string|null} */
   selectedStock: null,
-  /** @type {TrendHorizon} */
+  /** @type {'launch'|'5y'|'1y'|'ytd'} */
   trendHorizon: 'ytd',
-  /** @type {ScannerTag[]} */
-  activeScanners: [],
   /** @type {string} */
   searchQuery: '',
-  /** @type {'ticker'|'name'|'currentPrice'|'changePct'|'volume'|'pe'|'marketCap'|'trend'} */
+  /** @type {string} */
   sortKey: 'marketCap',
   /** @type {'asc'|'desc'} */
   sortDir: 'desc',
-  /** @type {Direction} — filter by trend horizon direction */
-  trendDirection: null,
-  /** @type {Direction} — filter by today's price change */
-  todayDirection: null,
-  /** @type {boolean} — hide stocks whose prices are still mock (not fetched from Yahoo Finance) */
+  /** @type {boolean} */
   hideMockData: false,
+  /** @type {boolean} */
+  filterPanelOpen: false,
 
-  // Reset all filters when switching index so stale scanner results don't carry over
+  // -- Filter state --
+  ...FILTER_DEFAULTS,
+
+  // -- Actions --
+
   setActiveIndex: (id) => set({
     activeIndex: id,
     selectedStock: null,
-    activeScanners: [],
     searchQuery: '',
-    trendDirection: null,
-    todayDirection: null,
     hideMockData: false,
+    filterPanelOpen: false,
+    ...FILTER_DEFAULTS,
   }),
   setSelectedStock: (ticker) => set({ selectedStock: ticker }),
   setTrendHorizon: (horizon) => set({ trendHorizon: horizon }),
-  toggleScanner: (tag) => set((state) => ({
-    activeScanners: state.activeScanners.includes(tag)
-      ? state.activeScanners.filter(t => t !== tag)
-      : [...state.activeScanners, tag],
-  })),
   setSearchQuery: (q) => set({ searchQuery: q }),
   setSort: (key) => set((state) => ({
     sortKey: key,
     sortDir: state.sortKey === key && state.sortDir === 'desc' ? 'asc' : 'desc',
   })),
-  // Mutually exclusive within each group — clicking the active one clears it
+
+  toggleFilterPanel: () => set((state) => ({ filterPanelOpen: !state.filterPanelOpen })),
+  toggleHideMockData: () => set((state) => ({ hideMockData: !state.hideMockData })),
+
+  /** Set a single filter field and clear any active preset */
+  setFilter: (key, val) => set({ [key]: val, activePreset: null }),
+
+  /** Set multiple filter fields atomically and clear any active preset */
+  setFilters: (updates) => set({ ...updates, activePreset: null }),
+
+  /** Set selected sectors -- null means all sectors */
+  setSelectedSectors: (sectors) => set({ selectedSectors: sectors, activePreset: null }),
+
+  /** Toggle trend direction; clicking the active direction clears it */
   setTrendDirection: (dir) => set((state) => ({
     trendDirection: state.trendDirection === dir ? null : dir,
+    activePreset: null,
   })),
-  setTodayDirection: (dir) => set((state) => ({
-    todayDirection: state.todayDirection === dir ? null : dir,
-  })),
-  toggleHideMockData: () => set((state) => ({ hideMockData: !state.hideMockData })),
+
+  /** Apply a named screener preset -- resets all other filters first */
+  applyPreset: (presetId) => {
+    const preset = PRESETS_MAP[presetId]
+    if (!preset) return
+    set({ ...FILTER_DEFAULTS, ...preset.filters, activePreset: presetId })
+  },
+
+  /** Clear all filters and search back to defaults */
+  clearAllFilters: () => set({ ...FILTER_DEFAULTS, searchQuery: '', hideMockData: false }),
 }))
 
 export default useAppStore

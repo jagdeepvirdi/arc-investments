@@ -13,7 +13,7 @@ function getDateYearsAgo(years) {
   return d.toISOString().slice(0, 10)
 }
 
-// Lazy signal cache keyed by index ID — computed once per index, never again
+// Lazy signal cache keyed by index ID -- computed once per index, never again
 const _signalCache = new Map()
 
 function getSignals(stocks, indexId) {
@@ -54,42 +54,40 @@ function getSignals(stocks, indexId) {
  * @param {{
  *   activeIndex: string,
  *   searchQuery: string,
- *   activeScanners: string[],
  *   trendHorizon: string,
  *   trendDirection: 'up'|'down'|null,
- *   todayDirection: 'up'|'down'|null,
+ *   hideMockData: boolean,
+ *   selectedSectors: string[]|null,
+ *   peMin: number|null, peMax: number|null,
+ *   deMin: number|null, deMax: number|null,
+ *   roeMin: number|null, roeMax: number|null,
+ *   fcfFilter: 'any'|'positive'|'negative',
+ *   rsiMin: number, rsiMax: number,
+ *   macdFilter: 'any'|'bullish',
  *   sortKey: string,
  *   sortDir: 'asc'|'desc'
  * }} filters
- * @returns {{ stocks: any[], totalCount: number, scannerCounts: Object }}
+ * @returns {{ stocks: any[], totalCount: number }}
  */
 export function useFilteredStocks({
   activeIndex,
   searchQuery,
-  activeScanners,
   trendHorizon,
   trendDirection,
-  todayDirection,
   hideMockData,
+  selectedSectors,
+  peMin, peMax,
+  deMin, deMax,
+  roeMin, roeMax,
+  fcfFilter,
+  rsiMin, rsiMax,
+  macdFilter,
   sortKey,
   sortDir,
 }) {
   const indexDef = INDICES_MAP[activeIndex]
   const allStocks = indexDef.stocks
   const signals = getSignals(allStocks, activeIndex)
-
-  const scannerCounts = useMemo(() => {
-    const counts = { RSI_OVERSOLD: 0, RSI_OVERBOUGHT: 0, MACD_BULLISH: 0 }
-    for (const stock of allStocks) {
-      const sig = signals.get(stock.ticker)
-      if (!sig) continue
-      if (sig.rsiLast < 30) counts.RSI_OVERSOLD++
-      if (sig.rsiLast > 70) counts.RSI_OVERBOUGHT++
-      if (sig.macdBullish) counts.MACD_BULLISH++
-    }
-    return counts
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeIndex])
 
   const stocks = useMemo(() => {
     const q = searchQuery.toLowerCase()
@@ -118,22 +116,34 @@ export function useFilteredStocks({
       return { ...stock, trend, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish }
     })
 
+    // Data quality
     if (hideMockData) list = list.filter(s => s.isRealData !== false)
 
-    if (q) {
-      list = list.filter(s =>
-        s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)
-      )
-    }
+    // Text search
+    if (q) list = list.filter(s =>
+      s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)
+    )
 
+    // Sector
+    if (selectedSectors?.length) list = list.filter(s => selectedSectors.includes(s.sector))
+
+    // Trend direction
     if (trendDirection === 'up')   list = list.filter(s => s.trend > 0)
     if (trendDirection === 'down') list = list.filter(s => s.trend < 0)
-    if (todayDirection === 'up')   list = list.filter(s => s.changePct > 0)
-    if (todayDirection === 'down') list = list.filter(s => s.changePct < 0)
 
-    if (activeScanners.includes('RSI_OVERSOLD'))   list = list.filter(s => s.rsiLast < 30)
-    if (activeScanners.includes('RSI_OVERBOUGHT')) list = list.filter(s => s.rsiLast > 70)
-    if (activeScanners.includes('MACD_BULLISH'))   list = list.filter(s => s.macdBullish)
+    // Fundamentals
+    if (peMin !== null) list = list.filter(s => s.pe > 0 && s.pe >= peMin)
+    if (peMax !== null) list = list.filter(s => s.pe > 0 && s.pe <= peMax)
+    if (deMin !== null) list = list.filter(s => s.de >= deMin)
+    if (deMax !== null) list = list.filter(s => s.de <= deMax)
+    if (roeMin !== null) list = list.filter(s => s.roe >= roeMin)
+    if (roeMax !== null) list = list.filter(s => s.roe <= roeMax)
+    if (fcfFilter === 'positive') list = list.filter(s => s.fcf > 0)
+    if (fcfFilter === 'negative') list = list.filter(s => s.fcf < 0)
+
+    // Technicals
+    if (rsiMin > 0 || rsiMax < 100) list = list.filter(s => s.rsiLast >= rsiMin && s.rsiLast <= rsiMax)
+    if (macdFilter === 'bullish') list = list.filter(s => s.macdBullish)
 
     list.sort((a, b) => {
       const aVal = a[sortKey] ?? 0
@@ -145,7 +155,11 @@ export function useFilteredStocks({
     })
 
     return list
-  }, [activeIndex, searchQuery, activeScanners, trendHorizon, trendDirection, todayDirection, hideMockData, sortKey, sortDir])
+  }, [
+    activeIndex, searchQuery, trendHorizon, trendDirection, hideMockData,
+    selectedSectors, peMin, peMax, deMin, deMax, roeMin, roeMax,
+    fcfFilter, rsiMin, rsiMax, macdFilter, sortKey, sortDir,
+  ])
 
-  return { stocks, totalCount: allStocks.length, scannerCounts }
+  return { stocks, totalCount: allStocks.length }
 }
