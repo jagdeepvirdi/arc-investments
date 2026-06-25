@@ -1,5 +1,5 @@
 import { getFundamentals } from '../../data/fundamentals.js'
-import { STOCKS_MAP } from '../../data/mockStocks.js'
+import { ALL_STOCKS_MAP } from '../../data/indices.js'
 import { Badge } from '../UI/Badge.jsx'
 import { Tooltip } from '../UI/Tooltip.jsx'
 import { HelpCircle } from 'lucide-react'
@@ -37,7 +37,7 @@ function MetricRow({ label, value, tip, extra }) {
 
 /** @param {{ ticker: string }} props */
 export function FundamentalPanel({ ticker }) {
-  const stock = STOCKS_MAP[ticker]
+  const stock = ALL_STOCKS_MAP[ticker]
   const fund  = getFundamentals(ticker)
   if (!stock || !fund) return null
 

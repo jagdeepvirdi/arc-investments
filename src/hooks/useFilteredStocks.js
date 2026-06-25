@@ -1,9 +1,7 @@
 import { useMemo } from 'react'
-import { STOCKS } from '../data/mockStocks.js'
+import { INDICES_MAP } from '../data/indices.js'
 import { getStockHistory, getPriceAtDate } from '../data/mockPriceHistory.js'
 import { calcRSI, calcMACD } from '../data/indicators.js'
-
-const TODAY = new Date().toISOString().slice(0, 10)
 
 function getYTDDate() {
   return `${new Date().getUTCFullYear()}-01-01`
@@ -15,13 +13,13 @@ function getDateYearsAgo(years) {
   return d.toISOString().slice(0, 10)
 }
 
-/**
- * Pre-compute scanner signals for all stocks once.
- * Returns a Map<ticker, {rsiLast, macdBullish}>
- */
-const _signals = (() => {
+// Lazy signal cache keyed by index ID — computed once per index, never again
+const _signalCache = new Map()
+
+function getSignals(stocks, indexId) {
+  if (_signalCache.has(indexId)) return _signalCache.get(indexId)
   const map = new Map()
-  for (const stock of STOCKS) {
+  for (const stock of stocks) {
     const history = getStockHistory(stock.ticker)
     if (history.length < 30) {
       map.set(stock.ticker, { rsiLast: 50, macdBullish: false })
@@ -31,13 +29,11 @@ const _signals = (() => {
     const rsiArr = calcRSI(closes, 14)
     const macdArr = calcMACD(closes, 12, 26, 9)
 
-    // Last valid RSI
     let rsiLast = 50
     for (let i = rsiArr.length - 1; i >= 0; i--) {
       if (rsiArr[i] !== null) { rsiLast = rsiArr[i]; break }
     }
 
-    // MACD bullish cross in last 5 sessions
     let macdBullish = false
     const recentMacd = macdArr.slice(-6).filter(Boolean)
     for (let i = 1; i < recentMacd.length; i++) {
@@ -50,11 +46,13 @@ const _signals = (() => {
     }
     map.set(stock.ticker, { rsiLast, macdBullish })
   }
+  _signalCache.set(indexId, map)
   return map
-})()
+}
 
 /**
  * @param {{
+ *   activeIndex: string,
  *   searchQuery: string,
  *   activeScanners: string[],
  *   trendHorizon: string,
@@ -63,38 +61,50 @@ const _signals = (() => {
  *   sortKey: string,
  *   sortDir: 'asc'|'desc'
  * }} filters
- * @returns {{ stocks: any[], scannerCounts: Object }}
+ * @returns {{ stocks: any[], totalCount: number, scannerCounts: Object }}
  */
-export function useFilteredStocks({ searchQuery, activeScanners, trendHorizon, trendDirection, todayDirection, sortKey, sortDir }) {
+export function useFilteredStocks({
+  activeIndex,
+  searchQuery,
+  activeScanners,
+  trendHorizon,
+  trendDirection,
+  todayDirection,
+  sortKey,
+  sortDir,
+}) {
+  const indexDef = INDICES_MAP[activeIndex]
+  const allStocks = indexDef.stocks
+  const signals = getSignals(allStocks, activeIndex)
+
   const scannerCounts = useMemo(() => {
     const counts = { RSI_OVERSOLD: 0, RSI_OVERBOUGHT: 0, MACD_BULLISH: 0 }
-    for (const stock of STOCKS) {
-      const sig = _signals.get(stock.ticker)
+    for (const stock of allStocks) {
+      const sig = signals.get(stock.ticker)
       if (!sig) continue
       if (sig.rsiLast < 30) counts.RSI_OVERSOLD++
       if (sig.rsiLast > 70) counts.RSI_OVERBOUGHT++
       if (sig.macdBullish) counts.MACD_BULLISH++
     }
     return counts
-  }, [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndex])
 
   const stocks = useMemo(() => {
     const q = searchQuery.toLowerCase()
 
-    // Determine reference date for trend horizon
     let refDate
     switch (trendHorizon) {
-      case 'launch': refDate = null; break // use ipoDate per stock
+      case 'launch': refDate = null; break
       case '5y':  refDate = getDateYearsAgo(5); break
       case '1y':  refDate = getDateYearsAgo(1); break
       case 'ytd': refDate = getYTDDate(); break
       default:    refDate = getYTDDate()
     }
 
-    let list = STOCKS.map(stock => {
-      const sig = _signals.get(stock.ticker) ?? { rsiLast: 50, macdBullish: false }
+    let list = allStocks.map(stock => {
+      const sig = signals.get(stock.ticker) ?? { rsiLast: 50, macdBullish: false }
 
-      // Trend calculation
       const baseDate = trendHorizon === 'launch' ? stock.ipoDate : refDate
       const basePrice = trendHorizon === 'launch'
         ? stock.ipoPrice
@@ -107,27 +117,21 @@ export function useFilteredStocks({ searchQuery, activeScanners, trendHorizon, t
       return { ...stock, trend, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish }
     })
 
-    // Search filter
     if (q) {
       list = list.filter(s =>
         s.ticker.toLowerCase().includes(q) || s.name.toLowerCase().includes(q)
       )
     }
 
-    // Direction filters (based on trend horizon %)
     if (trendDirection === 'up')   list = list.filter(s => s.trend > 0)
     if (trendDirection === 'down') list = list.filter(s => s.trend < 0)
-
-    // Today's change filter
     if (todayDirection === 'up')   list = list.filter(s => s.changePct > 0)
     if (todayDirection === 'down') list = list.filter(s => s.changePct < 0)
 
-    // Scanner filters (AND logic)
-    if (activeScanners.includes('RSI_OVERSOLD'))  list = list.filter(s => s.rsiLast < 30)
+    if (activeScanners.includes('RSI_OVERSOLD'))   list = list.filter(s => s.rsiLast < 30)
     if (activeScanners.includes('RSI_OVERBOUGHT')) list = list.filter(s => s.rsiLast > 70)
     if (activeScanners.includes('MACD_BULLISH'))   list = list.filter(s => s.macdBullish)
 
-    // Sort
     list.sort((a, b) => {
       const aVal = a[sortKey] ?? 0
       const bVal = b[sortKey] ?? 0
@@ -138,7 +142,7 @@ export function useFilteredStocks({ searchQuery, activeScanners, trendHorizon, t
     })
 
     return list
-  }, [searchQuery, activeScanners, trendHorizon, trendDirection, todayDirection, sortKey, sortDir])
+  }, [activeIndex, searchQuery, activeScanners, trendHorizon, trendDirection, todayDirection, sortKey, sortDir])
 
-  return { stocks, scannerCounts }
+  return { stocks, totalCount: allStocks.length, scannerCounts }
 }

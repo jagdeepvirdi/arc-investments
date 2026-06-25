@@ -1,4 +1,4 @@
-import { STOCKS_MAP } from './mockStocks.js'
+import { ALL_STOCKS_MAP } from './indices.js'
 
 /**
  * @typedef {Object} Fundamentals
@@ -17,7 +17,7 @@ import { STOCKS_MAP } from './mockStocks.js'
  * @returns {Fundamentals|null}
  */
 export function getFundamentals(ticker) {
-  const stock = STOCKS_MAP[ticker]
+  const stock = ALL_STOCKS_MAP[ticker]
   if (!stock) return null
   return {
     pe: stock.pe,

@@ -1,10 +1,13 @@
 import { create } from 'zustand'
+import { DEFAULT_INDEX_ID } from '../data/indices.js'
 
 /** @typedef {'launch'|'5y'|'1y'|'ytd'} TrendHorizon */
 /** @typedef {'RSI_OVERSOLD'|'RSI_OVERBOUGHT'|'MACD_BULLISH'} ScannerTag */
 /** @typedef {'up'|'down'|null} Direction */
 
 const useAppStore = create((set) => ({
+  /** @type {string} — active index id */
+  activeIndex: DEFAULT_INDEX_ID,
   /** @type {string|null} */
   selectedStock: null,
   /** @type {TrendHorizon} */
@@ -22,6 +25,15 @@ const useAppStore = create((set) => ({
   /** @type {Direction} — filter by today's price change */
   todayDirection: null,
 
+  // Reset all filters when switching index so stale scanner results don't carry over
+  setActiveIndex: (id) => set({
+    activeIndex: id,
+    selectedStock: null,
+    activeScanners: [],
+    searchQuery: '',
+    trendDirection: null,
+    todayDirection: null,
+  }),
   setSelectedStock: (ticker) => set({ selectedStock: ticker }),
   setTrendHorizon: (horizon) => set({ trendHorizon: horizon }),
   toggleScanner: (tag) => set((state) => ({

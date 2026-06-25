@@ -16,9 +16,11 @@ export default function DashboardPage() {
   const todayDirection = useAppStore(s => s.todayDirection)
   const sortKey        = useAppStore(s => s.sortKey)
   const sortDir        = useAppStore(s => s.sortDir)
+  const activeIndex    = useAppStore(s => s.activeIndex)
   const selectedStock  = useAppStore(s => s.selectedStock)
 
-  const { stocks, scannerCounts } = useFilteredStocks({
+  const { stocks, totalCount, scannerCounts } = useFilteredStocks({
+    activeIndex,
     searchQuery,
     activeScanners,
     trendHorizon,
@@ -35,7 +37,7 @@ export default function DashboardPage() {
 
       {/* Row count */}
       <div className="px-6 py-2 border-b border-border/40 text-[10px] text-muted shrink-0">
-        {stocks.length} / 100 stocks
+        {stocks.length} / {totalCount} stocks
       </div>
 
       <StockTable stocks={stocks} />

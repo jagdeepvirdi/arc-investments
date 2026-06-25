@@ -1,4 +1,4 @@
-import { STOCKS } from './mockStocks.js'
+import { ALL_STOCKS_MAP } from './indices.js'
 
 /**
  * Mulberry32 seeded PRNG — deterministic, fast, good distribution.
@@ -152,7 +152,7 @@ const _cache = new Map()
 export function getStockHistory(ticker) {
   if (_cache.has(ticker)) return _cache.get(ticker)
 
-  const stock = STOCKS.find(s => s.ticker === ticker)
+  const stock = ALL_STOCKS_MAP[ticker]
   if (!stock) return []
 
   const vol = stock.volatility ?? SECTOR_VOLATILITY[stock.sector] ?? 0.020

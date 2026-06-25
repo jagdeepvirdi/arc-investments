@@ -6,14 +6,14 @@ import { MACDChart } from '../Charts/MACDChart.jsx'
 import { FundamentalPanel } from './FundamentalPanel.jsx'
 import { Badge } from '../UI/Badge.jsx'
 import { getStockHistory } from '../../data/mockPriceHistory.js'
-import { STOCKS_MAP } from '../../data/mockStocks.js'
+import { ALL_STOCKS_MAP } from '../../data/indices.js'
 import useAppStore from '../../store/useAppStore.js'
 
 export default function StockTerminal() {
   const ticker = useAppStore(s => s.selectedStock)
   const setSelectedStock = useAppStore(s => s.setSelectedStock)
 
-  const stock = ticker ? STOCKS_MAP[ticker] : null
+  const stock = ticker ? ALL_STOCKS_MAP[ticker] : null
   const history = ticker ? getStockHistory(ticker) : []
 
   const close = useCallback(() => setSelectedStock(null), [setSelectedStock])

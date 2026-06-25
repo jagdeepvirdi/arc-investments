@@ -1,6 +1,7 @@
 import { Search } from 'lucide-react'
 import { Dropdown } from '../UI/Dropdown.jsx'
 import useAppStore from '../../store/useAppStore.js'
+import { INDICES } from '../../data/indices.js'
 
 const TREND_OPTIONS = [
   { value: 'ytd',    label: 'YTD' },
@@ -10,19 +11,39 @@ const TREND_OPTIONS = [
 ]
 
 export function TopBar() {
-  const searchQuery  = useAppStore(s => s.searchQuery)
-  const trendHorizon = useAppStore(s => s.trendHorizon)
+  const searchQuery    = useAppStore(s => s.searchQuery)
+  const trendHorizon   = useAppStore(s => s.trendHorizon)
+  const activeIndex    = useAppStore(s => s.activeIndex)
   const setSearchQuery  = useAppStore(s => s.setSearchQuery)
   const setTrendHorizon = useAppStore(s => s.setTrendHorizon)
+  const setActiveIndex  = useAppStore(s => s.setActiveIndex)
 
   return (
     <header className="flex items-center justify-between px-6 py-3 border-b border-border bg-surface shrink-0">
-      {/* Wordmark */}
-      <div className="flex items-center gap-3">
+      {/* Wordmark + Index Tabs */}
+      <div className="flex items-center gap-4">
         <span className="text-heading font-semibold tracking-tight text-base">ArcInvestments</span>
-        <span className="bg-accent/15 text-accent border border-accent/30 text-[10px] font-medium px-1.5 py-0.5 rounded uppercase tracking-wider">
-          SET 100
-        </span>
+
+        {/* Index selector */}
+        <nav className="flex items-center gap-1" aria-label="Index selector">
+          {INDICES.map(idx => (
+            <button
+              key={idx.id}
+              type="button"
+              onClick={() => setActiveIndex(idx.id)}
+              title={idx.description}
+              className={`
+                text-[11px] font-medium px-2.5 py-1 rounded transition-colors duration-150
+                ${activeIndex === idx.id
+                  ? 'bg-accent text-white'
+                  : 'text-muted border border-border hover:border-accent/40 hover:text-body'
+                }
+              `}
+            >
+              {idx.label}
+            </button>
+          ))}
+        </nav>
       </div>
 
       {/* Controls */}
