@@ -6,8 +6,9 @@
  */
 import set100History from './real/set100_history.json'
 import ssetHistory   from './real/sset_history.json'
+import maiHistory    from './real/mai_history.json'
 
-const _all = { ...set100History, ...ssetHistory }
+const _all = { ...set100History, ...ssetHistory, ...maiHistory }
 
 /**
  * Returns real OHLCV candles for a ticker.

@@ -12,9 +12,11 @@
  */
 import set100Raw from './real/set100_stocks.json'
 import ssetRaw   from './real/sset_stocks.json'
+import maiRaw    from './real/mai_stocks.json'
 
 import { STOCKS as MOCK_SET100 } from './mockStocks.js'
 import { STOCKS as MOCK_SSET   } from './mockSset.js'
+import { STOCKS as MOCK_MAI    } from './mockMai.js'
 
 /**
  * Merge: keep all mock stocks; overlay real price fields where available.
@@ -52,3 +54,7 @@ export const SET100_SECTORS = [...new Set(SET100_STOCKS.map(s => s.sector))]
 export const SSET_STOCKS  = buildStocks(ssetRaw, MOCK_SSET)
 export const SSET_MAP     = Object.fromEntries(SSET_STOCKS.map(s => [s.ticker, s]))
 export const SSET_SECTORS = [...new Set(SSET_STOCKS.map(s => s.sector))]
+
+export const MAI_STOCKS  = buildStocks(maiRaw, MOCK_MAI)
+export const MAI_MAP     = Object.fromEntries(MAI_STOCKS.map(s => [s.ticker, s]))
+export const MAI_SECTORS = [...new Set(MAI_STOCKS.map(s => s.sector))]

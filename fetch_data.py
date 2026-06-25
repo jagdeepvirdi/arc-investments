@@ -63,6 +63,27 @@ SSET_TICKERS = [
     'LEO','WICE','JWD','NCL',
 ]
 
+MAI_TICKERS = [
+    # Technology / Media
+    'JKN','PLANET','MST','SMART','UBIS','NMG','SMT','ROBOT',
+    # Manufacturing
+    'DRT','HPMT','INOX','SIMAT','SNC','STANLY','SYNTEC','TYM','TWFP','UNIUN','PANKO',
+    # Industrial / Engineering
+    'CHO','GENCO','YONG',
+    # Property
+    'SORKON','SKN','PDI','MOONG','TMI',
+    # Food & Beverage
+    'TIGER','WFRESH','COCOCO',
+    # Healthcare
+    'VIBHA',
+    # Consumer
+    'BGC',
+    # Energy
+    'TSE','TAE','PSTC',
+    # Services
+    'PRANDA','JCK','SLC',
+]
+
 SECTOR_MAP = {
     'PTT':'Energy','PTTEP':'Energy','GULF':'Energy','GPSC':'Energy',
     'BGRIM':'Energy','BPP':'Energy','RATCH':'Energy','EGCO':'Energy',
@@ -105,6 +126,19 @@ SECTOR_MAP = {
     'MBK':'Consumer','SINGER':'Consumer','BEAUTY':'Consumer','JUBILE':'Consumer','TNP':'Consumer',
     'CHAYO':'Financials','EASY':'Financials','AIRA':'Financials','CIMBT':'Financials','ASP':'Financials',
     'LEO':'Logistics','WICE':'Logistics','JWD':'Logistics','NCL':'Logistics',
+    # MAI
+    'JKN':'Technology','PLANET':'Technology','MST':'Technology','SMART':'Technology',
+    'UBIS':'Technology','NMG':'Technology','SMT':'Technology','ROBOT':'Technology',
+    'DRT':'Manufacturing','HPMT':'Manufacturing','INOX':'Manufacturing','SIMAT':'Manufacturing',
+    'SNC':'Manufacturing','STANLY':'Manufacturing','SYNTEC':'Manufacturing','TYM':'Manufacturing',
+    'TWFP':'Manufacturing','UNIUN':'Manufacturing','PANKO':'Manufacturing',
+    'CHO':'Industrial','GENCO':'Industrial','YONG':'Industrial',
+    'SORKON':'Property','SKN':'Property','PDI':'Property','MOONG':'Property','TMI':'Property',
+    'TIGER':'Food & Beverage','WFRESH':'Food & Beverage','COCOCO':'Food & Beverage',
+    'VIBHA':'Healthcare',
+    'BGC':'Consumer',
+    'TSE':'Energy','TAE':'Energy','PSTC':'Energy',
+    'PRANDA':'Services','JCK':'Services','SLC':'Services',
 }
 
 # ── Core fetch ────────────────────────────────────────────────────────────────
@@ -254,6 +288,7 @@ if __name__ == '__main__':
     out = os.path.join('src', 'data', 'real')
     set100_result = process(SET100_TICKERS, 'set100', out)
     sset_result   = process(SSET_TICKERS,   'sset',   out)
+    mai_result    = process(MAI_TICKERS,    'mai',    out)
 
     # Write meta.json so the UI can show "Last updated" timestamp
     meta = {
@@ -262,9 +297,12 @@ if __name__ == '__main__':
         'set100Total':  len(SET100_TICKERS),
         'ssetCount':    sset_result['fetched'],
         'ssetTotal':    len(SSET_TICKERS),
+        'maiCount':     mai_result['fetched'],
+        'maiTotal':     len(MAI_TICKERS),
         'skipped': {
             'SET100': set100_result['skipped'],
             'SSET':   sset_result['skipped'],
+            'MAI':    mai_result['skipped'],
         },
     }
     meta_path = os.path.join(out, 'meta.json')

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { ArrowUp, ArrowDown } from 'lucide-react'
-import { INDICES_MAP } from '../../data/indices.js'
+import { INDICES, INDICES_MAP } from '../../data/indices.js'
 import { SET_INDEX_HISTORY } from '../../data/mockPriceHistory.js'
 
 // ── Data helpers ────────────────────────────────────────────────────────────
@@ -121,8 +121,10 @@ function Divider() {
 // ── Main component ──────────────────────────────────────────────────────────
 
 export function MarketOverviewBar() {
-  const set100Stocks = INDICES_MAP['SET100']?.stocks ?? []
-  const ssetStocks   = INDICES_MAP['SSET']?.stocks   ?? []
+  const allMarketStocks = useMemo(
+    () => INDICES.flatMap(idx => idx.stocks),
+    [],
+  )
 
   const { setLast, setChange, setChangePct } = useMemo(() => {
     const last = SET_INDEX_HISTORY.at(-1)
@@ -133,20 +135,19 @@ export function MarketOverviewBar() {
     return { setLast: last.close, setChange: chg, setChangePct: chgPct }
   }, [])
 
-  const set100 = useMemo(() => indexMetrics(set100Stocks), [set100Stocks])
-  const sset   = useMemo(() => indexMetrics(ssetStocks),   [ssetStocks])
-
-  const sentiment = useMemo(
-    () => calcSentiment([...set100Stocks, ...ssetStocks]),
-    [set100Stocks, ssetStocks],
+  const indexStats = useMemo(
+    () => INDICES.map(idx => ({ id: idx.id, label: idx.label, ...indexMetrics(idx.stocks) })),
+    [],
   )
+
+  const sentiment = useMemo(() => calcSentiment(allMarketStocks), [allMarketStocks])
 
   const setIsUp = setChangePct >= 0
 
   return (
     <div className="flex items-center gap-0 px-6 py-3 border-b border-border bg-surface/60 shrink-0">
 
-      {/* ── SET Index ─────────────────────────────────────────────────── */}
+      {/* ── SET composite index ───────────────────────────────────────── */}
       <div className="flex flex-col gap-0.5 min-w-[130px]">
         <span className="text-[9px] text-muted uppercase tracking-widest">SET Index</span>
         {setLast !== null ? (
@@ -166,23 +167,17 @@ export function MarketOverviewBar() {
         )}
       </div>
 
-      <Divider />
-
-      {/* ── SET 100 ───────────────────────────────────────────────────── */}
-      <div className="flex flex-col gap-0.5 min-w-[140px]">
-        <span className="text-[9px] text-muted uppercase tracking-widest">SET 100</span>
-        <ChangeChip pct={set100.avg} size="lg" />
-        <BreadthBar adv={set100.adv} dec={set100.dec} total={set100.total} />
-      </div>
-
-      <Divider />
-
-      {/* ── sSET ──────────────────────────────────────────────────────── */}
-      <div className="flex flex-col gap-0.5 min-w-[140px]">
-        <span className="text-[9px] text-muted uppercase tracking-widest">sSET</span>
-        <ChangeChip pct={sset.avg} size="lg" />
-        <BreadthBar adv={sset.adv} dec={sset.dec} total={sset.total} />
-      </div>
+      {/* ── One card per registered index ─────────────────────────────── */}
+      {indexStats.map(stat => (
+        <div key={stat.id} className="flex items-center">
+          <Divider />
+          <div className="flex flex-col gap-0.5 min-w-[130px]">
+            <span className="text-[9px] text-muted uppercase tracking-widest">{stat.label}</span>
+            <ChangeChip pct={stat.avg} size="lg" />
+            <BreadthBar adv={stat.adv} dec={stat.dec} total={stat.total} />
+          </div>
+        </div>
+      ))}
 
       <Divider />
 

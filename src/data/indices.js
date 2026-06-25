@@ -1,4 +1,4 @@
-import { SET100_STOCKS, SET100_MAP, SET100_SECTORS, SSET_STOCKS, SSET_MAP, SSET_SECTORS } from './realStocks.js'
+import { SET100_STOCKS, SET100_MAP, SET100_SECTORS, SSET_STOCKS, SSET_MAP, SSET_SECTORS, MAI_STOCKS, MAI_MAP, MAI_SECTORS } from './realStocks.js'
 
 /**
  * @typedef {{ id: string, label: string, description: string, stocks: import('./mockStocks.js').Stock[], stocksMap: Object, sectors: string[] }} IndexDef
@@ -21,6 +21,14 @@ export const INDICES = [
     stocks: SSET_STOCKS,
     stocksMap: SSET_MAP,
     sectors: SSET_SECTORS,
+  },
+  {
+    id: 'MAI',
+    label: 'mai',
+    description: 'Market for Alternative Investment — smaller growth companies',
+    stocks: MAI_STOCKS,
+    stocksMap: MAI_MAP,
+    sectors: MAI_SECTORS,
   },
 ]
 
