@@ -5,7 +5,10 @@ Fetch real SET market data from Yahoo Finance:
   • quoteSummary (v10)    — P/E, D/E, FCF, ROE, dividendYield,
                             payoutRatio, epsGrowth, revenueGrowth
 
-Usage:  python fetch_data.py
+Usage:  python fetch_data.py                  # fetch all three indices
+        python fetch_data.py --index sset     # sSET only
+        python fetch_data.py --index set100   # SET100 only
+        python fetch_data.py --index mai      # MAI only
 
 Outputs:
   src/data/real/set100_stocks.json   — price + fundamental fields
@@ -60,14 +63,29 @@ SET100_TICKERS = [
 ]
 
 SSET_TICKERS = [
-    'MALEE','ICHI','ZEN','SAPPE','SNP','OISHI','TFG',
-    'WPH','SKR','RAM','THG','LPH','KDH',
-    'INET','MFEC','SVI','SVOA','CS','TEAMG','SIS',
-    'LALIN','SENA','NUSA','RICHY','PRIN','GRAND','JSP','PACE',
-    'PYLON','NWR','SEAFCO','ITD','COTTO','CHOW','STEC','MASTER',
-    'MBK','SINGER','BEAUTY','JUBILE','TNP',
-    'CHAYO','EASY','AIRA','CIMBT','ASP',
-    'LEO','WICE','JWD','NCL',
+    # Food & Beverage
+    'ASIAN','COCOCO','KCG','MALEE','RBF','SAPPE','SNNP','TEGH','TKN',
+    # Healthcare
+    'EKH','ILM','KLINIQ','MEDEZE','RJH','RPH','THG','WPH',
+    # Technology
+    'ADVICE','AIT','BBIK','DITTO','FORTH','III','ILINK','RABBIT',
+    'SAMART','SIS','SKY','SYNEX','TEAMG','THCOM','TKS','XPG',
+    # Property
+    'BLAND','LPN','NEX','NOBLE','ORI','PSH','SC',
+    # Manufacturing
+    'BYD','EPG','HFT','HTC','MCS','NER','NYT','OKJ','SAK','SAT','SCGD','STPI','TFM',
+    # Consumer
+    'FM','KAMART','MC','PLAT','SABINA','SINGER','SPA','SUN','TMAN',
+    # Financials
+    'ASK','CB','HENG','KGI','NCAP','NSL','PTL','SCAP','THANI','TQM',
+    # Energy
+    'BAFS','BBGI','LANNA','PCE','PT','SUPER',
+    # Transport
+    'AAI','DMT','PM','PSL','TTA',
+    # Media & Entertainment
+    'BEC','MAJOR','MASTER','ONEE','PSP',
+    # Services
+    'AH','BLC','EASTW','HUMAN','KBS','NEO','ROJNA','SHR','SRICHA','TIPH','UVAN','VIH',
 ]
 
 MAI_TICKERS = [
@@ -110,20 +128,42 @@ SECTOR_MAP = {
     'MTC':'Financials','SAWAD':'Financials','AEONTS':'Financials','ASK':'Financials',
     'GL':'Financials','TIDLOR':'Financials','THANI':'Financials','TMT':'Financials',
     'KTC':'Financials','TLI':'Financials','JMT':'Financials','PHOL':'Financials',
-    'MALEE':'Food & Beverage','ICHI':'Food & Beverage','ZEN':'Food & Beverage',
-    'SAPPE':'Food & Beverage','SNP':'Food & Beverage','OISHI':'Food & Beverage','TFG':'Food & Beverage',
-    'WPH':'Healthcare','SKR':'Healthcare','RAM':'Healthcare','THG':'Healthcare',
-    'LPH':'Healthcare','KDH':'Healthcare',
-    'INET':'Technology','MFEC':'Technology','SVI':'Technology','SVOA':'Technology',
-    'CS':'Technology','TEAMG':'Technology','SIS':'Technology',
-    'LALIN':'Property','SENA':'Property','NUSA':'Property','RICHY':'Property',
-    'PRIN':'Property','GRAND':'Property','JSP':'Property','PACE':'Property',
-    'PYLON':'Manufacturing','NWR':'Manufacturing','SEAFCO':'Manufacturing',
-    'ITD':'Manufacturing','COTTO':'Manufacturing','CHOW':'Manufacturing',
-    'STEC':'Manufacturing','MASTER':'Manufacturing',
-    'MBK':'Consumer','SINGER':'Consumer','BEAUTY':'Consumer','JUBILE':'Consumer','TNP':'Consumer',
-    'CHAYO':'Financials','EASY':'Financials','AIRA':'Financials','CIMBT':'Financials','ASP':'Financials',
-    'LEO':'Logistics','WICE':'Logistics','JWD':'Logistics','NCL':'Logistics',
+    # sSET — Food & Beverage
+    'ASIAN':'Food & Beverage','COCOCO':'Food & Beverage','KCG':'Food & Beverage',
+    'MALEE':'Food & Beverage','RBF':'Food & Beverage','SAPPE':'Food & Beverage',
+    'SNNP':'Food & Beverage','TEGH':'Food & Beverage','TKN':'Food & Beverage',
+    # sSET — Healthcare
+    'EKH':'Healthcare','ILM':'Healthcare','KLINIQ':'Healthcare','MEDEZE':'Healthcare',
+    'RJH':'Healthcare','RPH':'Healthcare','THG':'Healthcare','WPH':'Healthcare',
+    # sSET — Technology
+    'ADVICE':'Technology','AIT':'Technology','BBIK':'Technology','DITTO':'Technology',
+    'FORTH':'Technology','III':'Technology','ILINK':'Technology','RABBIT':'Technology',
+    'SAMART':'Technology','SIS':'Technology','SKY':'Technology','SYNEX':'Technology',
+    'TEAMG':'Technology','THCOM':'Technology','TKS':'Technology','XPG':'Technology',
+    # sSET — Property
+    'BLAND':'Property','NEX':'Property','NOBLE':'Property','PSH':'Property',
+    # sSET — Manufacturing
+    'BYD':'Manufacturing','EPG':'Manufacturing','HFT':'Manufacturing','HTC':'Manufacturing',
+    'MCS':'Manufacturing','NER':'Manufacturing','NYT':'Manufacturing','OKJ':'Manufacturing',
+    'SAK':'Manufacturing','SAT':'Manufacturing','SCGD':'Manufacturing',
+    'STPI':'Manufacturing','TFM':'Manufacturing',
+    # sSET — Consumer
+    'FM':'Consumer','KAMART':'Consumer','MC':'Consumer','PLAT':'Consumer',
+    'SABINA':'Consumer','SINGER':'Consumer','SPA':'Consumer','SUN':'Consumer','TMAN':'Consumer',
+    # sSET — Financials
+    'CB':'Financials','HENG':'Financials','KGI':'Financials','NCAP':'Financials',
+    'NSL':'Financials','PTL':'Financials','SCAP':'Financials','TQM':'Financials',
+    # sSET — Energy
+    'BAFS':'Energy','BBGI':'Energy','LANNA':'Energy','PCE':'Energy','PT':'Energy','SUPER':'Energy',
+    # sSET — Transport
+    'AAI':'Transport','DMT':'Transport','PM':'Transport','PSL':'Transport',
+    # sSET — Media & Entertainment
+    'BEC':'Media & Entertainment','MASTER':'Media & Entertainment',
+    'ONEE':'Media & Entertainment','PSP':'Media & Entertainment',
+    # sSET — Services
+    'AH':'Services','BLC':'Services','HUMAN':'Services','KBS':'Services',
+    'NEO':'Services','ROJNA':'Services','SHR':'Services','SRICHA':'Services',
+    'TIPH':'Services','UVAN':'Services','VIH':'Services',
     'JKN':'Technology','PLANET':'Technology','MST':'Technology','SMART':'Technology',
     'UBIS':'Technology','NMG':'Technology','SMT':'Technology','ROBOT':'Technology',
     'DRT':'Manufacturing','HPMT':'Manufacturing','INOX':'Manufacturing','SIMAT':'Manufacturing',
@@ -407,14 +447,53 @@ def process(tickers, label, out_dir):
 # ── Entry ─────────────────────────────────────────────────────────────────────
 
 if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Fetch SET market data from Yahoo Finance.')
+    parser.add_argument(
+        '--index', choices=['set100', 'sset', 'mai'], default=None,
+        help='Fetch a single index only (default: fetch all three)',
+    )
+    args = parser.parse_args()
+
     out = os.path.join('src', 'data', 'real')
 
     print('Initializing Yahoo Finance session...')
     init_session()
 
-    set100_result = process(SET100_TICKERS, 'set100', out)
-    sset_result   = process(SSET_TICKERS,   'sset',   out)
-    mai_result    = process(MAI_TICKERS,    'mai',    out)
+    # Load existing meta so unchanged indices keep their stats
+    meta_path = os.path.join(out, 'meta.json')
+    try:
+        with open(meta_path, 'r', encoding='utf-8') as f:
+            existing_meta = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        existing_meta = {}
+
+    run_all = args.index is None
+
+    if run_all or args.index == 'set100':
+        set100_result = process(SET100_TICKERS, 'set100', out)
+    else:
+        set100_result = {
+            'fetched': existing_meta.get('set100Count', 0),
+            'skipped': existing_meta.get('skipped', {}).get('SET100', []),
+        }
+
+    if run_all or args.index == 'sset':
+        sset_result = process(SSET_TICKERS, 'sset', out)
+    else:
+        sset_result = {
+            'fetched': existing_meta.get('ssetCount', 0),
+            'skipped': existing_meta.get('skipped', {}).get('SSET', []),
+        }
+
+    if run_all or args.index == 'mai':
+        mai_result = process(MAI_TICKERS, 'mai', out)
+    else:
+        mai_result = {
+            'fetched': existing_meta.get('maiCount', 0),
+            'skipped': existing_meta.get('skipped', {}).get('MAI', []),
+        }
 
     meta = {
         'lastFetched': datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
@@ -430,7 +509,6 @@ if __name__ == '__main__':
             'MAI':    mai_result['skipped'],
         },
     }
-    meta_path = os.path.join(out, 'meta.json')
     with open(meta_path, 'w', encoding='utf-8') as f:
         json.dump(meta, f, indent=2)
     print(f'\n  Wrote metadata     -> {meta_path}')
