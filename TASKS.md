@@ -183,11 +183,288 @@ Follow this exact sequence. Complete each phase fully before moving to the next.
 
 ---
 
+---
+
+## Phase 9 — Backtesting Engine
+
+> Build a self-contained backtesting system that runs entirely in the browser against
+> the existing real OHLCV history. Zero disruption to the dashboard — new route `/backtest`,
+> new files only, one small addition to TopBar and App.jsx.
+
+### Data context
+- Real OHLCV history: **2021-06-28 → 2026-06-26** (~1 215 candles / stock, all indices)
+- Earliest meaningful backtest start: **2022-07-01**
+  (≈250 trading days of warm-up from data start → EMA200 is fully valid by then)
+- Stocks with < 400 candles (some MAI names) auto-skip entry signals until indicators warm up
+
+---
+
+### T-090 — Core backtesting engine (`src/data/backtester.js`)
+
+Pure function, no React imports, no side effects.
+
+**Input:**
+```js
+runBacktest({
+  strategy,    // StrategyDef (see T-091)
+  allStocks,   // Stock[] — full universe passed in; engine applies selectionCriteria internally
+  startDate,   // 'YYYY-MM-DD' — first date trades may fire
+  endDate,     // 'YYYY-MM-DD' — force-close everything on this date (default: last candle)
+  budget,      // number — initial capital in THB
+})
+```
+
+**Engine algorithm (daily loop):**
+1. Pre-compute full indicator arrays for every stock in universe once before the loop
+   (`calcSMA`, `calcEMA`, `calcBollingerBands`, `calcRSI`, `calcMACD`)
+2. Build a sorted union of all trading dates across all stocks
+3. Walk each date from `startDate` → `endDate`:
+   - **Exit pass** (check open positions first to free up cash):
+     - Stop-loss hit: if `candle.low ≤ buyPrice × (1 − stopLossPct)` → sell at stop price
+     - Take-profit hit: if `candle.high ≥ buyPrice × (1 + takeProfitPct)` → sell at target
+     - Strategy exit signal: call `strategy.exitCriteria(ctx)` → sell at `candle.close`
+   - **Entry pass** (open new positions if cash available and below `maxPositions`):
+     - Call `strategy.selectionCriteria(stock)` → skip if false
+     - Call `strategy.entryCriteria(ctx)` → buy at next-day open (avoid look-ahead bias)
+     - Position size = `availableCash / (maxPositions − openPositionCount)`
+     - `quantity = Math.floor(positionSize / entryPrice)` (whole shares only)
+4. After `endDate`: force-close all open positions at last available candle close
+
+**Output — `BacktestResult`:**
+```js
+{
+  strategyId,
+  runAt,           // ISO timestamp
+  startDate,
+  endDate,
+  initialBudget,
+  finalValue,      // cash + open-position mark-to-market
+  trades: [{
+    ticker,
+    buyDate,       // 'YYYY-MM-DD'
+    buyPrice,      // THB
+    quantity,
+    sellDate,      // null if still open at end
+    sellPrice,
+    pnl,           // THB — positive = profit
+    pnlPct,        // %
+    daysHeld,
+    exitReason,    // 'signal' | 'stop_loss' | 'take_profit' | 'end_of_data'
+  }],
+  summary: {
+    totalTrades,
+    winningTrades,
+    losingTrades,
+    winRate,       // %
+    totalPnl,      // THB
+    totalPnlPct,   // %
+    maxDrawdown,   // % — largest peak-to-trough drawdown on equity curve
+    avgDaysHeld,
+    bestTrade,     // Trade with highest pnlPct
+    worstTrade,    // Trade with lowest pnlPct
+    equityCurve,   // [{ date, value }] — daily portfolio value for charting
+  },
+}
+```
+
+**Important constraints:**
+- Entries execute at **next-day open** (not same-day close) to avoid look-ahead bias
+- Indicators that return `null` (warm-up period) must never trigger a trade
+- A ticker already in the portfolio cannot be bought again until sold
+- Commission: configurable per-strategy (`commissionPct`, default `0.0015` = 0.15% per leg)
+
+---
+
+### T-091 — Strategy definition schema (`src/data/strategies.js`)
+
+Each strategy is a plain JS object:
+```js
+{
+  id: string,
+  label: string,
+  description: string,
+  universe: 'ALL' | 'SET100' | 'SSET' | 'MAI',
+  maxPositions: number,        // max concurrent open trades
+  stopLossPct: number | null,  // e.g. 0.08 = 8% hard stop; null = no stop
+  takeProfitPct: number | null,
+  commissionPct: number,       // default 0.0015
+
+  // ctx = { stock, history, closes, indicators, i, date }
+  selectionCriteria: (ctx) => boolean,
+  entryCriteria:     (ctx) => boolean,
+  exitCriteria:      (ctx) => boolean,  // only called when a position is open
+}
+```
+
+**`indicators` object passed to each criteria function:**
+```js
+{
+  sma20, sma50, sma150, sma160, sma200,   // number[] | null[]
+  ema20, ema50, ema200, ema220,
+  boll,   // { upper, mid, lower }[]
+  rsi14,  // number[]
+  macd,   // { macd, signal, hist }[]
+}
+```
+
+**Starter strategies to implement (one per strategy file section):**
+
+| # | ID | Entry Signal | Exit Signal | Stop |
+|---|---|---|---|---|
+| 1 | `golden_cross` | SMA50 crosses above SMA200 | SMA50 crosses below SMA200 | 8% |
+| 2 | `rsi_oversold_bounce` | RSI(14) crosses above 30 (was below) | RSI > 70 OR RSI crosses below 50 | 8% |
+| 3 | `ema200_pullback` | Price closes above EMA200 after dipping below it | Price closes below EMA200 | 5% |
+| 4 | `macd_crossover` | MACD line crosses above signal line | MACD line crosses below signal line | 8% |
+| 5 | `sma_trend_setup` | All 5 SMA Trend Setup screener conditions met | SMA50 falls below SMA160 | 10% |
+| 6 | `bollinger_breakout` | Close breaks above upper Bollinger band | Close back inside upper band for 2 days | 8% |
+
+---
+
+### T-092 — Backtest state slice in Zustand (`src/store/useAppStore.js`)
+
+Add to the existing store — do not touch any existing state or actions:
+```js
+// state
+backtestResults: {},         // { [strategyId_runId]: BacktestResult }
+backtestRunning: false,
+activeBacktestId: null,      // currently viewed result key
+
+// actions
+runBacktest(strategyId, budget, startDate, endDate),
+setActiveBacktest(resultId),
+clearBacktestResult(resultId),
+clearAllBacktestResults(),
+```
+
+`runBacktest` action:
+- Sets `backtestRunning: true`
+- Calls `runBacktest()` from `backtester.js` synchronously
+  (all data in memory; runs in < 2s for 254 stocks × 5 years)
+- Stores result under key `${strategyId}_${Date.now()}`
+- Sets `activeBacktestId` to the new key
+- Sets `backtestRunning: false`
+
+---
+
+### T-093 — Backtest route + TopBar nav link
+
+**`src/App.jsx`** — add second route:
+```jsx
+<Route path="/backtest" element={<BacktestPage />} />
+```
+
+**`src/components/Dashboard/TopBar.jsx`** — add a nav link alongside the index tabs:
+- "⚡ Backtest" button styled as a secondary action (outline, not accent-filled)
+- Uses React Router `<Link>` to `/backtest`
+- Active state when on `/backtest`
+
+---
+
+### T-094 — `BacktestPage` layout (`src/components/Backtest/BacktestPage.jsx`)
+
+Two-column layout matching the financial terminal aesthetic:
+
+```
+┌────────────────────────────────────────────────────────────────┐
+│ TopBar (same as dashboard — includes back-nav to "/" )         │
+├──────────────────┬─────────────────────────────────────────────┤
+│  Strategy Panel  │  Results Area                               │
+│  (280px fixed)   │                                             │
+│                  │  [no run yet]  → "Select a strategy and     │
+│  ○ Golden Cross  │                   click Run"                │
+│  ○ RSI Bounce    │                                             │
+│  ○ EMA200 Pull   │  [result ready] → SummaryStats + TradeTable │
+│  ○ MACD Cross    │                                             │
+│  ○ SMA Trend     │                                             │
+│  ○ Boll Break    │                                             │
+│                  │                                             │
+│  Budget: [____]  │                                             │
+│  Start:  [____]  │                                             │
+│  End:    [____]  │                                             │
+│                  │                                             │
+│  [ Run Backtest ]│                                             │
+│                  │                                             │
+│ Past Runs:       │                                             │
+│  Golden Cross ✓  │                                             │
+│  RSI Bounce   ✓  │                                             │
+└──────────────────┴─────────────────────────────────────────────┘
+```
+
+Defaults: Budget = 100,000 THB · Start = 2022-07-01 · End = today
+
+---
+
+### T-095 — `SummaryStats` component (`src/components/Backtest/SummaryStats.jsx`)
+
+Metric cards row + equity curve chart:
+
+**Cards (2 rows of 4):**
+```
+Final Value  │ Total P&L  │ Total P&L % │ Win Rate
+Total Trades │ Avg Days   │ Max Drawdown │ Best / Worst Trade
+```
+
+**Equity Curve:**
+- `lightweight-charts` LineSeries
+- X-axis: dates from startDate → endDate
+- Y-axis: portfolio value in THB
+- Horizontal dashed line at initial budget
+- Area fill below the line: green if above budget, red if below
+
+---
+
+### T-096 — `BacktestResultsTable` component (`src/components/Backtest/BacktestResultsTable.jsx`)
+
+Sortable table — one row per closed trade (open positions shown at bottom, greyed out):
+
+| Ticker | Buy Date | Buy Price | Qty | Sell Date | Sell Price | P&L (฿) | P&L % | Days | Exit Reason |
+|---|---|---|---|---|---|---|---|---|---|
+
+- P&L ฿ and P&L % colored bullish/bearish
+- Exit Reason shown as a small badge: `SIGNAL` · `STOP` · `TARGET` · `EOD`
+- Click a row → opens the StockTerminal modal for that ticker
+- Sortable on every column
+- Footer row: totals for P&L ฿, and averages for P&L %, Days Held
+
+---
+
+### T-097 — `StrategyPanel` component (`src/components/Backtest/StrategyPanel.jsx`)
+
+Left panel:
+- Radio list of all strategies with description on hover
+- Number inputs: Budget (THB), Start Date, End Date
+- "Run Backtest" button — disabled while `backtestRunning`
+- "Past Runs" section below: lists previous results by strategy name + run time
+  - Click → sets `activeBacktestId` to show that result
+  - Delete (×) button → calls `clearBacktestResult`
+
+---
+
+### T-098 — Export backtest results to CSV
+
+Extend `src/utils/exportCsv.js` with:
+```js
+exportBacktestToCSV(result)
+```
+- Exports the full trade log with all columns
+- UTF-8 BOM header for Excel
+- Button in `BacktestResultsTable` toolbar: "Export CSV"
+
+---
+
+### T-099 — Strategy comparison view
+
+After running 2+ strategies with the same date range and budget:
+- "Compare" button appears above the results area
+- Side-by-side table: each strategy as a column, each summary metric as a row
+- Highlight the best value in each row in accent color
+
+---
+
 ## Deferred (Post-MVP)
 
 - Real-time WebSocket price feed integration
 - User watchlists (localStorage persistence)
 - Portfolio tracker
 - News feed panel per stock
-- Export to CSV
 - Thai language toggle
