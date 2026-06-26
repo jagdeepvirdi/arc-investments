@@ -15,15 +15,15 @@ const StockTerminal = lazy(() => import('../Terminal/StockTerminal.jsx'))
 const TOGGLEABLE_COLUMNS = [
   { key: 'name',           label: 'Company' },
   { key: 'sector',         label: 'Sector' },
-  { key: 'currentPrice',   label: 'Price (THB)' },
-  { key: 'trendBasePrice', label: 'Start Price' },
-  { key: 'changePct',      label: 'Change %' },
+  { key: 'marketCap',      label: 'Mkt Cap (B)' },
   { key: 'volume',         label: 'Volume' },
+  { key: 'trendBasePrice', label: 'IPO Price' },
+  { key: 'currentPrice',   label: 'Price (LTP)' },
+  { key: 'changePct',      label: 'Change %' },
   { key: 'pe',             label: 'P/E' },
   { key: 'de',             label: 'D/E' },
   { key: 'roe',            label: 'ROE' },
   { key: 'fcf',            label: 'FCF (B)' },
-  { key: 'marketCap',      label: 'Mkt Cap (B)' },
 ]
 
 function ColumnPicker() {

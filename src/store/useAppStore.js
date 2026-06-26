@@ -22,7 +22,7 @@ const useAppStore = create((set) => ({
   /** @type {boolean} */
   filterPanelOpen: false,
   /** @type {string[]} Column keys that are currently hidden */
-  hiddenColumns: [],
+  hiddenColumns: ['changePct', 'volume'],
 
   // -- Filter state --
   ...FILTER_DEFAULTS,

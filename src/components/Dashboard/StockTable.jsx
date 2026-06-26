@@ -65,26 +65,10 @@ function buildColumns(trendHorizon) {
       ),
     },
     {
-      key: 'currentPrice', label: 'Price (THB)', align: 'right', sortable: true,
+      key: 'marketCap', label: 'Mkt Cap (B)', align: 'right', sortable: true,
       renderCell: (s) => (
-        <td className="px-4 py-2.5 text-right font-price text-heading font-medium">
-          {fmt(s.currentPrice, 'currentPrice')}
-        </td>
-      ),
-    },
-    {
-      key: 'trendBasePrice', label: TREND_START_LABELS[trendHorizon] ?? 'Start Price', align: 'right', sortable: false,
-      renderCell: (s) => (
-        <td className="px-4 py-2.5 text-right font-price text-muted">
-          {fmt(s.trendBasePrice, 'trendBasePrice')}
-        </td>
-      ),
-    },
-    {
-      key: 'changePct', label: 'Change %', align: 'right', sortable: true,
-      renderCell: (s) => (
-        <td className={`px-4 py-2.5 text-right font-price font-medium ${s.changePct >= 0 ? 'text-bullish' : 'text-bearish'}`}>
-          {fmt(s.changePct, 'changePct')}
+        <td className="px-4 py-2.5 text-right font-price text-body">
+          {fmt(s.marketCap, 'marketCap')}
         </td>
       ),
     },
@@ -93,6 +77,30 @@ function buildColumns(trendHorizon) {
       renderCell: (s) => (
         <td className="px-4 py-2.5 text-right font-price text-muted">
           {fmt(s.volume, 'volume')}
+        </td>
+      ),
+    },
+    {
+      key: 'trendBasePrice', label: TREND_START_LABELS[trendHorizon] ?? 'IPO Price', align: 'right', sortable: false,
+      renderCell: (s) => (
+        <td className="px-4 py-2.5 text-right font-price text-muted">
+          {fmt(s.trendBasePrice, 'trendBasePrice')}
+        </td>
+      ),
+    },
+    {
+      key: 'currentPrice', label: 'Price (LTP)', align: 'right', sortable: true,
+      renderCell: (s) => (
+        <td className="px-4 py-2.5 text-right font-price text-heading font-medium">
+          {fmt(s.currentPrice, 'currentPrice')}
+        </td>
+      ),
+    },
+    {
+      key: 'changePct', label: 'Change %', align: 'right', sortable: true,
+      renderCell: (s) => (
+        <td className={`px-4 py-2.5 text-right font-price font-medium ${s.changePct >= 0 ? 'text-bullish' : 'text-bearish'}`}>
+          {fmt(s.changePct, 'changePct')}
         </td>
       ),
     },
@@ -125,14 +133,6 @@ function buildColumns(trendHorizon) {
       renderCell: (s) => (
         <td className={`px-4 py-2.5 text-right font-price ${s.fcf >= 0 ? 'text-bullish' : 'text-bearish'}`}>
           {fmt(s.fcf, 'fcf')}
-        </td>
-      ),
-    },
-    {
-      key: 'marketCap', label: 'Mkt Cap (B)', align: 'right', sortable: true,
-      renderCell: (s) => (
-        <td className="px-4 py-2.5 text-right font-price text-body">
-          {fmt(s.marketCap, 'marketCap')}
         </td>
       ),
     },
