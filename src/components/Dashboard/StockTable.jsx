@@ -26,12 +26,33 @@ function fmt(val, key) {
   }
 }
 
+const INDEX_COLORS = {
+  SET100: 'text-accent border-accent/30 bg-accent/10',
+  SSET:   'text-purple-400 border-purple-400/30 bg-purple-400/10',
+  MAI:    'text-emerald-400 border-emerald-400/30 bg-emerald-400/10',
+}
+
 /**
  * Builds the full column definition list including header metadata and cell renderer.
  * Columns with required:true never appear in the column picker and cannot be hidden.
  */
-function buildColumns(trendHorizon) {
-  return [
+function buildColumns(trendHorizon, activeIndex) {
+  const cols = []
+
+  if (activeIndex === 'ALL') {
+    cols.push({
+      key: 'sourceIndex', label: 'Index', align: 'left', sortable: true, required: true,
+      renderCell: (s) => (
+        <td className="px-4 py-2.5 whitespace-nowrap">
+          <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded border ${INDEX_COLORS[s.sourceIndex] ?? 'text-muted border-border bg-white/5'}`}>
+            {s.sourceIndex}
+          </span>
+        </td>
+      ),
+    })
+  }
+
+  cols.push(
     {
       key: 'ticker', label: 'Ticker', align: 'left', sortable: true, required: true,
       renderCell: (s) => (
@@ -150,7 +171,9 @@ function buildColumns(trendHorizon) {
         )
       },
     },
-  ]
+  )
+
+  return cols
 }
 
 function SortIcon({ col, sortKey, sortDir }) {
@@ -167,10 +190,11 @@ export function StockTable({ stocks }) {
   const setSort          = useAppStore(s => s.setSort)
   const setSelectedStock = useAppStore(s => s.setSelectedStock)
   const trendHorizon     = useAppStore(s => s.trendHorizon)
+  const activeIndex      = useAppStore(s => s.activeIndex)
   const hiddenColumns    = useAppStore(s => s.hiddenColumns)
   const tbodyRef = useRef(null)
 
-  const allCols    = buildColumns(trendHorizon)
+  const allCols    = buildColumns(trendHorizon, activeIndex)
   const visibleCols = allCols.filter(c => !hiddenColumns.includes(c.key))
 
   const handleRowClick = useCallback((ticker) => {

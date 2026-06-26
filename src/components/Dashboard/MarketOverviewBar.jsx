@@ -122,7 +122,7 @@ function Divider() {
 
 export function MarketOverviewBar() {
   const allMarketStocks = useMemo(
-    () => INDICES.flatMap(idx => idx.stocks),
+    () => INDICES.filter(idx => !idx.isAggregate).flatMap(idx => idx.stocks),
     [],
   )
 
@@ -136,7 +136,7 @@ export function MarketOverviewBar() {
   }, [])
 
   const indexStats = useMemo(
-    () => INDICES.map(idx => ({ id: idx.id, label: idx.label, ...indexMetrics(idx.stocks) })),
+    () => INDICES.filter(idx => !idx.isAggregate).map(idx => ({ id: idx.id, label: idx.label, ...indexMetrics(idx.stocks) })),
     [],
   )
 
