@@ -307,16 +307,335 @@ Each strategy is a plain JS object:
 }
 ```
 
-**Starter strategies to implement (one per strategy file section):**
+**Full strategy library — see T-091b below for detailed specifications.**
 
-| # | ID | Entry Signal | Exit Signal | Stop |
-|---|---|---|---|---|
-| 1 | `golden_cross` | SMA50 crosses above SMA200 | SMA50 crosses below SMA200 | 8% |
-| 2 | `rsi_oversold_bounce` | RSI(14) crosses above 30 (was below) | RSI > 70 OR RSI crosses below 50 | 8% |
-| 3 | `ema200_pullback` | Price closes above EMA200 after dipping below it | Price closes below EMA200 | 5% |
-| 4 | `macd_crossover` | MACD line crosses above signal line | MACD line crosses below signal line | 8% |
-| 5 | `sma_trend_setup` | All 5 SMA Trend Setup screener conditions met | SMA50 falls below SMA160 | 10% |
-| 6 | `bollinger_breakout` | Close breaks above upper Bollinger band | Close back inside upper band for 2 days | 8% |
+---
+
+### T-091b — Strategy Library (full catalog with entry/exit rules)
+
+> **Data analysis findings (SET100, 2022-07-01 → 2026-06-26):**
+> - 64.3% of stock-days were in SMA50 < SMA200 (persistent downtrend market)
+> - Average 3-year return across SET100: **−11%** — this market punishes buy-and-hold
+> - Daily volatility: **2.1%** — high enough for short-term mean reversion to be viable
+> - Stocks can lose 80–99% (RS: −99%, NOK: −89%) → **stop losses are mandatory on every strategy**
+> - Best performers (DELTA +442%, KTB +244%) shared: strong fundamentals + clear uptrend
+> - Bollinger lower band + RSI<40 + EMA200 filter produced 59.6% raw win rate (most promising signal)
+>
+> **Design principles applied to all strategies:**
+> 1. Every strategy has a hard stop loss — no exceptions
+> 2. Fundamental quality screens (ROE, FCF) block the catastrophic losers
+> 3. EMA200 or SMA200 trend filter prevents buying into multi-year downtrends
+> 4. Universe is ALL stocks (SET100 + sSET + MAI) unless noted — more opportunities
+> 5. Max 5 concurrent positions unless noted — equal position sizing
+
+---
+
+#### CATEGORY A — Trend Following
+
+---
+
+**S1 · Golden Cross + Quality Filter** `golden_cross_quality`
+> Rationale: Classic SMA50/SMA200 cross, but with fundamental screen to avoid the RS/NOK losers.
+> Raw golden cross has only ~2.9 events/stock over 5yr — quality filter keeps only the real breakouts.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | ROE > 10% AND FCF positive AND market cap > 5B THB |
+| Entry | SMA50 crosses above SMA200 (golden cross) |
+| Exit | SMA50 crosses below SMA200 (death cross) OR price drops below SMA200 |
+| Stop loss | 10% |
+| Take profit | None — let trend run |
+| Commission | 0.15% per leg |
+
+---
+
+**S2 · EMA Ribbon Alignment** `ema_ribbon`
+> Rationale: Requires EMA20 > EMA50 > EMA200 all aligned bullishly AND price above EMA20.
+> Stricter than golden cross — only enters when multiple timeframes agree.
+> RSI 45–65 filter prevents chasing overbought rallies.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | Any |
+| Entry | EMA20 > EMA50 > EMA200 AND price > EMA20 AND RSI between 45–65 |
+| Exit | EMA20 crosses below EMA50 |
+| Stop loss | 8% |
+| Take profit | None |
+| Commission | 0.15% per leg |
+
+---
+
+**S3 · EMA200 Reclaim** `ema200_reclaim`
+> Rationale: Price dips below EMA200 (shakeout), then closes back above it.
+> Captures the start of trend resumption after a correction.
+> Requires the dip to have lasted at least 3 days (not a one-day wick).
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | Any |
+| Entry | Price closes above EMA200 after being below it for 3+ consecutive days |
+| Exit | Price closes below EMA200 for 2 consecutive days |
+| Stop loss | 8% |
+| Take profit | None |
+| Commission | 0.15% per leg |
+
+---
+
+**S4 · MACD Crossover + Volume Confirmation** `macd_volume`
+> Rationale: MACD bullish cross filtered by volume spike (> 1.5× 20-day avg).
+> Volume confirmation separates genuine institutional buying from noise.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | Price > EMA200 (only in overall uptrend) |
+| Entry | MACD line crosses above signal line AND volume > 1.5× 20-day avg volume |
+| Exit | MACD line crosses below signal line |
+| Stop loss | 8% |
+| Take profit | None |
+| Commission | 0.15% per leg |
+
+---
+
+#### CATEGORY B — Mean Reversion
+
+---
+
+**S5 · Bollinger Band Quality Bounce** `boll_quality_bounce`
+> Rationale: Best raw signal found in data analysis (59.6% win rate unoptimised).
+> Price touches lower Bollinger Band + RSI oversold, but only in quality stocks above EMA200.
+> Quality filter (ROE + FCF) is critical — prevents catching stocks in terminal decline like RS.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 8 (more positions because short average hold time) |
+| Selection | ROE > 10% AND FCF positive AND price > EMA200 |
+| Entry | Close ≤ lower Bollinger Band (20, 2σ) AND RSI(14) < 40 |
+| Exit | Close ≥ middle Bollinger Band (SMA20) OR RSI > 60 |
+| Stop loss | 8% |
+| Take profit | None — middle band is the target |
+| Commission | 0.15% per leg |
+
+---
+
+**S6 · RSI Double-Dip Recovery** `rsi_double_dip`
+> Rationale: RSI makes a higher low below 40 while price also makes a higher low = bullish divergence.
+> Two-touch confirmation reduces false signals vs. single RSI dip.
+> Only in uptrending stocks (price above SMA200).
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | Price > SMA200 |
+| Entry | RSI was below 40, bounced above 40, then dipped back towards 40 (but higher low), and crosses 40 again |
+| Exit | RSI > 65 OR price drops below SMA200 |
+| Stop loss | 8% |
+| Take profit | 15% |
+| Commission | 0.15% per leg |
+
+---
+
+**S7 · Pullback to Rising SMA50** `sma50_pullback`
+> Rationale: In uptrending stocks, pullbacks to SMA50 are re-entry points.
+> SMA50 must be rising (higher than 10 days ago) — not a declining support.
+> RSI 40–55 confirms neither overbought nor broken down.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | SMA50 > SMA200 AND SMA50 is rising (SMA50[i] > SMA50[i−10]) |
+| Entry | Price within 2% above SMA50 AND RSI between 40–55 |
+| Exit | Price rises 15% above entry OR SMA50 crosses below SMA200 |
+| Stop loss | 6% (tight — we're buying near support) |
+| Take profit | 15% |
+| Commission | 0.15% per leg |
+
+---
+
+#### CATEGORY C — Momentum
+
+---
+
+**S8 · 52-Week High Breakout + Market Filter** `high52w_breakout`
+> Rationale: 505 breakout events found; 44% raw win rate.
+> Adding SET index filter (only trade when SET index itself is above its EMA200) is expected
+> to significantly improve win rate by preventing buying breakouts in a falling market.
+
+| Field | Value |
+|---|---|
+| Universe | SET100 only (most liquid, avoids thin MAI names) |
+| Max positions | 5 |
+| Selection | SET index close > SET index EMA200 (market timing gate) |
+| Entry | Price makes a new 52-week closing high (close > highest close of past 252 days) |
+| Exit | Price drops 12% from highest close since entry (trailing from peak) OR falls below SMA50 |
+| Stop loss | 8% hard stop from entry |
+| Take profit | None — trailing exit |
+| Commission | 0.15% per leg |
+
+---
+
+**S9 · Relative Strength vs SET Index** `relative_strength`
+> Rationale: In a declining market, buy the stocks that are still going UP.
+> These are the market leaders — DELTA, KTB, ADVANC showed this pattern.
+> Measured as stock's 3-month return minus SET index 3-month return.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | 3-month return of stock > 3-month return of SET index + 10% (outperforming by 10%) |
+| Entry | Stock makes new 1-month closing high (price > highest close in past 21 days) |
+| Exit | Stock's 1-month return drops below SET index 1-month return (underperformance) |
+| Stop loss | 10% |
+| Take profit | None |
+| Rebalance | Re-evaluate entry conditions weekly |
+| Commission | 0.15% per leg |
+
+---
+
+**S10 · MACD Histogram Momentum Shift** `macd_histogram_reversal`
+> Rationale: MACD histogram turning positive after 5+ consecutive negative bars
+> is the earliest measurable sign of momentum reversal — earlier than line crossover.
+> Catches the beginning of a move, exits on first sign of loss of momentum.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 6 |
+| Selection | Price > EMA200 |
+| Entry | MACD histogram was negative for 5+ consecutive days, then turns positive (first positive bar) |
+| Exit | MACD histogram turns negative again (first negative bar) |
+| Stop loss | 7% |
+| Take profit | None |
+| Commission | 0.15% per leg |
+
+---
+
+#### CATEGORY D — Hybrid Technical + Fundamental
+
+---
+
+**S11 · Quality Uptrend (Minervini-Style)** `quality_uptrend`
+> Rationale: Mimics Mark Minervini's SEPA criteria adapted for Thai market.
+> Only buy high-quality companies (ROE + FCF + low debt) that are in confirmed uptrends.
+> This is what DELTA, KTB, ADVANC, TTB all looked like before their big runs.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | ROE > 15% AND FCF positive AND D/E < 1.5 AND market cap > 10B THB |
+| Entry | Price > EMA200 AND SMA50 > SMA200 AND price makes new 1-month closing high |
+| Exit | Price drops below EMA200 OR SMA50 crosses below SMA200 |
+| Stop loss | 8% |
+| Take profit | None — let the winners run |
+| Commission | 0.15% per leg |
+
+---
+
+**S12 · Value Breakout** `value_breakout`
+> Rationale: Fundamentally cheap stocks (PE < 12, FCF positive) that are starting to move.
+> The breakout above 3-month high signals the market is re-rating the value.
+> Combines a margin-of-safety valuation entry with a price momentum trigger.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | PE between 1–12 AND FCF positive AND D/E < 1.0 |
+| Entry | Price breaks above the highest close of the past 63 trading days (3-month high) |
+| Exit | Price drops below SMA50 |
+| Stop loss | 10% (wider — value stocks can stay cheap longer) |
+| Take profit | 25% |
+| Commission | 0.15% per leg |
+
+---
+
+**S13 · Dividend Defensive Uptrend** `dividend_uptrend`
+> Rationale: High-yield dividend stocks with low payout ratios are the safest bet in a
+> bearish market. Adding a trend filter (price > SMA50 > SMA200) ensures we only hold
+> while the stock is healthy, not catching yield traps in decline.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 6 |
+| Selection | Dividend yield > 3.5% AND payout ratio < 70% AND FCF positive |
+| Entry | Price > SMA50 AND SMA50 > SMA200 AND RSI < 65 (not overbought) |
+| Exit | Price drops below SMA50 for 3 consecutive days |
+| Stop loss | 10% |
+| Take profit | None — hold for income + capital gain |
+| Commission | 0.15% per leg |
+
+---
+
+**S14 · SMA Trend Setup (screener as strategy)** `sma_trend_setup`
+> Rationale: The 5-condition screener we built — now run as a backtest strategy.
+> Conditions: SMA150>EMA220, Price>SMA50, SMA50>SMA160, Price>1.25×52wLow, touched EMA220 in 90d.
+> This is a high-conviction setup that requires many conditions to align simultaneously.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | history.length ≥ 220 (needs EMA220) |
+| Entry | All 5 SMA Trend Setup conditions true on the same day |
+| Exit | SMA50 falls below SMA160 (condition 3 violated) |
+| Stop loss | 10% |
+| Take profit | None |
+| Commission | 0.15% per leg |
+
+---
+
+#### CATEGORY E — Market Timing / Regime
+
+---
+
+**S15 · SET Index Market Timer** `set_market_timer`
+> Rationale: The most powerful filter found in the data: 64.3% of days were in downtrend.
+> This strategy does nothing except act as a regime gate: it wraps ANY other strategy
+> and blocks all entries when the SET composite index is below its own EMA200.
+> Implement as a boolean helper `isMarketInUptrend(date)` that all strategies can optionally use.
+> Standalone: holds cash when SET below EMA200, switches to equal-weight SET100 top-20 by ROE when above.
+
+| Field | Value |
+|---|---|
+| Universe | SET100 |
+| Max positions | 20 |
+| Selection | SET index close > SET index EMA200 (market regime is bullish) |
+| Entry | Price > EMA50 AND RSI < 65 (buy quality in bulk when market cooperates) |
+| Exit | SET index drops below its EMA200 (exit ALL positions) OR individual price < EMA50 |
+| Stop loss | 12% (wider because market filter does the heavy lifting) |
+| Take profit | None |
+| Commission | 0.15% per leg |
+
+---
+
+**S16 · Bollinger Band Squeeze Breakout** `boll_squeeze`
+> Rationale: Periods of low volatility (narrow Bollinger Bands) are consistently followed
+> by large directional moves. The squeeze signals energy building; the breakout direction
+> shows which way it releases. 2.1% daily vol makes these squeezes meaningful.
+
+| Field | Value |
+|---|---|
+| Universe | ALL stocks |
+| Max positions | 5 |
+| Selection | Price > EMA200 |
+| Entry signal | Bollinger Band width (upper − lower) is at its lowest in 20 days (squeeze) AND price closes above upper band (breakout direction confirmed) |
+| Exit | Price closes below SMA20 (middle band) for 2 consecutive days |
+| Stop loss | 8% |
+| Take profit | None |
+| Commission | 0.15% per leg |
 
 ---
 
