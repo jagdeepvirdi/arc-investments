@@ -13,6 +13,7 @@ function buildColumns(trendHorizon) {
   return [
     { key: 'ticker',          label: 'Ticker',                              align: 'left',  sortable: true },
     { key: 'name',            label: 'Company',                             align: 'left',  sortable: true },
+    { key: 'sector',          label: 'Sector',                              align: 'left',  sortable: true },
     { key: 'currentPrice',    label: 'Price (THB)',                         align: 'right', sortable: true },
     { key: 'trendBasePrice',  label: TREND_START_LABELS[trendHorizon] ?? 'Start Price', align: 'right', sortable: false },
     { key: 'changePct',       label: 'Change %',                            align: 'right', sortable: true },
@@ -99,7 +100,7 @@ export function StockTable({ stocks }) {
 
   return (
     <div className="overflow-auto flex-1">
-      <table className="w-full text-xs border-collapse min-w-[1260px]">
+      <table className="w-full text-xs border-collapse min-w-[1400px]">
         <thead className="sticky top-0 z-10 bg-surface border-b border-border">
           <tr>
             {COLUMNS.map(col => (
@@ -152,6 +153,13 @@ export function StockTable({ stocks }) {
                 </td>
                 {/* Name */}
                 <td className="px-4 py-2.5 text-body max-w-[200px] truncate">{stock.name}</td>
+                {/* Sector */}
+                <td className="px-4 py-2.5 whitespace-nowrap">
+                  <span className="text-[10px] font-medium px-1.5 py-0.5 rounded
+                                   bg-white/5 text-muted border border-border">
+                    {stock.sector}
+                  </span>
+                </td>
                 {/* Price */}
                 <td className="px-4 py-2.5 text-right font-price text-heading font-medium">
                   {fmt(stock.currentPrice, 'currentPrice')}
