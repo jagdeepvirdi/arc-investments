@@ -104,6 +104,51 @@ export function CandlestickChart({ history, timeframe, onChartCreated }) {
     }
   }, [])
 
+  // ── Build overlay data helpers ────────────────────────────────────────────────
+  const buildOverlayDefs = useCallback((sliced) => {
+    const historyIndexMap = new Map(history.map((c, i) => [c.time, i]))
+
+    const fromIndicator = (arr) =>
+      sliced.map(c => {
+        const i = historyIndexMap.get(c.time)
+        const v = i !== undefined ? arr[i] : null
+        return v !== null && v !== undefined ? { time: c.time, value: v } : null
+      }).filter(Boolean)
+
+    const fromBoll = (band) =>
+      sliced.map(c => {
+        const i = historyIndexMap.get(c.time)
+        const v = i !== undefined ? overlayData.BOLL[i] : null
+        return v ? { time: c.time, value: v[band] } : null
+      }).filter(Boolean)
+
+    return {
+      SMA20:  { color: '#F59E0B', data: () => fromIndicator(overlayData.SMA20) },
+      SMA50:  { color: '#8B5CF6', data: () => fromIndicator(overlayData.SMA50) },
+      EMA20:  { color: '#06B6D4', data: () => fromIndicator(overlayData.EMA20) },
+      EMA50:  { color: '#EC4899', data: () => fromIndicator(overlayData.EMA50) },
+      EMA200: { color: '#F97316', lineWidth: 2, data: () => fromIndicator(overlayData.EMA200) },
+      BOLL_U: { color: '#9CA3AF50', lineStyle: 2, data: () => fromBoll('upper') },
+      BOLL_M: { color: '#9CA3AF',   lineStyle: 2, data: () => fromBoll('mid') },
+      BOLL_L: { color: '#9CA3AF50', lineStyle: 2, data: () => fromBoll('lower') },
+      SET: {
+        color: '#6B728050', lineStyle: 2,
+        data: () => {
+          const firstSliced = sliced[0]
+          if (!firstSliced) return []
+          const setBase = SET_INDEX_MAP.get(firstSliced.time) ?? 1
+          const stockBase = firstSliced.close
+          return sliced.map(c => {
+            const setClose = SET_INDEX_MAP.get(c.time)
+            if (!setClose) return null
+            // Normalize SET index to stock's price scale
+            return { time: c.time, value: stockBase * (setClose / setBase) }
+          }).filter(Boolean)
+        },
+      },
+    }
+  }, [history, overlayData])
+
   // ── Feed candle + volume + overlay data when timeframe changes ───────────────
   useEffect(() => {
     const candle = candleSeriesRef.current
@@ -157,51 +202,6 @@ export function CandlestickChart({ history, timeframe, onChartCreated }) {
     chart.timeScale().fitContent()
     volumeChartRef.current?.timeScale().fitContent()
   }, [history, timeframe, activeOverlays, buildOverlayDefs, overlayData])
-
-  // ── Build overlay data helpers ────────────────────────────────────────────────
-  const buildOverlayDefs = useCallback((sliced) => {
-    const historyIndexMap = new Map(history.map((c, i) => [c.time, i]))
-
-    const fromIndicator = (arr) =>
-      sliced.map(c => {
-        const i = historyIndexMap.get(c.time)
-        const v = i !== undefined ? arr[i] : null
-        return v !== null && v !== undefined ? { time: c.time, value: v } : null
-      }).filter(Boolean)
-
-    const fromBoll = (band) =>
-      sliced.map(c => {
-        const i = historyIndexMap.get(c.time)
-        const v = i !== undefined ? overlayData.BOLL[i] : null
-        return v ? { time: c.time, value: v[band] } : null
-      }).filter(Boolean)
-
-    return {
-      SMA20:  { color: '#F59E0B', data: () => fromIndicator(overlayData.SMA20) },
-      SMA50:  { color: '#8B5CF6', data: () => fromIndicator(overlayData.SMA50) },
-      EMA20:  { color: '#06B6D4', data: () => fromIndicator(overlayData.EMA20) },
-      EMA50:  { color: '#EC4899', data: () => fromIndicator(overlayData.EMA50) },
-      EMA200: { color: '#F97316', lineWidth: 2, data: () => fromIndicator(overlayData.EMA200) },
-      BOLL_U: { color: '#9CA3AF50', lineStyle: 2, data: () => fromBoll('upper') },
-      BOLL_M: { color: '#9CA3AF',   lineStyle: 2, data: () => fromBoll('mid') },
-      BOLL_L: { color: '#9CA3AF50', lineStyle: 2, data: () => fromBoll('lower') },
-      SET: {
-        color: '#6B728050', lineStyle: 2,
-        data: () => {
-          const firstSliced = sliced[0]
-          if (!firstSliced) return []
-          const setBase = SET_INDEX_MAP.get(firstSliced.time) ?? 1
-          const stockBase = firstSliced.close
-          return sliced.map(c => {
-            const setClose = SET_INDEX_MAP.get(c.time)
-            if (!setClose) return null
-            // Normalize SET index to stock's price scale
-            return { time: c.time, value: stockBase * (setClose / setBase) }
-          }).filter(Boolean)
-        },
-      },
-    }
-  }, [history, overlayData])
 
   // ── Toggle overlays ───────────────────────────────────────────────────────────
   const toggleOverlay = useCallback((key) => {
