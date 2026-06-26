@@ -47,9 +47,9 @@ function Write-Tag([string]$msg, [string]$color = 'Cyan') {
 
 function Test-ProcessRunning([string]$pidFile) {
   if (-not (Test-Path $pidFile)) { return $false }
-  $pid = [int](Get-Content $pidFile -Raw).Trim()
+  $storedId = [int](Get-Content $pidFile -Raw).Trim()
   try {
-    $proc = Get-Process -Id $pid -ErrorAction Stop
+    Get-Process -Id $storedId -ErrorAction Stop | Out-Null
     return $true
   } catch {
     return $false
