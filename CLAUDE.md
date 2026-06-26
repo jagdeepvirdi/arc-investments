@@ -259,7 +259,7 @@ Three files, same stock typedef:
 | File | Index | Count | Sectors |
 |---|---|---|---|
 | `mockStocks.js` | SET100 | 121 | Energy, Banking, Property, Telecom, Consumer, Healthcare, Industry, Food & Agri, Transport, Tech/Media, Financials |
-| `mockSset.js` | sSET | 71 | Food & Beverage, Healthcare, Technology, Property, Manufacturing, Consumer, Financials, Logistics |
+| `mockSset.js` | sSET | 100 | Food & Beverage, Healthcare, Technology, Property, Manufacturing, Consumer, Financials, Energy, Transport, Media & Entertainment, Services |
 | `mockMai.js` | MAI | 83 | Technology, Manufacturing, Industrial, Property, Food & Beverage, Healthcare, Energy, Services |
 
 **Stock typedef:**
