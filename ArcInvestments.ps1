@@ -34,8 +34,8 @@ $StateDir  = Join-Path $Root '.server'
 $LogDir    = Join-Path $StateDir 'logs'
 
 $Config = @{
-  dev  = @{ Port = 5179; PidFile = Join-Path $StateDir 'dev.pid';  LogFile = Join-Path $LogDir 'dev.log';  Command = 'npm'; Args = @('run', 'dev') }
-  prod = @{ Port = 4179; PidFile = Join-Path $StateDir 'prod.pid'; LogFile = Join-Path $LogDir 'prod.log'; Command = 'npm'; Args = @('run', 'preview') }
+  dev  = @{ Port = 5179; PidFile = Join-Path $StateDir 'dev.pid';  LogFile = Join-Path $LogDir 'dev.log';  Command = 'cmd'; Args = @('/c', 'npm run dev') }
+  prod = @{ Port = 4179; PidFile = Join-Path $StateDir 'prod.pid'; LogFile = Join-Path $LogDir 'prod.log'; Command = 'cmd'; Args = @('/c', 'npm run preview') }
 }
 
 # ── helpers ───────────────────────────────────────────────────────────────────
@@ -74,7 +74,7 @@ function Start-Server([string]$env) {
   # Build first if prod and no dist/
   if ($env -eq 'prod' -and -not (Test-Path (Join-Path $Root 'dist'))) {
     Write-Tag 'No dist/ folder found — building first...' 'Yellow'
-    & npm run build
+    & cmd /c 'npm run build'
     if ($LASTEXITCODE -ne 0) { throw 'Build failed.' }
   }
 
