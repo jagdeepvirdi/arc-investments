@@ -170,11 +170,11 @@ Follow this exact sequence. Complete each phase fully before moving to the next.
 - [ ] **T-073** All 3 scanner chips filter correctly
 - [ ] **T-074** Scanner chips show correct match counts
 - [ ] **T-075** Clicking any stock opens terminal without error
-- [ ] **T-076** All 5 timeframes work on candlestick chart
-- [ ] **T-077** All 8 overlay toggles work (add/remove lines on chart)
-- [ ] **T-078** EMA 200 is visible by default on chart open
-- [ ] **T-079** RSI chart renders with 30/70 reference lines
-- [ ] **T-080** MACD chart renders with histogram coloring
+- [x] **T-076** All 5 timeframes work on candlestick chart
+- [x] **T-077** All 8 overlay toggles work (add/remove lines on chart)
+- [x] **T-078** EMA 200 is visible by default on chart open
+- [x] **T-079** RSI chart renders with 30/70 reference lines
+- [x] **T-080** MACD chart renders with histogram coloring
 - [ ] **T-081** Fundamental panel shows all 5 metrics
 - [ ] **T-082** P/E shows sector average comparison badge correctly
 - [ ] **T-083** Terminal closes cleanly and table is still intact

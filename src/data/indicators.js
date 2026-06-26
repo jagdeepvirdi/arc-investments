@@ -27,6 +27,7 @@ export function calcSMA(closes, period) {
  */
 export function calcEMA(closes, period) {
   const result = new Array(closes.length).fill(null)
+  if (closes.length < period) return result
   const k = 2 / (period + 1)
 
   // seed with SMA of first `period` values
@@ -111,6 +112,7 @@ export function calcRSI(closes, period) {
  */
 export function calcMACD(closes, fast, slow, signal) {
   const result = new Array(closes.length).fill(null)
+  if (closes.length < slow) return result
   const emaFast = calcEMA(closes, fast)
   const emaSlow = calcEMA(closes, slow)
 

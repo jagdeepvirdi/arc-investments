@@ -4,8 +4,6 @@ import { ChartOverlayControls } from './ChartOverlayControls.jsx'
 import { sliceByTimeframe, SET_INDEX_HISTORY } from '../../data/mockPriceHistory.js'
 import { calcSMA, calcEMA, calcBollingerBands, calcSupportResistance } from '../../data/indicators.js'
 
-const TIMEFRAMES = ['1D', '1W', '1M', '1Y', 'ALL']
-
 const DARK_CHART_OPTIONS = {
   layout: { background: { color: '#111827' }, textColor: '#6B7280' },
   grid: { vertLines: { color: '#1F2937' }, horzLines: { color: '#1F2937' } },
@@ -20,8 +18,8 @@ const DARK_CHART_OPTIONS = {
 
 const SET_INDEX_MAP = new Map(SET_INDEX_HISTORY.map(c => [c.time, c.close]))
 
-/** @param {{ history: import('../../data/mockPriceHistory').Candle[] }} props */
-export function CandlestickChart({ history }) {
+/** @param {{ history: import('../../data/mockPriceHistory').Candle[], timeframe: string, onChartCreated?: (chart: any) => void }} props */
+export function CandlestickChart({ history, timeframe, onChartCreated }) {
   const chartContainerRef = useRef(null)
   const volumeContainerRef = useRef(null)
   const chartRef = useRef(null)
@@ -30,7 +28,6 @@ export function CandlestickChart({ history }) {
   const volumeSeriesRef = useRef(null)
   const overlaySeriesRef = useRef({}) // key → series instance
 
-  const [timeframe, setTimeframe] = useState('1Y')
   const [activeOverlays, setActiveOverlays] = useState({ EMA200: true })
 
   // Pre-compute all indicator arrays — stable as long as `history` reference is stable
@@ -92,8 +89,11 @@ export function CandlestickChart({ history }) {
     candleSeriesRef.current = candleSeries
     volumeSeriesRef.current = volSeries
 
+    if (onChartCreated) onChartCreated(chart)
+
     return () => {
       ro.disconnect()
+      if (onChartCreated) onChartCreated(null)
       chart.remove()
       volChart.remove()
       chartRef.current = null
@@ -104,7 +104,7 @@ export function CandlestickChart({ history }) {
     }
   }, [])
 
-  // ── Feed candle + volume data when timeframe changes ─────────────────────────
+  // ── Feed candle + volume + overlay data when timeframe changes ───────────────
   useEffect(() => {
     const candle = candleSeriesRef.current
     const vol = volumeSeriesRef.current
@@ -121,9 +121,42 @@ export function CandlestickChart({ history }) {
       color: c.close >= c.open ? '#10B98130' : '#EF444430',
     })))
 
+    // Update active overlays with the new timeframe's sliced data
+    const defs = buildOverlayDefs(sliced)
+    Object.entries(activeOverlays).forEach(([key, active]) => {
+      if (!active) return
+
+      const groupKeys = key === 'BOLL'
+        ? ['BOLL_U', 'BOLL_M', 'BOLL_L']
+        : key === 'SET_INDEX' ? ['SET'] : [key]
+
+      for (const gk of groupKeys) {
+        const series = overlaySeriesRef.current[gk]
+        const def = defs[gk]
+        if (series && def) {
+          series.setData(def.data())
+        }
+      }
+
+      if (key === 'SR') {
+        const lines = overlaySeriesRef.current._srLines ?? []
+        for (const ln of lines) {
+          try { candleSeriesRef.current?.removePriceLine(ln) } catch {}
+        }
+        const sr = overlayData.SR
+        const allLevels = [
+          ...sr.support.map(p => ({ price: p, color: '#10B98160', axisLabelVisible: false })),
+          ...sr.resistance.map(p => ({ price: p, color: '#EF444460', axisLabelVisible: false })),
+        ]
+        overlaySeriesRef.current._srLines = allLevels.map(lvl =>
+          candleSeriesRef.current?.createPriceLine(lvl)
+        ).filter(Boolean)
+      }
+    })
+
     chart.timeScale().fitContent()
     volumeChartRef.current?.timeScale().fitContent()
-  }, [history, timeframe])
+  }, [history, timeframe, activeOverlays, buildOverlayDefs, overlayData])
 
   // ── Build overlay data helpers ────────────────────────────────────────────────
   const buildOverlayDefs = useCallback((sliced) => {
@@ -246,21 +279,7 @@ export function CandlestickChart({ history }) {
   return (
     <div className="flex flex-col gap-2">
       {/* Timeframe + overlay row */}
-      <div className="flex items-center justify-between flex-wrap gap-2">
-        <div className="flex items-center gap-1">
-          {TIMEFRAMES.map(tf => (
-            <button
-              key={tf}
-              type="button"
-              onClick={() => setTimeframe(tf)}
-              aria-pressed={timeframe === tf}
-              className={`px-2.5 py-1 text-[10px] font-medium rounded transition-colors
-                ${timeframe === tf ? 'bg-accent text-white' : 'text-muted hover:text-body hover:bg-surface'}`}
-            >
-              {tf}
-            </button>
-          ))}
-        </div>
+      <div className="flex items-center justify-end flex-wrap gap-2">
         <ChartOverlayControls activeOverlays={activeOverlays} onToggle={toggleOverlay} />
       </div>
 

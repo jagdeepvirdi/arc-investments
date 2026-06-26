@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { createChart } from 'lightweight-charts'
 import { calcMACD } from '../../data/indicators.js'
+import { sliceByTimeframe } from '../../data/mockPriceHistory.js'
 
 const DARK_OPTS = {
   layout: { background: { color: '#111827' }, textColor: '#6B7280' },
@@ -10,11 +11,15 @@ const DARK_OPTS = {
   crosshair: { mode: 1 },
 }
 
-/** @param {{ history: import('../../data/mockPriceHistory').Candle[] }} props */
-export function MACDChart({ history }) {
+/** @param {{ history: import('../../data/mockPriceHistory').Candle[], timeframe: string, onChartCreated?: (chart: any) => void }} props */
+export function MACDChart({ history, timeframe, onChartCreated }) {
   const containerRef = useRef(null)
   const chartRef = useRef(null)
+  const macdSeriesRef = useRef(null)
+  const signalSeriesRef = useRef(null)
+  const histSeriesRef = useRef(null)
 
+  // Initialize chart (once on mount)
   useEffect(() => {
     if (!containerRef.current) return
 
@@ -24,12 +29,62 @@ export function MACDChart({ history }) {
       width: containerRef.current.clientWidth,
     })
 
+    const histSeries = chart.addHistogramSeries({
+      priceLineVisible: false,
+      lastValueVisible: false,
+    })
+
+    const macdSeries = chart.addLineSeries({
+      color: '#3B82F6',
+      lineWidth: 1.5,
+      priceLineVisible: false,
+      lastValueVisible: true,
+    })
+
+    const signalSeries = chart.addLineSeries({
+      color: '#F97316',
+      lineWidth: 1.5,
+      priceLineVisible: false,
+      lastValueVisible: true,
+    })
+
+    const ro = new ResizeObserver(entries => {
+      for (const e of entries) chart.resize(e.contentRect.width, 120)
+    })
+    ro.observe(containerRef.current)
+
+    chartRef.current = chart
+    macdSeriesRef.current = macdSeries
+    signalSeriesRef.current = signalSeries
+    histSeriesRef.current = histSeries
+
+    if (onChartCreated) onChartCreated(chart)
+
+    return () => {
+      ro.disconnect()
+      if (onChartCreated) onChartCreated(null)
+      chart.remove()
+      chartRef.current = null
+      macdSeriesRef.current = null
+      signalSeriesRef.current = null
+      histSeriesRef.current = null
+    }
+  }, [])
+
+  // Feed data dynamically on timeframe / history changes
+  useEffect(() => {
+    const chart = chartRef.current
+    const macdSeries = macdSeriesRef.current
+    const signalSeries = signalSeriesRef.current
+    const histSeries = histSeriesRef.current
+    if (!chart || !macdSeries || !signalSeries || !histSeries) return
+
     const closes = history.map(c => c.close)
     const macdArr = calcMACD(closes, 12, 26, 9)
 
-    const macdData    = []
-    const signalData  = []
-    const histData    = []
+    const macdData = []
+    const signalData = []
+    const histData = []
 
     for (let i = 0; i < history.length; i++) {
       if (!macdArr[i]) continue
@@ -43,35 +98,16 @@ export function MACDChart({ history }) {
       })
     }
 
-    chart.addHistogramSeries({
-      priceLineVisible: false,
-      lastValueVisible: false,
-    }).setData(histData)
+    const slicedMacd = sliceByTimeframe(macdData, timeframe)
+    const slicedSignal = sliceByTimeframe(signalData, timeframe)
+    const slicedHist = sliceByTimeframe(histData, timeframe)
 
-    chart.addLineSeries({
-      color: '#3B82F6',
-      lineWidth: 1.5,
-      priceLineVisible: false,
-      lastValueVisible: true,
-    }).setData(macdData)
-
-    chart.addLineSeries({
-      color: '#F97316',
-      lineWidth: 1.5,
-      priceLineVisible: false,
-      lastValueVisible: true,
-    }).setData(signalData)
+    histSeries.setData(slicedHist)
+    macdSeries.setData(slicedMacd)
+    signalSeries.setData(slicedSignal)
 
     chart.timeScale().fitContent()
-
-    const ro = new ResizeObserver(entries => {
-      for (const e of entries) chart.resize(e.contentRect.width, 120)
-    })
-    ro.observe(containerRef.current)
-
-    chartRef.current = chart
-    return () => { ro.disconnect(); chart.remove(); chartRef.current = null }
-  }, [history])
+  }, [history, timeframe])
 
   return (
     <div>

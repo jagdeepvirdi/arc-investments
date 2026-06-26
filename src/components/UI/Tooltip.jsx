@@ -20,7 +20,7 @@ export function Tooltip({ text, children, className = '' }) {
           role="tooltip"
           className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 z-50
                      bg-surface border border-border text-body text-xs rounded px-2 py-1
-                     whitespace-nowrap shadow-lg pointer-events-none"
+                     max-w-[200px] whitespace-normal text-center shadow-lg pointer-events-none"
         >
           {text}
           <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-border" />

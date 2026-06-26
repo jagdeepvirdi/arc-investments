@@ -89,15 +89,38 @@ SSET_TICKERS = [
 ]
 
 MAI_TICKERS = [
-    'JKN','PLANET','MST','SMART','UBIS','NMG','SMT','ROBOT',
-    'DRT','HPMT','INOX','SIMAT','SNC','STANLY','SYNTEC','TYM','TWFP','UNIUN','PANKO',
-    'CHO','GENCO','YONG',
-    'SORKON','SKN','PDI','MOONG','TMI',
-    'TIGER','WFRESH','COCOCO',
-    'VIBHA',
-    'BGC',
-    'TSE','TAE','PSTC',
-    'PRANDA','JCK','SLC',
+    # Food & Agri
+    'APO','AU','CFARM','KASET','MAGURO','MUD','NTF','NTSC','QDC','CB',
+    'TACC','TMILL','WINNER','XO',
+    # Consumer
+    '88TH','BGT','DOD','ECF','EFORL','EURO','HPT','ITTHI','JSP','JUBILE',
+    'LTS','MGI','MOONG','NPK','NUT','SEI','SKIN','SMD100','TM','WARRIX','WINMED',
+    # Financials
+    'ACAP','AF','AIRA','ASN','BTC','GCAP','KCC','LIT','MITSIB','SGF','TQR',
+    # Manufacturing
+    'ADB','BM','BPS','CHO','CHOW','CIG','COLOR','CPR','FPI','GTB','HARN',
+    'KCM','KJL','KUMWEL','KWM','MBAX','MGT','MTW','NDR','PACO','PDG','PHOL',
+    'PIMO','PMC','PPM','PRAPAT','RWI','SAF','SALEE','SANKO','SCL','SFT','STP',
+    'SWC','TATG','TMC','TMI','TMW','TPLAS','TRT','TRV','UBIS','UEC','UKEM',
+    'UREKA','YUASA','ZIGA',
+    # Property
+    'ARIN','ARROW','BC','BKA','BLESS','BSM','BTW','CAZ','CHEWA','CPANEL',
+    'CRD','DHOUSE','DIMET','DPAINT','EMPIRE','FLOYD','HYDRO','IND','JAK','META',
+    'MMM','PANEL','PPS','PRI','PROS','PSGC','QTCG','SENX','SK','SMART',
+    'STC','STX','SVR','TAPAC','THANA','TIGER','WELL','YONG',
+    # Energy
+    'ABM','ALPHAX','GTV','PSTC','PTC','SAAM','SR','STOWER','TAKUNI','TPCH','UMS',
+    # Services
+    'ADD','AKP','AMA','AMARC','ARIP','ASTR','ATP30','AUCT','BIS','BOL','CEYE',
+    'CHIC','CMO','D','DEXON','ETE','FSMART','FVC','GFC','GLORY','HANN','HL',
+    'IMH','IROYAL','IVF','JPARK','K','KGEN','KK','KOOL','KTMS','LDC','LEO',
+    'LTMH','MCA','MEB','MORE','MOTHER','MPJ','MVP','NCL','NCP','PEER','PICO',
+    'PLT','QLT','RP','SONIC','SPTX','THMUI','TNDT','TNH','TNP','TPL','TRP',
+    'TURTLE','TVDH','TVT','UBA','VIBE','VL','VS','WASH','YGG',
+    # Technology
+    'APP','BE8','BVG','COMAN','I2','IDG','IIG','IRCP','ITNS','NAT','NETBAY',
+    'PIS','PLANET','PROEN','READY','SECURE','SICT','SIMAT','SPVI','SRS','TBN',
+    'TERA','TPS','VCOM',
 ]
 
 SECTOR_MAP = {
@@ -164,18 +187,74 @@ SECTOR_MAP = {
     'AH':'Services','BLC':'Services','HUMAN':'Services','KBS':'Services',
     'NEO':'Services','ROJNA':'Services','SHR':'Services','SRICHA':'Services',
     'TIPH':'Services','UVAN':'Services','VIH':'Services',
-    'JKN':'Technology','PLANET':'Technology','MST':'Technology','SMART':'Technology',
-    'UBIS':'Technology','NMG':'Technology','SMT':'Technology','ROBOT':'Technology',
-    'DRT':'Manufacturing','HPMT':'Manufacturing','INOX':'Manufacturing','SIMAT':'Manufacturing',
-    'SNC':'Manufacturing','STANLY':'Manufacturing','SYNTEC':'Manufacturing','TYM':'Manufacturing',
-    'TWFP':'Manufacturing','UNIUN':'Manufacturing','PANKO':'Manufacturing',
-    'CHO':'Industrial','GENCO':'Industrial','YONG':'Industrial',
-    'SORKON':'Property','SKN':'Property','PDI':'Property','MOONG':'Property','TMI':'Property',
-    'TIGER':'Food & Beverage','WFRESH':'Food & Beverage','COCOCO':'Food & Beverage',
-    'VIBHA':'Healthcare',
-    'BGC':'Consumer',
-    'TSE':'Energy','TAE':'Energy','PSTC':'Energy',
-    'PRANDA':'Services','JCK':'Services','SLC':'Services',
+    # MAI — Food & Agri
+    'APO':'Food & Agri','AU':'Food & Agri','CFARM':'Food & Agri','KASET':'Food & Agri',
+    'MAGURO':'Food & Agri','MUD':'Food & Agri','NTF':'Food & Agri','NTSC':'Food & Agri',
+    'QDC':'Food & Agri','CB':'Food & Agri','TACC':'Food & Agri','TMILL':'Food & Agri',
+    'WINNER':'Food & Agri','XO':'Food & Agri',
+    # MAI — Consumer
+    '88TH':'Consumer','BGT':'Consumer','DOD':'Consumer','ECF':'Consumer',
+    'EFORL':'Consumer','EURO':'Consumer','HPT':'Consumer','ITTHI':'Consumer',
+    'JSP':'Consumer','JUBILE':'Consumer','LTS':'Consumer','MGI':'Consumer',
+    'MOONG':'Consumer','NPK':'Consumer','NUT':'Consumer','SEI':'Consumer',
+    'SKIN':'Consumer','SMD100':'Consumer','TM':'Consumer','WARRIX':'Consumer',
+    'WINMED':'Consumer',
+    # MAI — Financials
+    'ACAP':'Financials','AF':'Financials','AIRA':'Financials','ASN':'Financials',
+    'BTC':'Financials','GCAP':'Financials','KCC':'Financials','LIT':'Financials',
+    'MITSIB':'Financials','SGF':'Financials','TQR':'Financials',
+    # MAI — Manufacturing
+    'ADB':'Manufacturing','BM':'Manufacturing','BPS':'Manufacturing','CHO':'Manufacturing',
+    'CHOW':'Manufacturing','CIG':'Manufacturing','COLOR':'Manufacturing','CPR':'Manufacturing',
+    'FPI':'Manufacturing','GTB':'Manufacturing','HARN':'Manufacturing','KCM':'Manufacturing',
+    'KJL':'Manufacturing','KUMWEL':'Manufacturing','KWM':'Manufacturing','MBAX':'Manufacturing',
+    'MGT':'Manufacturing','MTW':'Manufacturing','NDR':'Manufacturing','PACO':'Manufacturing',
+    'PDG':'Manufacturing','PHOL':'Manufacturing','PIMO':'Manufacturing','PMC':'Manufacturing',
+    'PPM':'Manufacturing','PRAPAT':'Manufacturing','RWI':'Manufacturing','SAF':'Manufacturing',
+    'SALEE':'Manufacturing','SANKO':'Manufacturing','SCL':'Manufacturing','SFT':'Manufacturing',
+    'STP':'Manufacturing','SWC':'Manufacturing','TATG':'Manufacturing','TMC':'Manufacturing',
+    'TMI':'Manufacturing','TMW':'Manufacturing','TPLAS':'Manufacturing','TRT':'Manufacturing',
+    'TRV':'Manufacturing','UBIS':'Manufacturing','UEC':'Manufacturing','UKEM':'Manufacturing',
+    'UREKA':'Manufacturing','YUASA':'Manufacturing','ZIGA':'Manufacturing',
+    # MAI — Property
+    'ARIN':'Property','ARROW':'Property','BC':'Property','BKA':'Property',
+    'BLESS':'Property','BSM':'Property','BTW':'Property','CAZ':'Property',
+    'CHEWA':'Property','CPANEL':'Property','CRD':'Property','DHOUSE':'Property',
+    'DIMET':'Property','DPAINT':'Property','EMPIRE':'Property','FLOYD':'Property',
+    'HYDRO':'Property','IND':'Property','JAK':'Property','META':'Property',
+    'MMM':'Property','PANEL':'Property','PPS':'Property','PRI':'Property',
+    'PROS':'Property','PSGC':'Property','QTCG':'Property','SENX':'Property',
+    'SK':'Property','SMART':'Property','STC':'Property','STX':'Property',
+    'SVR':'Property','TAPAC':'Property','THANA':'Property','TIGER':'Property',
+    'WELL':'Property','YONG':'Property',
+    # MAI — Energy
+    'ABM':'Energy','ALPHAX':'Energy','GTV':'Energy','PSTC':'Energy','PTC':'Energy',
+    'SAAM':'Energy','SR':'Energy','STOWER':'Energy','TAKUNI':'Energy','TPCH':'Energy',
+    'UMS':'Energy',
+    # MAI — Services
+    'ADD':'Services','AKP':'Services','AMA':'Services','AMARC':'Services',
+    'ARIP':'Services','ASTR':'Services','ATP30':'Services','AUCT':'Services',
+    'BIS':'Services','BOL':'Services','CEYE':'Services','CHIC':'Services',
+    'CMO':'Services','D':'Services','DEXON':'Services','ETE':'Services',
+    'FSMART':'Services','FVC':'Services','GFC':'Services','GLORY':'Services',
+    'HANN':'Services','HL':'Services','IMH':'Services','IROYAL':'Services',
+    'IVF':'Services','JPARK':'Services','K':'Services','KGEN':'Services',
+    'KK':'Services','KOOL':'Services','KTMS':'Services','LDC':'Services',
+    'LEO':'Services','LTMH':'Services','MCA':'Services','MEB':'Services',
+    'MORE':'Services','MOTHER':'Services','MPJ':'Services','MVP':'Services',
+    'NCL':'Services','NCP':'Services','PEER':'Services','PICO':'Services',
+    'PLT':'Services','QLT':'Services','RP':'Services','SONIC':'Services',
+    'SPTX':'Services','THMUI':'Services','TNDT':'Services','TNH':'Services',
+    'TNP':'Services','TPL':'Services','TRP':'Services','TURTLE':'Services',
+    'TVDH':'Services','TVT':'Services','UBA':'Services','VIBE':'Services',
+    'VL':'Services','VS':'Services','WASH':'Services','YGG':'Services',
+    # MAI — Technology
+    'APP':'Technology','BE8':'Technology','BVG':'Technology','COMAN':'Technology',
+    'I2':'Technology','IDG':'Technology','IIG':'Technology','IRCP':'Technology',
+    'ITNS':'Technology','NAT':'Technology','NETBAY':'Technology','PIS':'Technology',
+    'PLANET':'Technology','PROEN':'Technology','READY':'Technology','SECURE':'Technology',
+    'SICT':'Technology','SIMAT':'Technology','SPVI':'Technology','SRS':'Technology',
+    'TBN':'Technology','TERA':'Technology','TPS':'Technology','VCOM':'Technology',
 }
 
 # ── Session / crumb ────────────────────────────────────────────────────────────

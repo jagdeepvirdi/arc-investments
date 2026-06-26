@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { X, TrendingUp, TrendingDown } from 'lucide-react'
 import { CandlestickChart } from '../Charts/CandlestickChart.jsx'
 import { RSIChart } from '../Charts/RSIChart.jsx'
@@ -9,9 +9,13 @@ import { getStockHistory } from '../../data/mockPriceHistory.js'
 import { ALL_STOCKS_MAP } from '../../data/indices.js'
 import useAppStore from '../../store/useAppStore.js'
 
+const TIMEFRAMES = ['1D', '1W', '1M', '1Y', 'ALL']
+
 export default function StockTerminal() {
   const ticker = useAppStore(s => s.selectedStock)
   const setSelectedStock = useAppStore(s => s.setSelectedStock)
+  const [timeframe, setTimeframe] = useState('1Y')
+  const [charts, setCharts] = useState({ main: null, rsi: null, macd: null })
 
   const stock = ticker ? ALL_STOCKS_MAP[ticker] : null
   const history = ticker ? getStockHistory(ticker) : []
@@ -30,6 +34,48 @@ export default function StockTerminal() {
     document.body.style.overflow = 'hidden'
     return () => { document.body.style.overflow = '' }
   }, [])
+
+  // Synchronise timescales of all 3 charts
+  useEffect(() => {
+    const { main, rsi, macd } = charts
+    if (!main || !rsi || !macd) return
+
+    let isSyncing = false
+
+    const handleMainRange = (range) => {
+      if (isSyncing || !range) return
+      isSyncing = true
+      rsi.timeScale().setVisibleLogicalRange(range)
+      macd.timeScale().setVisibleLogicalRange(range)
+      isSyncing = false
+    }
+
+    const handleRsiRange = (range) => {
+      if (isSyncing || !range) return
+      isSyncing = true
+      main.timeScale().setVisibleLogicalRange(range)
+      macd.timeScale().setVisibleLogicalRange(range)
+      isSyncing = false
+    }
+
+    const handleMacdRange = (range) => {
+      if (isSyncing || !range) return
+      isSyncing = true
+      main.timeScale().setVisibleLogicalRange(range)
+      rsi.timeScale().setVisibleLogicalRange(range)
+      isSyncing = false
+    }
+
+    main.timeScale().subscribeVisibleLogicalRangeChange(handleMainRange)
+    rsi.timeScale().subscribeVisibleLogicalRangeChange(handleRsiRange)
+    macd.timeScale().subscribeVisibleLogicalRangeChange(handleMacdRange)
+
+    return () => {
+      try { main.timeScale().unsubscribeVisibleLogicalRangeChange(handleMainRange) } catch {}
+      try { rsi.timeScale().unsubscribeVisibleLogicalRangeChange(handleRsiRange) } catch {}
+      try { macd.timeScale().unsubscribeVisibleLogicalRangeChange(handleMacdRange) } catch {}
+    }
+  }, [charts])
 
   if (!stock) return null
 
@@ -95,9 +141,38 @@ export default function StockTerminal() {
 
             {/* Left: Charts (65%) */}
             <div className="flex-1 lg:w-[65%] overflow-y-auto p-4 flex flex-col gap-4 border-r border-border">
-              <CandlestickChart history={history} />
-              <RSIChart history={history} />
-              <MACDChart history={history} />
+              {/* Range Selector Bar */}
+              <div className="flex items-center gap-1 bg-surface/40 p-1 border border-border/40 rounded shrink-0">
+                <span className="text-[10px] text-muted px-2 uppercase font-semibold tracking-wider">Range</span>
+                {TIMEFRAMES.map(tf => (
+                  <button
+                    key={tf}
+                    type="button"
+                    onClick={() => setTimeframe(tf)}
+                    aria-pressed={timeframe === tf}
+                    className={`px-3 py-1 text-[10px] font-medium rounded transition-colors
+                      ${timeframe === tf ? 'bg-accent text-white font-semibold' : 'text-muted hover:text-body hover:bg-surface'}`}
+                  >
+                    {tf}
+                  </button>
+                ))}
+              </div>
+
+              <CandlestickChart
+                history={history}
+                timeframe={timeframe}
+                onChartCreated={c => setCharts(prev => ({ ...prev, main: c }))}
+              />
+              <RSIChart
+                history={history}
+                timeframe={timeframe}
+                onChartCreated={c => setCharts(prev => ({ ...prev, rsi: c }))}
+              />
+              <MACDChart
+                history={history}
+                timeframe={timeframe}
+                onChartCreated={c => setCharts(prev => ({ ...prev, macd: c }))}
+              />
             </div>
 
             {/* Right: Fundamentals (35%) */}

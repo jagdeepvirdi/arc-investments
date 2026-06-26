@@ -5,21 +5,21 @@
     "sector": "Energy",
     "ipoDate": "2001-12-06",
     "ipoPrice": 39.75,
-    "currentPrice": 34.5,
-    "change": -5.25,
-    "changePct": -13.21,
-    "volume": 69037314
+    "currentPrice": 35.0,
+    "change": -4.75,
+    "changePct": -11.95,
+    "volume": 46890316
   },
   {
     "ticker": "PTTEP",
     "name": "PTT Exploration and Production Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 120.5,
-    "currentPrice": 129.5,
-    "change": 9.0,
-    "changePct": 7.47,
-    "volume": 13977251
+    "ipoPrice": 119.0,
+    "currentPrice": 130.0,
+    "change": 9.5,
+    "changePct": 7.88,
+    "volume": 3133789
   },
   {
     "ticker": "GULF",
@@ -27,21 +27,21 @@
     "sector": "Energy",
     "ipoDate": "2025-04-03",
     "ipoPrice": 48.75,
-    "currentPrice": 60.5,
-    "change": 11.25,
-    "changePct": 22.84,
-    "volume": 81892428
+    "currentPrice": 60.25,
+    "change": 11.0,
+    "changePct": 22.34,
+    "volume": 15899279
   },
   {
     "ticker": "GPSC",
     "name": "Global Power Synergy Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2015-05-18",
-    "ipoPrice": 71.75,
-    "currentPrice": 44.5,
-    "change": -27.25,
-    "changePct": -37.98,
-    "volume": 19167000
+    "ipoPrice": 72.5,
+    "currentPrice": 44.0,
+    "change": -27.75,
+    "changePct": -38.68,
+    "volume": 4773664
   },
   {
     "ticker": "BGRIM",
@@ -49,10 +49,10 @@
     "sector": "Energy",
     "ipoDate": "2017-07-20",
     "ipoPrice": 41.5,
-    "currentPrice": 17.3,
-    "change": -24.2,
-    "changePct": -58.31,
-    "volume": 29087935
+    "currentPrice": 17.1,
+    "change": -24.4,
+    "changePct": -58.8,
+    "volume": 9759214
   },
   {
     "ticker": "BPP",
@@ -63,117 +63,117 @@
     "currentPrice": 10.9,
     "change": -7.2,
     "changePct": -39.78,
-    "volume": 76773
+    "volume": 11002
   },
   {
     "ticker": "RATCH",
     "name": "Ratch Group Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2000-11-03",
-    "ipoPrice": 41.69,
+    "ipoPrice": 41.92,
     "currentPrice": 30.5,
     "change": -11.19,
     "changePct": -26.84,
-    "volume": 2275148
+    "volume": 1513548
   },
   {
     "ticker": "EGCO",
     "name": "Electricity Generating Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 172.0,
-    "currentPrice": 117.5,
-    "change": -54.5,
-    "changePct": -31.69,
-    "volume": 988091
+    "ipoPrice": 171.5,
+    "currentPrice": 118.5,
+    "change": -53.5,
+    "changePct": -31.1,
+    "volume": 616290
   },
   {
     "ticker": "IRPC",
     "name": "IRPC Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 3.8,
-    "currentPrice": 1.68,
-    "change": -2.12,
-    "changePct": -55.79,
-    "volume": 77609497
+    "ipoPrice": 3.82,
+    "currentPrice": 1.74,
+    "change": -2.06,
+    "changePct": -54.21,
+    "volume": 130136391
   },
   {
     "ticker": "TOP",
     "name": "Thai Oil Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2004-10-26",
-    "ipoPrice": 54.74,
-    "currentPrice": 44.75,
-    "change": -9.98,
-    "changePct": -18.23,
-    "volume": 14426335
+    "ipoPrice": 53.99,
+    "currentPrice": 46.25,
+    "change": -8.48,
+    "changePct": -15.49,
+    "volume": 12401456
   },
   {
     "ticker": "SPRC",
     "name": "Star Petroleum Refining Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2015-12-08",
-    "ipoPrice": 9.85,
-    "currentPrice": 7.1,
-    "change": -2.75,
-    "changePct": -27.92,
-    "volume": 21546728
+    "ipoPrice": 9.8,
+    "currentPrice": 7.45,
+    "change": -2.4,
+    "changePct": -24.37,
+    "volume": 19620865
   },
   {
     "ticker": "PTTGC",
     "name": "PTT Global Chemical Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2011-10-21",
-    "ipoPrice": 59.0,
-    "currentPrice": 31.5,
-    "change": -27.5,
-    "changePct": -46.61,
-    "volume": 31822064
+    "ipoPrice": 59.25,
+    "currentPrice": 32.25,
+    "change": -26.75,
+    "changePct": -45.34,
+    "volume": 6045520
   },
   {
     "ticker": "BANPU",
     "name": "Banpu Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 13.48,
-    "currentPrice": 5.2,
-    "change": -8.28,
-    "changePct": -61.42,
-    "volume": 19434054
+    "ipoPrice": 13.4,
+    "currentPrice": 5.25,
+    "change": -8.23,
+    "changePct": -61.05,
+    "volume": 3642535
   },
   {
     "ticker": "BCP",
     "name": "Bangchak Corporation Public Company Limited",
     "sector": "Energy",
     "ipoDate": "1994-08-02",
-    "ipoPrice": 25.25,
-    "currentPrice": 32.0,
-    "change": 6.75,
-    "changePct": 26.73,
-    "volume": 9564610
+    "ipoPrice": 25.0,
+    "currentPrice": 33.0,
+    "change": 7.75,
+    "changePct": 30.69,
+    "volume": 5058743
   },
   {
     "ticker": "OR",
     "name": "PTT Oil and Retail Business Public Company Limited",
     "sector": "Energy",
     "ipoDate": "2021-02-11",
-    "ipoPrice": 30.5,
-    "currentPrice": 12.1,
-    "change": -18.4,
-    "changePct": -60.33,
-    "volume": 11699180
+    "ipoPrice": 30.0,
+    "currentPrice": 12.2,
+    "change": -18.3,
+    "changePct": -60.0,
+    "volume": 1722890
   },
   {
     "ticker": "KBANK",
     "name": "Kasikornbank Public Company Limited",
     "sector": "Banking",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 120.0,
-    "currentPrice": 212.0,
-    "change": 92.0,
-    "changePct": 76.67,
-    "volume": 19069703
+    "ipoPrice": 119.0,
+    "currentPrice": 214.0,
+    "change": 94.0,
+    "changePct": 78.33,
+    "volume": 7500656
   },
   {
     "ticker": "SCB",
@@ -181,54 +181,54 @@
     "sector": "Banking",
     "ipoDate": "2022-04-20",
     "ipoPrice": 81.5,
-    "currentPrice": 143.5,
-    "change": 75.5,
-    "changePct": 111.03,
-    "volume": 18513038
+    "currentPrice": 144.5,
+    "change": 76.5,
+    "changePct": 112.5,
+    "volume": 8855124
   },
   {
     "ticker": "BBL",
     "name": "Bangkok Bank Public Company Limited",
     "sector": "Banking",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 114.5,
+    "ipoPrice": 114.0,
     "currentPrice": 175.5,
     "change": 61.0,
     "changePct": 53.28,
-    "volume": 16689000
+    "volume": 6453454
   },
   {
     "ticker": "KTB",
     "name": "Krung Thai Bank Public Company Limited",
     "sector": "Banking",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 10.8,
+    "ipoPrice": 10.6,
     "currentPrice": 36.5,
     "change": 25.7,
     "changePct": 237.96,
-    "volume": 68007256
+    "volume": 15273051
   },
   {
     "ticker": "TTB",
     "name": "TMBThanachart Bank Public Company Limited",
     "sector": "Banking",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 1.12,
-    "currentPrice": 2.4,
-    "change": 1.28,
-    "changePct": 114.29,
-    "volume": 228383736
+    "ipoPrice": 1.13,
+    "currentPrice": 2.44,
+    "change": 1.32,
+    "changePct": 117.86,
+    "volume": 91128518
   },
   {
     "ticker": "TISCO",
     "name": "TISCO Financial Group Public Company Limited",
     "sector": "Banking",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 89.0,
+    "ipoPrice": 88.5,
     "currentPrice": 117.5,
     "change": 28.5,
     "changePct": 32.02,
-    "volume": 3045174
+    "volume": 1330594
   },
   {
     "ticker": "KKP",
@@ -236,10 +236,10 @@
     "sector": "Banking",
     "ipoDate": "2000-01-04",
     "ipoPrice": 55.25,
-    "currentPrice": 98.75,
-    "change": 43.5,
-    "changePct": 78.73,
-    "volume": 13245041
+    "currentPrice": 99.25,
+    "change": 44.0,
+    "changePct": 79.64,
+    "volume": 5122604
   },
   {
     "ticker": "TCAP",
@@ -247,65 +247,65 @@
     "sector": "Banking",
     "ipoDate": "2000-01-04",
     "ipoPrice": 34.25,
-    "currentPrice": 64.75,
-    "change": 30.5,
-    "changePct": 89.05,
-    "volume": 2278746
+    "currentPrice": 65.0,
+    "change": 30.75,
+    "changePct": 89.78,
+    "volume": 700563
   },
   {
     "ticker": "CPN",
     "name": "Central Pattana Public Company Limited",
     "sector": "Property",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 53.5,
+    "ipoPrice": 53.0,
     "currentPrice": 67.0,
     "change": 13.5,
     "changePct": 25.23,
-    "volume": 12350916
+    "volume": 2254522
   },
   {
     "ticker": "AWC",
     "name": "Asset World Corp Public Company Limited",
     "sector": "Property",
     "ipoDate": "2019-10-10",
-    "ipoPrice": 4.56,
-    "currentPrice": 2.74,
-    "change": -1.82,
-    "changePct": -39.91,
-    "volume": 113163483
+    "ipoPrice": 4.42,
+    "currentPrice": 2.7,
+    "change": -1.86,
+    "changePct": -40.79,
+    "volume": 28154603
   },
   {
     "ticker": "LH",
     "name": "Land and Houses Public Company Limited",
     "sector": "Property",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 8.2,
-    "currentPrice": 3.68,
-    "change": -4.52,
-    "changePct": -55.12,
-    "volume": 33721198
+    "ipoPrice": 8.15,
+    "currentPrice": 3.78,
+    "change": -4.42,
+    "changePct": -53.9,
+    "volume": 36414998
   },
   {
     "ticker": "SPALI",
     "name": "Supalai Public Company Limited",
     "sector": "Property",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 21.0,
-    "currentPrice": 15.6,
-    "change": -5.4,
-    "changePct": -25.71,
-    "volume": 3173511
+    "ipoPrice": 20.8,
+    "currentPrice": 15.8,
+    "change": -5.2,
+    "changePct": -24.76,
+    "volume": 2063188
   },
   {
     "ticker": "AP",
     "name": "AP (Thailand) Public Company Limited",
     "sector": "Property",
     "ipoDate": "2000-01-05",
-    "ipoPrice": 8.35,
-    "currentPrice": 7.15,
-    "change": -1.2,
-    "changePct": -14.37,
-    "volume": 13426849
+    "ipoPrice": 8.3,
+    "currentPrice": 7.25,
+    "change": -1.1,
+    "changePct": -13.17,
+    "volume": 2022294
   },
   {
     "ticker": "QH",
@@ -313,87 +313,87 @@
     "sector": "Property",
     "ipoDate": "2000-01-04",
     "ipoPrice": 2.28,
-    "currentPrice": 1.35,
-    "change": -0.93,
-    "changePct": -40.79,
-    "volume": 6432660
+    "currentPrice": 1.36,
+    "change": -0.92,
+    "changePct": -40.35,
+    "volume": 6710129
   },
   {
     "ticker": "SC",
     "name": "SC Asset Corporation Public Company Limited",
     "sector": "Property",
     "ipoDate": "2003-11-13",
-    "ipoPrice": 3.14,
-    "currentPrice": 1.79,
-    "change": -1.35,
-    "changePct": -42.99,
-    "volume": 2685060
+    "ipoPrice": 3.06,
+    "currentPrice": 1.81,
+    "change": -1.33,
+    "changePct": -42.36,
+    "volume": 2176383
   },
   {
     "ticker": "ORI",
     "name": "Origin Property Public Company Limited",
     "sector": "Property",
     "ipoDate": "2015-10-07",
-    "ipoPrice": 9.0,
-    "currentPrice": 1.68,
-    "change": -7.32,
-    "changePct": -81.33,
-    "volume": 2045133
+    "ipoPrice": 8.85,
+    "currentPrice": 1.69,
+    "change": -7.31,
+    "changePct": -81.22,
+    "volume": 774003
   },
   {
     "ticker": "NOBLE",
     "name": "Noble Development Public Company Limited",
     "sector": "Property",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 7.4,
-    "currentPrice": 1.77,
-    "change": -5.63,
-    "changePct": -76.08,
-    "volume": 154419
+    "ipoPrice": 7.35,
+    "currentPrice": 1.76,
+    "change": -5.64,
+    "changePct": -76.22,
+    "volume": 63700
   },
   {
     "ticker": "ANAN",
     "name": "Ananda Development Public Company Limited",
     "sector": "Property",
     "ipoDate": "2012-12-07",
-    "ipoPrice": 2.06,
-    "currentPrice": 0.33,
-    "change": -1.73,
-    "changePct": -84.1,
-    "volume": 3207679
+    "ipoPrice": 2.02,
+    "currentPrice": 0.34,
+    "change": -1.72,
+    "changePct": -83.62,
+    "volume": 870710
   },
   {
     "ticker": "SIRI",
     "name": "Sansiri Public Company Limited",
     "sector": "Property",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 1.34,
+    "ipoPrice": 1.33,
     "currentPrice": 1.42,
     "change": 0.08,
     "changePct": 5.97,
-    "volume": 19602352
+    "volume": 7682052
   },
   {
     "ticker": "LPN",
     "name": "L.P.N. Development Public Company Limited",
     "sector": "Property",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 5.2,
-    "currentPrice": 1.57,
-    "change": -3.63,
-    "changePct": -69.81,
-    "volume": 1909216
+    "ipoPrice": 5.15,
+    "currentPrice": 1.56,
+    "change": -3.64,
+    "changePct": -70.0,
+    "volume": 38303
   },
   {
     "ticker": "AMATA",
     "name": "Amata Corporation Public Company Limited",
     "sector": "Property",
     "ipoDate": "2000-01-05",
-    "ipoPrice": 18.7,
-    "currentPrice": 26.75,
-    "change": 8.05,
-    "changePct": 43.05,
-    "volume": 8182028
+    "ipoPrice": 18.6,
+    "currentPrice": 27.0,
+    "change": 8.3,
+    "changePct": 44.39,
+    "volume": 1495419
   },
   {
     "ticker": "WHA",
@@ -401,54 +401,54 @@
     "sector": "Property",
     "ipoDate": "2012-11-08",
     "ipoPrice": 3.22,
-    "currentPrice": 5.1,
-    "change": 1.88,
-    "changePct": 58.39,
-    "volume": 117863704
+    "currentPrice": 5.15,
+    "change": 1.93,
+    "changePct": 59.94,
+    "volume": 33447377
   },
   {
     "ticker": "ADVANC",
     "name": "Advanced Info Service Public Company Limited",
     "sector": "Telecom",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 171.5,
-    "currentPrice": 353.0,
-    "change": 181.5,
-    "changePct": 105.83,
-    "volume": 8978884
+    "ipoPrice": 170.0,
+    "currentPrice": 351.0,
+    "change": 179.5,
+    "changePct": 104.66,
+    "volume": 2460798
   },
   {
     "ticker": "TRUE",
     "name": "True Corporation Public Company Limited",
     "sector": "Telecom",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 3.22,
-    "currentPrice": 12.5,
-    "change": 9.28,
-    "changePct": 288.2,
-    "volume": 731507411
+    "ipoPrice": 3.18,
+    "currentPrice": 12.7,
+    "change": 9.48,
+    "changePct": 294.41,
+    "volume": 173974527
   },
   {
     "ticker": "CPALL",
     "name": "CP ALL Public Company Limited",
     "sector": "Consumer",
     "ipoDate": "2003-10-14",
-    "ipoPrice": 60.0,
-    "currentPrice": 45.0,
-    "change": -15.0,
-    "changePct": -25.0,
-    "volume": 22075282
+    "ipoPrice": 59.5,
+    "currentPrice": 45.25,
+    "change": -14.75,
+    "changePct": -24.58,
+    "volume": 5224501
   },
   {
     "ticker": "HMPRO",
     "name": "Home Product Center Public Company Limited",
     "sector": "Consumer",
     "ipoDate": "2001-10-30",
-    "ipoPrice": 14.6,
-    "currentPrice": 6.4,
-    "change": -8.2,
-    "changePct": -56.16,
-    "volume": 58563999
+    "ipoPrice": 14.5,
+    "currentPrice": 6.6,
+    "change": -8.0,
+    "changePct": -54.79,
+    "volume": 36122047
   },
   {
     "ticker": "CRC",
@@ -456,32 +456,32 @@
     "sector": "Consumer",
     "ipoDate": "2020-02-20",
     "ipoPrice": 34.75,
-    "currentPrice": 23.3,
-    "change": -11.45,
-    "changePct": -32.95,
-    "volume": 16582556
+    "currentPrice": 23.4,
+    "change": -11.35,
+    "changePct": -32.66,
+    "volume": 5112679
   },
   {
     "ticker": "BJC",
     "name": "Berli Jucker Public Company Limited",
     "sector": "Consumer",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 34.25,
-    "currentPrice": 14.1,
-    "change": -20.15,
-    "changePct": -58.83,
-    "volume": 6264923
+    "ipoPrice": 34.5,
+    "currentPrice": 14.2,
+    "change": -20.05,
+    "changePct": -58.54,
+    "volume": 2224566
   },
   {
     "ticker": "COM7",
     "name": "Com7 Public Company Limited",
     "sector": "Consumer",
     "ipoDate": "2015-08-10",
-    "ipoPrice": 34.75,
-    "currentPrice": 28.0,
-    "change": -6.75,
-    "changePct": -19.42,
-    "volume": 18427797
+    "ipoPrice": 34.5,
+    "currentPrice": 26.75,
+    "change": -8.0,
+    "changePct": -23.02,
+    "volume": 11912554
   },
   {
     "ticker": "DOHOME",
@@ -489,10 +489,10 @@
     "sector": "Consumer",
     "ipoDate": "2019-08-06",
     "ipoPrice": 17.9,
-    "currentPrice": 3.5,
-    "change": -14.4,
-    "changePct": -80.43,
-    "volume": 26972635
+    "currentPrice": 3.76,
+    "change": -14.14,
+    "changePct": -78.98,
+    "volume": 44840660
   },
   {
     "ticker": "CPAXT",
@@ -500,32 +500,32 @@
     "sector": "Consumer",
     "ipoDate": "2024-10-03",
     "ipoPrice": 32.25,
-    "currentPrice": 14.7,
-    "change": -18.55,
-    "changePct": -55.79,
-    "volume": 7379920
+    "currentPrice": 14.8,
+    "change": -18.45,
+    "changePct": -55.49,
+    "volume": 2211364
   },
   {
     "ticker": "GLOBAL",
     "name": "Siam Global House Public Company Limited",
     "sector": "Consumer",
     "ipoDate": "2009-08-19",
-    "ipoPrice": 16.92,
-    "currentPrice": 6.7,
-    "change": -10.22,
-    "changePct": -60.4,
-    "volume": 28436173
+    "ipoPrice": 17.0,
+    "currentPrice": 6.95,
+    "change": -9.97,
+    "changePct": -58.92,
+    "volume": 17425605
   },
   {
     "ticker": "CBG",
     "name": "Carabao Group Public Company Limited",
     "sector": "Consumer",
     "ipoDate": "2014-11-21",
-    "ipoPrice": 137.0,
+    "ipoPrice": 137.5,
     "currentPrice": 44.75,
     "change": -92.25,
     "changePct": -67.34,
-    "volume": 12255673
+    "volume": 3785013
   },
   {
     "ticker": "OSP",
@@ -536,18 +536,18 @@
     "currentPrice": 17.7,
     "change": -19.3,
     "changePct": -52.16,
-    "volume": 29635285
+    "volume": 4062579
   },
   {
     "ticker": "BDMS",
     "name": "Bangkok Dusit Medical Services Public Company Limited",
     "sector": "Healthcare",
     "ipoDate": "2000-01-20",
-    "ipoPrice": 23.7,
-    "currentPrice": 18.4,
-    "change": -5.3,
-    "changePct": -22.36,
-    "volume": 75805413
+    "ipoPrice": 23.1,
+    "currentPrice": 18.9,
+    "change": -4.8,
+    "changePct": -20.25,
+    "volume": 107540595
   },
   {
     "ticker": "BH",
@@ -555,76 +555,76 @@
     "sector": "Healthcare",
     "ipoDate": "2000-01-04",
     "ipoPrice": 128.0,
-    "currentPrice": 186.0,
-    "change": 58.0,
-    "changePct": 45.31,
-    "volume": 4170350
+    "currentPrice": 186.5,
+    "change": 58.5,
+    "changePct": 45.7,
+    "volume": 1582391
   },
   {
     "ticker": "BCH",
     "name": "Bangkok Chain Hospital Public Company Limited",
     "sector": "Healthcare",
     "ipoDate": "2004-11-10",
-    "ipoPrice": 21.8,
+    "ipoPrice": 22.7,
     "currentPrice": 9.85,
     "change": -11.95,
     "changePct": -54.82,
-    "volume": 43257029
+    "volume": 8734209
   },
   {
     "ticker": "CHG",
     "name": "Chularat Hospital Public Company Limited",
     "sector": "Healthcare",
     "ipoDate": "2013-05-16",
-    "ipoPrice": 3.74,
-    "currentPrice": 1.57,
-    "change": -2.17,
-    "changePct": -58.02,
-    "volume": 46790275
+    "ipoPrice": 3.82,
+    "currentPrice": 1.58,
+    "change": -2.16,
+    "changePct": -57.75,
+    "volume": 7687704
   },
   {
     "ticker": "MEGA",
     "name": "Mega Lifesciences Public Company Limited",
     "sector": "Healthcare",
     "ipoDate": "2013-11-19",
-    "ipoPrice": 37.0,
-    "currentPrice": 35.25,
-    "change": -1.75,
-    "changePct": -4.73,
-    "volume": 1113715
+    "ipoPrice": 36.75,
+    "currentPrice": 35.75,
+    "change": -1.25,
+    "changePct": -3.38,
+    "volume": 425111
   },
   {
     "ticker": "VGI",
     "name": "VGI Public Company Limited",
     "sector": "Healthcare",
     "ipoDate": "2012-10-11",
-    "ipoPrice": 5.81,
+    "ipoPrice": 5.76,
     "currentPrice": 0.92,
     "change": -4.89,
     "changePct": -84.19,
-    "volume": 198653680
+    "volume": 18649518
   },
   {
     "ticker": "RJH",
     "name": "Rajthanee Hospital Public Company Limited",
     "sector": "Healthcare",
     "ipoDate": "2016-09-01",
-    "ipoPrice": 30.75,
-    "currentPrice": 13.3,
-    "change": -17.45,
-    "changePct": -56.75,
-    "volume": 101614
+    "ipoPrice": 31.75,
+    "currentPrice": 13.4,
+    "change": -17.35,
+    "changePct": -56.42,
+    "volume": 5744
   },
   {
     "ticker": "SCC",
     "name": "The Siam Cement Public Company Limited",
     "sector": "Industry",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 424.0,
+    "ipoPrice": 420.0,
     "currentPrice": 241.0,
     "change": -183.0,
     "changePct": -43.16,
-    "volume": 3412054
+    "volume": 2013844
   },
   {
     "ticker": "IVL",
@@ -632,131 +632,131 @@
     "sector": "Industry",
     "ipoDate": "2010-02-05",
     "ipoPrice": 41.0,
-    "currentPrice": 21.0,
-    "change": -20.0,
-    "changePct": -48.78,
-    "volume": 18231231
+    "currentPrice": 21.3,
+    "change": -19.7,
+    "changePct": -48.05,
+    "volume": 5497669
   },
   {
     "ticker": "SCGP",
     "name": "SCG Packaging Public Company Limited",
     "sector": "Industry",
     "ipoDate": "2020-10-22",
-    "ipoPrice": 57.5,
+    "ipoPrice": 59.0,
     "currentPrice": 27.5,
     "change": -30.0,
     "changePct": -52.17,
-    "volume": 11678452
+    "volume": 1994916
   },
   {
     "ticker": "TPIPL",
     "name": "TPI Polene Public Company Limited",
     "sector": "Industry",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 1.79,
-    "currentPrice": 0.79,
-    "change": -1.0,
-    "changePct": -55.87,
-    "volume": 7009477
+    "ipoPrice": 1.76,
+    "currentPrice": 0.8,
+    "change": -0.99,
+    "changePct": -55.31,
+    "volume": 4849148
   },
   {
     "ticker": "TASCO",
     "name": "Tipco Asphalt Public Company Limited",
     "sector": "Industry",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 19.4,
-    "currentPrice": 13.7,
-    "change": -5.7,
-    "changePct": -29.38,
-    "volume": 3691155
+    "ipoPrice": 19.2,
+    "currentPrice": 13.6,
+    "change": -5.8,
+    "changePct": -29.9,
+    "volume": 2323988
   },
   {
     "ticker": "HANA",
     "name": "Hana Microelectronics Public Company Limited",
     "sector": "Industry",
     "ipoDate": "1993-02-01",
-    "ipoPrice": 67.75,
-    "currentPrice": 38.0,
-    "change": -29.75,
-    "changePct": -43.91,
-    "volume": 25118489
+    "ipoPrice": 70.75,
+    "currentPrice": 36.5,
+    "change": -31.25,
+    "changePct": -46.13,
+    "volume": 8778356
   },
   {
     "ticker": "DELTA",
     "name": "Delta Electronics (Thailand) Public Company Limited",
     "sector": "Industry",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 55.0,
-    "currentPrice": 326.0,
-    "change": 271.0,
-    "changePct": 492.73,
-    "volume": 23238391
+    "ipoPrice": 56.4,
+    "currentPrice": 306.0,
+    "change": 251.0,
+    "changePct": 456.36,
+    "volume": 11203216
   },
   {
     "ticker": "KCE",
     "name": "KCE Electronics Public Company Limited",
     "sector": "Industry",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 68.5,
-    "currentPrice": 39.75,
-    "change": -28.75,
-    "changePct": -41.97,
-    "volume": 20990219
+    "ipoPrice": 72.75,
+    "currentPrice": 38.25,
+    "change": -30.25,
+    "changePct": -44.16,
+    "volume": 7730310
   },
   {
     "ticker": "CCET",
     "name": "Cal-Comp Electronics (Thailand) Public Company Limited",
     "sector": "Industry",
     "ipoDate": "2001-01-03",
-    "ipoPrice": 2.8,
-    "currentPrice": 9.1,
-    "change": 6.3,
-    "changePct": 225.32,
-    "volume": 63115423
+    "ipoPrice": 2.9,
+    "currentPrice": 8.75,
+    "change": 5.95,
+    "changePct": 212.8,
+    "volume": 31414092
   },
   {
     "ticker": "EASTW",
     "name": "Eastern Water Resources Development and Management Public Company Limited",
     "sector": "Industry",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 9.95,
+    "ipoPrice": 9.85,
     "currentPrice": 4.22,
     "change": -5.73,
     "changePct": -57.59,
-    "volume": 1150946
+    "volume": 533600
   },
   {
     "ticker": "CPF",
     "name": "Charoen Pokphand Foods Public Company Limited",
     "sector": "Food & Agri",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 26.5,
-    "currentPrice": 19.5,
-    "change": -7.0,
-    "changePct": -26.42,
-    "volume": 46591280
+    "ipoPrice": 26.25,
+    "currentPrice": 19.6,
+    "change": -6.9,
+    "changePct": -26.04,
+    "volume": 13622245
   },
   {
     "ticker": "TU",
     "name": "Thai Union Group Public Company Limited",
     "sector": "Food & Agri",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 19.3,
+    "ipoPrice": 19.7,
     "currentPrice": 11.6,
     "change": -7.7,
     "changePct": -39.9,
-    "volume": 13807027
+    "volume": 2065409
   },
   {
     "ticker": "GFPT",
     "name": "GFPT Public Company Limited",
     "sector": "Food & Agri",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 11.5,
-    "currentPrice": 8.95,
-    "change": -2.55,
-    "changePct": -22.17,
-    "volume": 2113614
+    "ipoPrice": 11.3,
+    "currentPrice": 8.9,
+    "change": -2.6,
+    "changePct": -22.61,
+    "volume": 436723
   },
   {
     "ticker": "BTG",
@@ -767,102 +767,102 @@
     "currentPrice": 20.1,
     "change": -17.65,
     "changePct": -46.75,
-    "volume": 4203803
+    "volume": 1395832
   },
   {
     "ticker": "MINT",
     "name": "Minor International Public Company Limited",
     "sector": "Food & Agri",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 30.25,
-    "currentPrice": 24.8,
-    "change": -5.45,
-    "changePct": -18.02,
-    "volume": 41916141
+    "ipoPrice": 30.5,
+    "currentPrice": 24.9,
+    "change": -5.35,
+    "changePct": -17.69,
+    "volume": 8251873
   },
   {
     "ticker": "ERW",
     "name": "The Erawan Group Public Company Limited",
     "sector": "Food & Agri",
     "ipoDate": "1988-08-26",
-    "ipoPrice": 2.82,
-    "currentPrice": 3.1,
-    "change": 0.28,
-    "changePct": 9.93,
-    "volume": 28114618
+    "ipoPrice": 2.84,
+    "currentPrice": 3.14,
+    "change": 0.32,
+    "changePct": 11.35,
+    "volume": 12578432
   },
   {
     "ticker": "CENTEL",
     "name": "Central Plaza Hotel Public Company Limited",
     "sector": "Food & Agri",
     "ipoDate": "2000-01-11",
-    "ipoPrice": 33.0,
+    "ipoPrice": 33.75,
     "currentPrice": 37.5,
     "change": 4.5,
     "changePct": 13.64,
-    "volume": 8071008
+    "volume": 1589358
   },
   {
     "ticker": "AOT",
     "name": "Airports of Thailand Public Company Limited",
     "sector": "Transport",
     "ipoDate": "2004-03-11",
-    "ipoPrice": 63.5,
-    "currentPrice": 61.5,
-    "change": -2.0,
-    "changePct": -3.15,
-    "volume": 57675666
+    "ipoPrice": 62.0,
+    "currentPrice": 61.75,
+    "change": -1.75,
+    "changePct": -2.76,
+    "volume": 10436609
   },
   {
     "ticker": "BEM",
     "name": "Bangkok Expressway and Metro Public Company Limited",
     "sector": "Transport",
     "ipoDate": "2006-09-21",
-    "ipoPrice": 8.4,
+    "ipoPrice": 8.15,
     "currentPrice": 6.1,
     "change": -2.3,
     "changePct": -27.38,
-    "volume": 99671058
+    "volume": 22072652
   },
   {
     "ticker": "BTS",
     "name": "BTS Group Holdings Public Company Limited",
     "sector": "Transport",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 9.45,
-    "currentPrice": 2.06,
-    "change": -7.39,
-    "changePct": -78.2,
-    "volume": 99120388
+    "ipoPrice": 9.25,
+    "currentPrice": 2.08,
+    "change": -7.37,
+    "changePct": -77.99,
+    "volume": 16762959
   },
   {
     "ticker": "AAV",
     "name": "Asia Aviation Public Company Limited",
     "sector": "Transport",
     "ipoDate": "2012-05-31",
-    "ipoPrice": 2.68,
+    "ipoPrice": 2.66,
     "currentPrice": 1.1,
     "change": -1.58,
     "changePct": -58.91,
-    "volume": 127930265
+    "volume": 32772583
   },
   {
     "ticker": "BA",
     "name": "Bangkok Airways Public Company Limited",
     "sector": "Transport",
     "ipoDate": "2014-11-03",
-    "ipoPrice": 9.5,
-    "currentPrice": 18.4,
-    "change": 8.9,
-    "changePct": 93.68,
-    "volume": 17791691
+    "ipoPrice": 9.55,
+    "currentPrice": 18.0,
+    "change": 8.5,
+    "changePct": 89.47,
+    "volume": 4534247
   },
   {
     "ticker": "NOK",
     "name": "Nok Airlines Public Company Limited",
     "sector": "Transport",
     "ipoDate": "2013-06-20",
-    "ipoPrice": 1.54,
+    "ipoPrice": 1.52,
     "currentPrice": 0.17,
     "change": -1.37,
     "changePct": -88.96,
@@ -877,51 +877,51 @@
     "currentPrice": 6.1,
     "change": 2.78,
     "changePct": 83.73,
-    "volume": 48564142
+    "volume": 11930168
   },
   {
     "ticker": "TTA",
     "name": "Thoresen Thai Agencies Public Company Limited",
     "sector": "Transport",
     "ipoDate": "2000-01-04",
-    "ipoPrice": 16.2,
-    "currentPrice": 4.64,
-    "change": -11.56,
-    "changePct": -71.36,
-    "volume": 6837553
+    "ipoPrice": 17.1,
+    "currentPrice": 4.68,
+    "change": -11.52,
+    "changePct": -71.11,
+    "volume": 2558370
   },
   {
     "ticker": "MAJOR",
     "name": "Major Cineplex Group Public Company Limited",
     "sector": "Tech / Media",
     "ipoDate": "2002-05-23",
-    "ipoPrice": 24.0,
-    "currentPrice": 7.0,
-    "change": -17.0,
-    "changePct": -70.83,
-    "volume": 401113
+    "ipoPrice": 23.9,
+    "currentPrice": 7.05,
+    "change": -16.95,
+    "changePct": -70.62,
+    "volume": 104772
   },
   {
     "ticker": "RS",
     "name": "RS Public Company Limited",
     "sector": "Tech / Media",
     "ipoDate": "2003-05-22",
-    "ipoPrice": 11.0,
-    "currentPrice": 0.13,
-    "change": -10.87,
-    "changePct": -98.82,
-    "volume": 2138893
+    "ipoPrice": 10.86,
+    "currentPrice": 0.14,
+    "change": -10.86,
+    "changePct": -98.73,
+    "volume": 143700
   },
   {
     "ticker": "WORK",
     "name": "Workpoint Entertainment Public Company Limited",
     "sector": "Tech / Media",
     "ipoDate": "2004-09-29",
-    "ipoPrice": 21.3,
+    "ipoPrice": 21.5,
     "currentPrice": 3.44,
     "change": -17.86,
     "changePct": -83.85,
-    "volume": 69183
+    "volume": 26700
   },
   {
     "ticker": "JMART",
@@ -929,10 +929,10 @@
     "sector": "Tech / Media",
     "ipoDate": "2009-06-25",
     "ipoPrice": 33.75,
-    "currentPrice": 9.4,
-    "change": -24.35,
-    "changePct": -72.15,
-    "volume": 25249715
+    "currentPrice": 9.45,
+    "change": -24.3,
+    "changePct": -72.0,
+    "volume": 7867769
   },
   {
     "ticker": "MTC",
@@ -940,43 +940,43 @@
     "sector": "Financials",
     "ipoDate": "2014-11-26",
     "ipoPrice": 57.25,
-    "currentPrice": 30.75,
-    "change": -26.5,
-    "changePct": -46.29,
-    "volume": 38850124
+    "currentPrice": 31.25,
+    "change": -26.0,
+    "changePct": -45.41,
+    "volume": 9195927
   },
   {
     "ticker": "SAWAD",
     "name": "Srisawad Corporation Public Company Limited",
     "sector": "Financials",
     "ipoDate": "2014-05-08",
-    "ipoPrice": 57.23,
+    "ipoPrice": 57.64,
     "currentPrice": 23.1,
     "change": -34.13,
     "changePct": -59.64,
-    "volume": 40313123
+    "volume": 9881025
   },
   {
     "ticker": "AEONTS",
     "name": "AEON Thana Sinsap (Thailand) Public Company Limited",
     "sector": "Financials",
     "ipoDate": "2001-12-11",
-    "ipoPrice": 193.5,
-    "currentPrice": 98.0,
-    "change": -95.5,
-    "changePct": -49.35,
-    "volume": 1588010
+    "ipoPrice": 191.5,
+    "currentPrice": 97.75,
+    "change": -95.75,
+    "changePct": -49.48,
+    "volume": 154695
   },
   {
     "ticker": "ASK",
     "name": "Asia Sermkij Leasing Public Company Limited",
     "sector": "Financials",
     "ipoDate": "2005-08-25",
-    "ipoPrice": 32.5,
+    "ipoPrice": 33.75,
     "currentPrice": 10.1,
     "change": -22.4,
     "changePct": -68.92,
-    "volume": 966758
+    "volume": 101802
   },
   {
     "ticker": "TIDLOR",
@@ -987,18 +987,18 @@
     "currentPrice": 19.4,
     "change": 4.7,
     "changePct": 31.97,
-    "volume": 33507847
+    "volume": 5011542
   },
   {
     "ticker": "THANI",
     "name": "Ratchthani Leasing Public Company Limited",
     "sector": "Financials",
     "ipoDate": "2002-12-19",
-    "ipoPrice": 4.51,
-    "currentPrice": 1.71,
-    "change": -2.8,
-    "changePct": -62.1,
-    "volume": 7260687
+    "ipoPrice": 4.47,
+    "currentPrice": 1.72,
+    "change": -2.79,
+    "changePct": -61.88,
+    "volume": 6288444
   },
   {
     "ticker": "TMT",
@@ -1006,21 +1006,21 @@
     "sector": "Financials",
     "ipoDate": "2005-02-18",
     "ipoPrice": 10.2,
-    "currentPrice": 3.4,
-    "change": -6.8,
-    "changePct": -66.67,
-    "volume": 23501
+    "currentPrice": 3.36,
+    "change": -6.84,
+    "changePct": -67.06,
+    "volume": 68900
   },
   {
     "ticker": "KTC",
     "name": "Krungthai Card Public Company Limited",
     "sector": "Financials",
     "ipoDate": "2002-10-28",
-    "ipoPrice": 67.0,
-    "currentPrice": 32.25,
-    "change": -34.75,
-    "changePct": -51.87,
-    "volume": 18526526
+    "ipoPrice": 67.5,
+    "currentPrice": 32.5,
+    "change": -34.5,
+    "changePct": -51.49,
+    "volume": 2194975
   },
   {
     "ticker": "TLI",
@@ -1031,28 +1031,28 @@
     "currentPrice": 11.2,
     "change": -4.8,
     "changePct": -30.0,
-    "volume": 10032016
+    "volume": 7730978
   },
   {
     "ticker": "JMT",
     "name": "JMT Network Services Public Company Limited",
     "sector": "Financials",
     "ipoDate": "2012-11-27",
-    "ipoPrice": 40.79,
-    "currentPrice": 11.2,
-    "change": -29.59,
-    "changePct": -72.55,
-    "volume": 22667966
+    "ipoPrice": 42.5,
+    "currentPrice": 11.5,
+    "change": -29.29,
+    "changePct": -71.81,
+    "volume": 13412157
   },
   {
     "ticker": "PHOL",
     "name": "Phol Dhanya Public Company Limited",
     "sector": "Financials",
     "ipoDate": "2010-12-09",
-    "ipoPrice": 3.76,
-    "currentPrice": 3.12,
-    "change": -0.64,
-    "changePct": -17.02,
-    "volume": 176357
+    "ipoPrice": 3.92,
+    "currentPrice": 3.14,
+    "change": -0.62,
+    "changePct": -16.49,
+    "volume": 70400
   }
 ]
