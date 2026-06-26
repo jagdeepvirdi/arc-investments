@@ -1,4 +1,5 @@
-import { Search } from 'lucide-react'
+import { Search, Zap } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
 import { Dropdown } from '../UI/Dropdown.jsx'
 import useAppStore from '../../store/useAppStore.js'
 import { INDICES } from '../../data/indices.js'
@@ -21,12 +22,16 @@ export function TopBar() {
   const setSearchQuery  = useAppStore(s => s.setSearchQuery)
   const setTrendHorizon = useAppStore(s => s.setTrendHorizon)
   const setActiveIndex  = useAppStore(s => s.setActiveIndex)
+  const { pathname }   = useLocation()
+  const onBacktest     = pathname === '/backtest'
 
   return (
     <header className="flex items-center justify-between px-6 py-3 border-b border-border bg-surface shrink-0">
       {/* Wordmark + Index Tabs */}
       <div className="flex items-center gap-4">
-        <span className="text-heading font-semibold tracking-tight text-base">ArcInvestments</span>
+        <Link to="/" className="text-heading font-semibold tracking-tight text-base hover:text-accent transition-colors">
+          ArcInvestments
+        </Link>
 
         {/* Index selector */}
         <nav className="flex items-center gap-1" aria-label="Index selector">
@@ -38,7 +43,7 @@ export function TopBar() {
               title={idx.description}
               className={`
                 text-[11px] font-medium px-2.5 py-1 rounded transition-colors duration-150
-                ${activeIndex === idx.id
+                ${activeIndex === idx.id && !onBacktest
                   ? 'bg-accent text-white'
                   : 'text-muted border border-border hover:border-accent/40 hover:text-body'
                 }
@@ -47,6 +52,23 @@ export function TopBar() {
               {idx.label}
             </button>
           ))}
+
+          {/* Backtest nav link */}
+          <Link
+            to="/backtest"
+            aria-label="Backtesting engine"
+            className={`
+              inline-flex items-center gap-1 text-[11px] font-medium px-2.5 py-1 rounded
+              transition-colors duration-150 ml-1
+              ${onBacktest
+                ? 'bg-accent text-white'
+                : 'text-muted border border-border hover:border-accent/40 hover:text-body'
+              }
+            `}
+          >
+            <Zap size={11} aria-hidden="true" />
+            Backtest
+          </Link>
         </nav>
       </div>
 

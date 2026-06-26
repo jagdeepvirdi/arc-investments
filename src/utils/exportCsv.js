@@ -76,3 +76,43 @@ export function exportToCSV(stocks, { activeIndex, trendHorizon }) {
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
 }
+
+/**
+ * Download a backtest result's full trade log as CSV.
+ * @param {import('../data/backtester.js').BacktestResult} result
+ */
+export function exportBacktestToCSV(result) {
+  const { strategyId, startDate, endDate, trades } = result
+
+  const headers = [
+    'Ticker', 'Buy Date', 'Buy Price (THB)', 'Qty',
+    'Sell Date', 'Sell Price (THB)', 'P&L (THB)', 'P&L %',
+    'Days Held', 'Exit Reason',
+  ]
+
+  const rows = trades.map(t => [
+    cell(t.ticker),
+    t.buyDate,
+    t.buyPrice.toFixed(2),
+    t.quantity,
+    t.sellDate ?? '—',
+    t.sellPrice != null ? t.sellPrice.toFixed(2) : '—',
+    t.pnl.toFixed(2),
+    t.pnlPct.toFixed(2),
+    t.daysHeld,
+    t.exitReason,
+  ])
+
+  const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n')
+  const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' })
+  const url  = URL.createObjectURL(blob)
+  const date = new Date().toISOString().slice(0, 10)
+
+  const a = document.createElement('a')
+  a.href     = url
+  a.download = `ArcInvestments_Backtest_${strategyId}_${date}.csv`
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}

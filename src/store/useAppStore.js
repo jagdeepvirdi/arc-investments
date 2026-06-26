@@ -1,6 +1,8 @@
 import { create } from 'zustand'
-import { DEFAULT_INDEX_ID } from '../data/indices.js'
+import { DEFAULT_INDEX_ID, INDICES_MAP } from '../data/indices.js'
 import { PRESETS_MAP, FILTER_DEFAULTS } from '../data/screenerPresets.js'
+import { runBacktest as runBacktestEngine } from '../data/backtester.js'
+import { STRATEGIES_MAP } from '../data/strategies.js'
 
 /** @typedef {'up'|'down'|null} Direction */
 
@@ -77,6 +79,42 @@ const useAppStore = create((set) => ({
 
   /** Clear all filters and search back to defaults */
   clearAllFilters: () => set({ ...FILTER_DEFAULTS, searchQuery: '', hideMockData: true }),
+
+  // ── Backtest state ─────────────────────────────────────────────────────────
+  /** @type {Object.<string, import('../data/backtester.js').BacktestResult>} */
+  backtestResults:  {},
+  backtestRunning:  false,
+  /** @type {string|null} */
+  activeBacktestId: null,
+
+  runBacktest: (strategyId, budget, startDate, endDate, maxPositionPct = 100) => {
+    const strategy = STRATEGIES_MAP[strategyId]
+    if (!strategy) return
+    set({ backtestRunning: true })
+    const allStocks = INDICES_MAP['ALL'].stocks
+    const result    = runBacktestEngine({ strategy, allStocks, startDate, endDate: endDate || null, budget, maxPositionPct })
+    const key       = `${strategyId}_${Date.now()}`
+    set(state => ({
+      backtestResults:  { ...state.backtestResults, [key]: result },
+      activeBacktestId: key,
+      backtestRunning:  false,
+    }))
+  },
+
+  setActiveBacktest: (resultId) => set({ activeBacktestId: resultId }),
+
+  clearBacktestResult: (resultId) => set(state => {
+    const next = { ...state.backtestResults }
+    delete next[resultId]
+    return {
+      backtestResults:  next,
+      activeBacktestId: state.activeBacktestId === resultId
+        ? (Object.keys(next).at(-1) ?? null)
+        : state.activeBacktestId,
+    }
+  }),
+
+  clearAllBacktestResults: () => set({ backtestResults: {}, activeBacktestId: null }),
 }))
 
 export default useAppStore
