@@ -1,5 +1,5 @@
-import { lazy, Suspense, useCallback } from 'react'
-import { Download } from 'lucide-react'
+import { lazy, Suspense, useCallback, useRef, useState, useEffect } from 'react'
+import { Download, Columns3 } from 'lucide-react'
 import { TopBar } from './TopBar.jsx'
 import { MarketOverviewBar } from './MarketOverviewBar.jsx'
 import { ActiveFilterBar } from './ActiveFilterBar.jsx'
@@ -11,6 +11,83 @@ import { useFilteredStocks } from '../../hooks/useFilteredStocks.js'
 import { exportToCSV } from '../../utils/exportCsv.js'
 
 const StockTerminal = lazy(() => import('../Terminal/StockTerminal.jsx'))
+
+const TOGGLEABLE_COLUMNS = [
+  { key: 'name',           label: 'Company' },
+  { key: 'sector',         label: 'Sector' },
+  { key: 'currentPrice',   label: 'Price (THB)' },
+  { key: 'trendBasePrice', label: 'Start Price' },
+  { key: 'changePct',      label: 'Change %' },
+  { key: 'volume',         label: 'Volume' },
+  { key: 'pe',             label: 'P/E' },
+  { key: 'de',             label: 'D/E' },
+  { key: 'roe',            label: 'ROE' },
+  { key: 'fcf',            label: 'FCF (B)' },
+  { key: 'marketCap',      label: 'Mkt Cap (B)' },
+]
+
+function ColumnPicker() {
+  const hiddenColumns = useAppStore(s => s.hiddenColumns)
+  const toggleColumn  = useAppStore(s => s.toggleColumn)
+  const [open, setOpen] = useState(false)
+  const ref = useRef(null)
+
+  useEffect(() => {
+    if (!open) return
+    function onOutside(e) {
+      if (ref.current && !ref.current.contains(e.target)) setOpen(false)
+    }
+    document.addEventListener('mousedown', onOutside)
+    return () => document.removeEventListener('mousedown', onOutside)
+  }, [open])
+
+  const hiddenCount = hiddenColumns.filter(k => TOGGLEABLE_COLUMNS.some(c => c.key === k)).length
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        className={`flex items-center gap-1.5 text-[10px] transition-colors
+          ${open ? 'text-accent' : 'text-muted hover:text-accent'}`}
+      >
+        <Columns3 size={11} />
+        Columns
+        {hiddenCount > 0 && (
+          <span className="px-1 py-0.5 rounded bg-accent/20 text-accent text-[9px] font-medium leading-none">
+            {hiddenCount} hidden
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-1.5 z-30 w-44
+                        bg-surface border border-border rounded shadow-lg py-1">
+          {TOGGLEABLE_COLUMNS.map(col => {
+            const visible = !hiddenColumns.includes(col.key)
+            return (
+              <label
+                key={col.key}
+                className="flex items-center gap-2.5 px-3 py-1.5 cursor-pointer
+                           hover:bg-white/5 select-none"
+              >
+                <input
+                  type="checkbox"
+                  checked={visible}
+                  onChange={() => toggleColumn(col.key)}
+                  className="accent-accent w-3 h-3"
+                />
+                <span className={`text-[11px] ${visible ? 'text-body' : 'text-muted'}`}>
+                  {col.label}
+                </span>
+              </label>
+            )
+          })}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export default function DashboardPage() {
   const activeIndex      = useAppStore(s => s.activeIndex)
@@ -66,17 +143,20 @@ export default function DashboardPage() {
             <span className="text-[10px] text-muted">
               {stocks.length} / {totalCount} stocks
             </span>
-            <button
-              type="button"
-              onClick={handleExport}
-              disabled={stocks.length === 0}
-              title={`Download ${stocks.length} rows as CSV`}
-              className="flex items-center gap-1.5 text-[10px] text-muted hover:text-accent
-                         disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            >
-              <Download size={11} />
-              Export CSV
-            </button>
+            <div className="flex items-center gap-4">
+              <ColumnPicker />
+              <button
+                type="button"
+                onClick={handleExport}
+                disabled={stocks.length === 0}
+                title={`Download ${stocks.length} rows as CSV`}
+                className="flex items-center gap-1.5 text-[10px] text-muted hover:text-accent
+                           disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+              >
+                <Download size={11} />
+                Export CSV
+              </button>
+            </div>
           </div>
 
           <StockTable stocks={stocks} />

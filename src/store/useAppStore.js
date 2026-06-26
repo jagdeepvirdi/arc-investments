@@ -21,6 +21,8 @@ const useAppStore = create((set) => ({
   hideMockData: true,
   /** @type {boolean} */
   filterPanelOpen: false,
+  /** @type {string[]} Column keys that are currently hidden */
+  hiddenColumns: [],
 
   // -- Filter state --
   ...FILTER_DEFAULTS,
@@ -44,6 +46,11 @@ const useAppStore = create((set) => ({
   })),
 
   toggleFilterPanel: () => set((state) => ({ filterPanelOpen: !state.filterPanelOpen })),
+  toggleColumn: (key) => set((state) => ({
+    hiddenColumns: state.hiddenColumns.includes(key)
+      ? state.hiddenColumns.filter(k => k !== key)
+      : [...state.hiddenColumns, key],
+  })),
   toggleHideMockData: () => set((state) => ({ hideMockData: !state.hideMockData })),
 
   /** Set a single filter field and clear any active preset */
