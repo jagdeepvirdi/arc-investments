@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { INDICES_MAP } from '../data/indices.js'
 import { getStockHistory, getPriceAtDate } from '../data/mockPriceHistory.js'
-import { calcRSI, calcMACD } from '../data/indicators.js'
+import { calcRSI, calcMACD, calcSMA, calcEMA } from '../data/indicators.js'
 import { getGrowthMetrics } from '../data/growthMetrics.js'
 
 function getYTDDate() {
@@ -36,11 +36,11 @@ function getSignals(stocks, indexId) {
   for (const stock of stocks) {
     const history = getStockHistory(stock.ticker)
     if (history.length < 30) {
-      map.set(stock.ticker, { rsiLast: 50, macdBullish: false })
+      map.set(stock.ticker, { rsiLast: 50, macdBullish: false, smaTrendSetupPass: false })
       continue
     }
     const closes = history.map(c => c.close)
-    const rsiArr = calcRSI(closes, 14)
+    const rsiArr  = calcRSI(closes, 14)
     const macdArr = calcMACD(closes, 12, 26, 9)
 
     let rsiLast = 50
@@ -58,7 +58,49 @@ function getSignals(stocks, indexId) {
         break
       }
     }
-    map.set(stock.ticker, { rsiLast, macdBullish })
+
+    // ── SMA Trend Setup: requires 220+ data points ───────────────────────────
+    let smaTrendSetupPass = false
+    if (history.length >= 220) {
+      const sma50Arr  = calcSMA(closes, 50)
+      const sma150Arr = calcSMA(closes, 150)
+      const sma160Arr = calcSMA(closes, 160)
+      const ema220Arr = calcEMA(closes, 220)
+      const last = closes.length - 1
+
+      const sma50Last  = sma50Arr[last]
+      const sma150Last = sma150Arr[last]
+      const sma160Last = sma160Arr[last]
+      const ema220Last = ema220Arr[last]
+      const closeLast  = closes[last]
+
+      // Condition 4: price > 1.25× 52-week low (past 252 trading days)
+      const start52w = Math.max(0, last + 1 - 252)
+      let low52w = Infinity
+      for (let i = start52w; i <= last; i++) {
+        if (closes[i] < low52w) low52w = closes[i]
+      }
+
+      // Condition 5: dipped below EMA220 at least once in past 90 trading days
+      const start90 = Math.max(0, last + 1 - 90)
+      let touchedBelowEma220 = false
+      for (let i = start90; i <= last; i++) {
+        if (ema220Arr[i] !== null && closes[i] < ema220Arr[i]) {
+          touchedBelowEma220 = true
+          break
+        }
+      }
+
+      smaTrendSetupPass = (
+        sma150Last !== null && ema220Last !== null && sma150Last > ema220Last &&  // 1
+        sma50Last  !== null && closeLast > sma50Last &&                           // 2
+        sma160Last !== null && sma50Last > sma160Last &&                          // 3
+        low52w < Infinity   && closeLast > 1.25 * low52w &&                      // 4
+        touchedBelowEma220                                                        // 5
+      )
+    }
+
+    map.set(stock.ticker, { rsiLast, macdBullish, smaTrendSetupPass })
   }
   _signalCache.set(indexId, map)
   return map
@@ -82,6 +124,7 @@ function getSignals(stocks, indexId) {
  *   revenueGrowthMin: number|null,
  *   divYieldMin: number|null,
  *   payoutRatioMax: number|null,
+ *   smaTrendSetup: boolean,
  *   sortKey: string,
  *   sortDir: 'asc'|'desc'
  * }} filters
@@ -104,6 +147,7 @@ export function useFilteredStocks({
   revenueGrowthMin,
   divYieldMin,
   payoutRatioMax,
+  smaTrendSetup,
   sortKey,
   sortDir,
 }) {
@@ -139,7 +183,7 @@ export function useFilteredStocks({
 
       // Spread growth first so real stock fields (epsGrowth, revenueGrowth, payoutRatio
       // from Yahoo Finance via realStocks.js) take priority over seeded mock values.
-      return { ...growth, ...stock, trend, trendBasePrice: basePrice ?? null, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish }
+      return { ...growth, ...stock, trend, trendBasePrice: basePrice ?? null, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish, smaTrendSetupPass: sig.smaTrendSetupPass ?? false }
     })
 
     // Data quality
@@ -170,6 +214,7 @@ export function useFilteredStocks({
     // Technicals
     if (rsiMin > 0 || rsiMax < 100) list = list.filter(s => s.rsiLast >= rsiMin && s.rsiLast <= rsiMax)
     if (macdFilter === 'bullish') list = list.filter(s => s.macdBullish)
+    if (smaTrendSetup) list = list.filter(s => s.smaTrendSetupPass)
 
     // Growth metrics
     if (epsGrowthMin    !== null) list = list.filter(s => s.epsGrowth     >= epsGrowthMin)
@@ -192,7 +237,7 @@ export function useFilteredStocks({
     selectedSectors, peMin, peMax, deMin, deMax, roeMin, roeMax,
     fcfFilter, rsiMin, rsiMax, macdFilter,
     epsGrowthMin, revenueGrowthMin, divYieldMin, payoutRatioMax,
-    sortKey, sortDir,
+    smaTrendSetup, sortKey, sortDir,
   ])
 
   return { stocks, totalCount: allStocks.length }

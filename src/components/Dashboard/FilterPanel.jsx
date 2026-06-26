@@ -80,6 +80,7 @@ export function FilterPanel() {
   const rsiMin             = useAppStore(s => s.rsiMin)
   const rsiMax             = useAppStore(s => s.rsiMax)
   const macdFilter         = useAppStore(s => s.macdFilter)
+  const smaTrendSetup      = useAppStore(s => s.smaTrendSetup)
   const epsGrowthMin       = useAppStore(s => s.epsGrowthMin)
   const revenueGrowthMin   = useAppStore(s => s.revenueGrowthMin)
   const divYieldMin        = useAppStore(s => s.divYieldMin)
@@ -179,6 +180,20 @@ export function FilterPanel() {
           <p className="text-[10px] text-muted mb-1.5">MACD Signal</p>
           <RadioGroup name="macd" value={macdFilter} onChange={v => setFilter('macdFilter', v)}
             options={[{ value: 'any', label: 'Any' }, { value: 'bullish', label: 'Bullish Cross' }]} />
+          <div className="mt-3">
+            <p className="text-[10px] text-muted mb-1.5">SMA Trend Setup</p>
+            <label className="flex items-start gap-2 cursor-pointer group">
+              <input
+                type="checkbox"
+                checked={smaTrendSetup}
+                onChange={() => setFilter('smaTrendSetup', !smaTrendSetup)}
+                className="accent-accent w-3 h-3 mt-0.5 shrink-0"
+              />
+              <span className="text-[10px] text-muted group-hover:text-body transition-colors leading-relaxed">
+                SMA150 &gt; EMA220 · Price &gt; SMA50 · SMA50 &gt; SMA160 · Price &gt; 1.25× 52w low · Dipped below EMA220 in 90d
+              </span>
+            </label>
+          </div>
         </Section>
 
         <Section title="Fundamentals">

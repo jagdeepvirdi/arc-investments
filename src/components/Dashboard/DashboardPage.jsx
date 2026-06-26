@@ -112,6 +112,7 @@ export default function DashboardPage() {
   const revenueGrowthMin = useAppStore(s => s.revenueGrowthMin)
   const divYieldMin      = useAppStore(s => s.divYieldMin)
   const payoutRatioMax   = useAppStore(s => s.payoutRatioMax)
+  const smaTrendSetup    = useAppStore(s => s.smaTrendSetup)
   const sortKey          = useAppStore(s => s.sortKey)
   const sortDir          = useAppStore(s => s.sortDir)
 
@@ -120,7 +121,7 @@ export default function DashboardPage() {
     selectedSectors, peMin, peMax, deMin, deMax, roeMin, roeMax,
     fcfFilter, rsiMin, rsiMax, macdFilter,
     epsGrowthMin, revenueGrowthMin, divYieldMin, payoutRatioMax,
-    sortKey, sortDir,
+    smaTrendSetup, sortKey, sortDir,
   })
 
   const handleExport = useCallback(() => {

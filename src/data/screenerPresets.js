@@ -81,6 +81,12 @@ export const PRESETS = [
     description: 'Dividend Yield > 4% with sustainable Payout Ratio < 70%',
     filters: { divYieldMin: 4, payoutRatioMax: 70 },
   },
+  {
+    id: 'sma_trend_setup',
+    label: 'SMA Trend Setup',
+    description: 'SMA150 > EMA220 · Price > SMA50 · SMA50 > SMA160 · Price > 1.25× 52w low · Touched EMA220 in past 90d',
+    filters: { smaTrendSetup: true },
+  },
 ]
 
 export const PRESETS_MAP = Object.fromEntries(PRESETS.map(p => [p.id, p]))
@@ -103,5 +109,6 @@ export const FILTER_DEFAULTS = {
   revenueGrowthMin: null, // % — Revenue growth YoY minimum
   divYieldMin: null,      // % — Dividend yield minimum
   payoutRatioMax: null,   // % — Payout ratio maximum
+  smaTrendSetup: false,   // SMA150>EMA220, Price>SMA50, SMA50>SMA160, >1.25×52wLow, touched EMA220 in 90d
   activePreset: null,
 }
