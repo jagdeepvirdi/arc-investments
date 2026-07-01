@@ -1,5 +1,7 @@
 import { ALL_STOCKS_MAP } from './indices.js'
-import { getStockHistory as getRealHistory } from './realPriceHistory.js'
+import { getStockHistory as getRealHistory, loadAllHistory, isHistoryLoaded } from './realPriceHistory.js'
+
+export { loadAllHistory, isHistoryLoaded }
 
 /**
  * Mulberry32 seeded PRNG — deterministic, fast, good distribution.

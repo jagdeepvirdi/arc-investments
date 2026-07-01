@@ -12,10 +12,18 @@ Usage:  python fetch_data.py                  # fetch all three indices
 
 Outputs:
   src/data/real/set100_stocks.json   — price + fundamental fields
-  src/data/real/set100_history.json  — daily OHLCV arrays
-  src/data/real/sset_stocks.json / sset_history.json
-  src/data/real/mai_stocks.json  / mai_history.json
+  src/data/real/sset_stocks.json
+  src/data/real/mai_stocks.json
   src/data/real/meta.json            — run stats ("Last updated")
+
+  public/data/set100_history.json    — daily OHLCV arrays (full history since IPO)
+  public/data/sset_history.json
+  public/data/mai_history.json
+
+  History JSON lives under public/ (not src/data/real/) because it is fetched
+  at runtime, not bundled — full-lifetime daily OHLCV for ~427 tickers is far
+  too large (100MB+) to statically import into the JS bundle without blowing
+  the build's heap. See src/data/realPriceHistory.js.
 """
 
 import sys, io, warnings, requests, urllib3, json, os, time, math
@@ -340,9 +348,21 @@ def fetch_chart(ticker, retries=3):
     """
     Fetch full history of daily candles + current price metadata via v8 chart API.
     Returns (stock_dict, candles_list) or (None, []) on failure.
+
+    Uses explicit period1/period2 (not range=max) because Yahoo's chart API
+    silently downsamples interval=1d responses to weekly/monthly once the
+    requested range exceeds a couple of years. An explicit bounded window
+    forces true daily candles for the whole lifetime of the ticker.
     """
     symbol = f'{ticker}.BK'
-    params = {'range': 'max', 'interval': '1d', 'includePrePost': 'false'}
+    period1 = int(datetime(1975, 1, 1, tzinfo=timezone.utc).timestamp())
+    period2 = int(datetime.now(timezone.utc).timestamp())
+    params = {
+        'period1': period1,
+        'period2': period2,
+        'interval': '1d',
+        'includePrePost': 'false',
+    }
 
     for attempt in range(retries):
         try:
@@ -568,7 +588,7 @@ def fetch_thaifin(ticker):
 
 # ── Process one index ─────────────────────────────────────────────────────────
 
-def process(tickers, label, out_dir):
+def process(tickers, label, out_dir, history_dir):
     print(f'\n{"="*60}')
     print(f' {label}  ({len(tickers)} tickers)')
     print(f'{"="*60}')
@@ -615,9 +635,10 @@ def process(tickers, label, out_dir):
         time.sleep(0.4)
 
     os.makedirs(out_dir, exist_ok=True)
+    os.makedirs(history_dir, exist_ok=True)
 
     stocks_path  = os.path.join(out_dir, f'{label}_stocks.json')
-    history_path = os.path.join(out_dir, f'{label}_history.json')
+    history_path = os.path.join(history_dir, f'{label}_history.json')
 
     with open(stocks_path,  'w', encoding='utf-8') as f:
         json.dump(stocks_out, f, ensure_ascii=False, indent=2)
@@ -645,6 +666,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     out = os.path.join('src', 'data', 'real')
+    history_out = os.path.join('public', 'data')
 
     print('Initializing Yahoo Finance session...')
     init_session()
@@ -660,7 +682,7 @@ if __name__ == '__main__':
     run_all = args.index is None
 
     if run_all or args.index == 'set100':
-        set100_result = process(SET100_TICKERS, 'set100', out)
+        set100_result = process(SET100_TICKERS, 'set100', out, history_out)
     else:
         set100_result = {
             'fetched': existing_meta.get('set100Count', 0),
@@ -668,7 +690,7 @@ if __name__ == '__main__':
         }
 
     if run_all or args.index == 'sset':
-        sset_result = process(SSET_TICKERS, 'sset', out)
+        sset_result = process(SSET_TICKERS, 'sset', out, history_out)
     else:
         sset_result = {
             'fetched': existing_meta.get('ssetCount', 0),
@@ -676,7 +698,7 @@ if __name__ == '__main__':
         }
 
     if run_all or args.index == 'mai':
-        mai_result = process(MAI_TICKERS, 'mai', out)
+        mai_result = process(MAI_TICKERS, 'mai', out, history_out)
     else:
         mai_result = {
             'fetched': existing_meta.get('maiCount', 0),
