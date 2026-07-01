@@ -9,6 +9,8 @@ const CATEGORIES = [
   { label: 'Momentum',                  ids: ['high52w_breakout', 'relative_strength', 'macd_histogram_reversal'] },
   { label: 'Hybrid Tech + Fundamental', ids: ['quality_uptrend', 'value_breakout', 'dividend_uptrend', 'sma_trend_setup'] },
   { label: 'Market Timing',             ids: ['set_market_timer', 'boll_squeeze'] },
+  { label: 'Enhanced / Experimental',   ids: ['ema200_reclaim_quality', 'high52w_breakout_enhanced', 'ema200_reclaim_breakout', 'ema220_reclaim'] },
+  { label: 'Breakout Systems',          ids: ['ema220_trend_52w_breakout'] },
 ]
 
 const TODAY = new Date().toISOString().slice(0, 10)
@@ -93,11 +95,29 @@ export function StrategyPanel() {
 
       {/* Strategy description */}
       {selectedStrategy && (
-        <div className="px-4 py-3 border-t border-border bg-bg/40">
-          <p className="text-muted text-[10px] leading-relaxed line-clamp-3">
+        <div className="px-4 py-3 border-t border-border bg-bg/40 max-h-56 overflow-y-auto">
+          <p className="text-muted text-[10px] leading-relaxed mb-2">
             {selectedStrategy.description}
           </p>
-          <p className="text-muted/50 text-[9px] mt-1">
+          {selectedStrategy.selectionNote && (
+            <div className="mb-1.5">
+              <p className="text-muted/50 text-[9px] uppercase tracking-wider mb-0.5">Selection</p>
+              <p className="text-body text-[10px] leading-relaxed">{selectedStrategy.selectionNote}</p>
+            </div>
+          )}
+          {selectedStrategy.buyTrigger && (
+            <div className="mb-1.5">
+              <p className="text-bullish/70 text-[9px] uppercase tracking-wider mb-0.5">Buy trigger</p>
+              <p className="text-body text-[10px] leading-relaxed">{selectedStrategy.buyTrigger}</p>
+            </div>
+          )}
+          {selectedStrategy.sellTrigger && (
+            <div className="mb-2">
+              <p className="text-bearish/70 text-[9px] uppercase tracking-wider mb-0.5">Sell trigger</p>
+              <p className="text-body text-[10px] leading-relaxed">{selectedStrategy.sellTrigger}</p>
+            </div>
+          )}
+          <p className="text-muted/50 text-[9px] border-t border-border/50 pt-1.5 mt-1">
             Max {selectedStrategy.maxPositions} positions ·{' '}
             {selectedStrategy.stopLossPct != null
               ? `${(selectedStrategy.stopLossPct * 100).toFixed(0)}% stop`

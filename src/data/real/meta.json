@@ -1,18 +1,13 @@
 {
-  "lastFetched": "2026-06-26T07:55:49.000Z",
-  "set100Count": 96,
+  "lastFetched": "2026-07-01T07:01:37.000Z",
+  "set100Count": 100,
   "set100Total": 100,
   "ssetCount": 99,
   "ssetTotal": 100,
   "maiCount": 228,
   "maiTotal": 230,
   "skipped": {
-    "SET100": [
-      "PRUK",
-      "INTUCH",
-      "DMK",
-      "GL"
-    ],
+    "SET100": [],
     "SSET": [
       "CB"
     ],

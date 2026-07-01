@@ -33,6 +33,9 @@
  *   id: string,
  *   label: string,
  *   description: string,
+ *   selectionNote: string,
+ *   buyTrigger: string,
+ *   sellTrigger: string,
  *   universe: 'ALL' | 'SET100' | 'SSET' | 'MAI',
  *   maxPositions: number,
  *   stopLossPct: number | null,
@@ -51,6 +54,9 @@ const GOLDEN_CROSS_QUALITY = {
   id:          'golden_cross_quality',
   label:       'S1 · Golden Cross + Quality',
   description: 'SMA50/SMA200 golden cross filtered by fundamental quality (ROE, FCF, market cap). Avoids catastrophic losers by requiring positive free cash flow.',
+  selectionNote: 'ROE > 10%, FCF positive, Market Cap > 5B THB',
+  buyTrigger:    'SMA50 crosses above SMA200 (golden cross)',
+  sellTrigger:   'Death cross (SMA50 < SMA200) OR price closes below SMA200',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.10,
@@ -91,6 +97,9 @@ const EMA_RIBBON = {
   id:          'ema_ribbon',
   label:       'S2 · EMA Ribbon Alignment',
   description: 'Requires EMA20 > EMA50 > EMA200 all aligned bullishly with price above EMA20. RSI 45–65 prevents chasing overbought rallies.',
+  selectionNote: 'All stocks (no fundamental filter)',
+  buyTrigger:    'EMA20 > EMA50 > EMA200, price above EMA20, RSI 45–65',
+  sellTrigger:   'EMA20 crosses below EMA50',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.08,
@@ -127,6 +136,9 @@ const EMA200_RECLAIM = {
   id:          'ema200_reclaim',
   label:       'S3 · EMA200 Reclaim',
   description: 'Price dips below EMA200 for 3+ days then closes back above — captures trend resumption after a correction.',
+  selectionNote: 'All stocks (no fundamental filter)',
+  buyTrigger:    'Price closes above EMA200 after 3+ consecutive days below it',
+  sellTrigger:   'Two consecutive closes below EMA200',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.08,
@@ -164,6 +176,9 @@ const MACD_VOLUME = {
   id:          'macd_volume',
   label:       'S4 · MACD + Volume Spike',
   description: 'MACD bullish crossover confirmed by volume > 1.5× 20-day average. Only in stocks already above EMA200.',
+  selectionNote: 'Price above EMA200',
+  buyTrigger:    'MACD line crosses above signal line + volume > 1.5× 20-day average',
+  sellTrigger:   'MACD line crosses below signal line',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.08,
@@ -200,6 +215,9 @@ const BOLL_QUALITY_BOUNCE = {
   id:          'boll_quality_bounce',
   label:       'S5 · Bollinger Quality Bounce',
   description: 'Price touches lower Bollinger Band + RSI < 40, but only in quality stocks (ROE > 10%, FCF positive) above EMA200. Best raw signal from data analysis (59.6% win rate).',
+  selectionNote: 'ROE > 10%, FCF positive, price above EMA200',
+  buyTrigger:    'Price touches or closes below lower Bollinger Band + RSI < 40',
+  sellTrigger:   'Price reaches middle Bollinger Band OR RSI rises above 60',
   universe:    'ALL',
   maxPositions:  8,
   stopLossPct:   0.08,
@@ -232,6 +250,9 @@ const RSI_DOUBLE_DIP = {
   id:          'rsi_double_dip',
   label:       'S6 · RSI Double-Dip Recovery',
   description: 'RSI makes two lows below 40, with the second being higher (bullish divergence). Only in stocks above SMA200.',
+  selectionNote: 'Price above SMA200',
+  buyTrigger:    'RSI forms a higher second low below 40 (bullish divergence), then crosses back above 40',
+  sellTrigger:   'RSI rises above 65 OR price closes below SMA200',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.08,
@@ -290,6 +311,9 @@ const SMA50_PULLBACK = {
   id:          'sma50_pullback',
   label:       'S7 · Pullback to Rising SMA50',
   description: 'In uptrending stocks (SMA50 > SMA200), buy pullbacks to rising SMA50 with RSI 40–55.',
+  selectionNote: 'SMA50 > SMA200 and SMA50 rising (above its 10-day-ago level)',
+  buyTrigger:    'Price within 0–2% above SMA50 (pullback zone) + RSI 40–55',
+  sellTrigger:   'SMA50 drops below SMA200',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.06,
@@ -326,6 +350,9 @@ const HIGH52W_BREAKOUT = {
   id:          'high52w_breakout',
   label:       'S8 · 52-Week High Breakout',
   description: 'New 52-week closing high, only when the SET index itself is above its EMA200. Trailing exit from peak close.',
+  selectionNote: 'SET100 stocks only; SET index must be above its EMA200 (bull regime)',
+  buyTrigger:    'New 52-week closing high (close exceeds every close in prior 252 days)',
+  sellTrigger:   '12% trailing stop from peak close OR price closes below SMA50',
   universe:    'SET100',
   maxPositions:  5,
   stopLossPct:   0.08,
@@ -366,6 +393,9 @@ const RELATIVE_STRENGTH = {
   id:          'relative_strength',
   label:       'S9 · Relative Strength vs SET',
   description: 'Buy stocks outperforming the SET index by 10%+ over 3 months. Entry when stock makes a new 1-month high.',
+  selectionNote: 'Stock 3-month return exceeds SET index 3-month return by 10+ percentage points',
+  buyTrigger:    'New 1-month closing high (price > every close in prior 21 days)',
+  sellTrigger:   'Stock\'s 1-month return drops below SET\'s 1-month return (underperformance)',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.10,
@@ -407,6 +437,9 @@ const MACD_HISTOGRAM_REVERSAL = {
   id:          'macd_histogram_reversal',
   label:       'S10 · MACD Histogram Reversal',
   description: 'MACD histogram turns positive after 5+ consecutive negative bars — earliest measurable momentum reversal signal.',
+  selectionNote: 'Price above EMA200',
+  buyTrigger:    'First positive MACD histogram bar after 5+ consecutive negative bars',
+  sellTrigger:   'MACD histogram turns negative',
   universe:    'ALL',
   maxPositions:  6,
   stopLossPct:   0.07,
@@ -449,6 +482,9 @@ const QUALITY_UPTREND = {
   id:          'quality_uptrend',
   label:       'S11 · Quality Uptrend (SEPA)',
   description: 'Minervini SEPA criteria adapted for Thai market: high-quality companies (ROE > 15%, FCF positive, D/E < 1.5) in confirmed price uptrends.',
+  selectionNote: 'ROE > 15%, FCF positive, D/E < 1.5, Market Cap > 10B THB',
+  buyTrigger:    'Price above EMA200 + SMA50 > SMA200 + new 1-month closing high',
+  sellTrigger:   'Price closes below EMA200 OR death cross (SMA50 crosses below SMA200)',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.08,
@@ -489,6 +525,9 @@ const VALUE_BREAKOUT = {
   id:          'value_breakout',
   label:       'S12 · Value Breakout',
   description: 'Fundamentally cheap stocks (P/E 1–12, FCF positive, D/E < 1) that break out above their 3-month high — market re-rating the value.',
+  selectionNote: 'P/E between 1–12, FCF positive, D/E < 1.0',
+  buyTrigger:    'Price breaks above the 3-month (63-day) closing high',
+  sellTrigger:   'Price closes below SMA50',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.10,
@@ -519,6 +558,9 @@ const DIVIDEND_UPTREND = {
   id:          'dividend_uptrend',
   label:       'S13 · Dividend Defensive Uptrend',
   description: 'High-yield dividend stocks (yield > 3.5%, payout < 70%, FCF positive) held only while the trend is healthy.',
+  selectionNote: 'Dividend yield > 3.5%, payout ratio < 70%, FCF positive',
+  buyTrigger:    'Price above SMA50 + SMA50 > SMA200 + RSI below 65',
+  sellTrigger:   'Three consecutive closes below SMA50',
   universe:    'ALL',
   maxPositions:  6,
   stopLossPct:   0.10,
@@ -555,6 +597,9 @@ const SMA_TREND_SETUP = {
   id:          'sma_trend_setup',
   label:       'S14 · SMA Trend Setup',
   description: '5-condition Minervini-style setup: SMA150 > EMA220, Price > SMA50, SMA50 > SMA160, Price > 1.25× 52-week low, touched EMA220 within 90 days.',
+  selectionNote: 'Stocks with 220+ days of price history',
+  buyTrigger:    'All 5 conditions met: SMA150 > EMA220, Price > SMA50, SMA50 > SMA160, Price > 1.25× 52W low, touched EMA220 within past 90 days',
+  sellTrigger:   'SMA50 drops below SMA160',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.10,
@@ -602,6 +647,9 @@ const SET_MARKET_TIMER = {
   id:          'set_market_timer',
   label:       'S15 · SET Market Timer',
   description: 'Holds cash when SET index is below its EMA200 (64.3% of days were in downtrend). Buys quality SET100 stocks when market regime turns bullish.',
+  selectionNote: 'SET100 stocks only; SET index must be above its EMA200',
+  buyTrigger:    'Price above EMA50 + RSI below 65 (while SET is in bull regime)',
+  sellTrigger:   'SET index drops below its EMA200 (exit all) OR price closes below EMA50',
   universe:    'SET100',
   maxPositions:  20,
   stopLossPct:   0.12,
@@ -641,6 +689,9 @@ const BOLL_SQUEEZE = {
   id:          'boll_squeeze',
   label:       'S16 · Bollinger Band Squeeze',
   description: 'Periods of low volatility (narrowest Bollinger Bands in 20 days) followed by a breakout above the upper band. Only in stocks above EMA200.',
+  selectionNote: 'Price above EMA200',
+  buyTrigger:    'Band width at 20-day low (squeeze) + price breaks above upper Bollinger Band',
+  sellTrigger:   'Two consecutive closes below the middle Bollinger Band',
   universe:    'ALL',
   maxPositions:  5,
   stopLossPct:   0.08,
@@ -676,6 +727,341 @@ const BOLL_SQUEEZE = {
   },
 }
 
+// ── CATEGORY F — Enhanced / Experimental ─────────────────────────────────────
+
+/**
+ * S17 · EMA200 Reclaim + Quality Shield
+ * Addresses S3's low win rate and high drawdown with three layers of improvement:
+ * 1. Requires 5+ consecutive days below EMA200 (filters noise vs 3-day in S3)
+ * 2. Quality gate: FCF positive + SET market in bull regime
+ * 3. Volume surge on reclaim day (institutional conviction)
+ * Also adds RSI bounds, tighter stop, and EMA50 as a secondary exit.
+ */
+const EMA200_RECLAIM_QUALITY = {
+  id:          'ema200_reclaim_quality',
+  label:       'S17 · EMA200 Reclaim + Quality',
+  description: 'S3 improved: requires 5+ days below EMA200, positive FCF, volume surge on reclaim, and SET market in bull regime. Tighter stop + EMA50 exit to limit drawdown.',
+  selectionNote: 'FCF positive + SET index above its EMA200 (bull regime)',
+  buyTrigger:    'Price reclaims EMA200 after 5+ consecutive days below it + RSI 35–65 + volume surge > 1.2× average',
+  sellTrigger:   'Two consecutive closes below EMA200 OR price closes below EMA50',
+  universe:    'ALL',
+  maxPositions:  5,
+  stopLossPct:   0.07,
+  takeProfitPct: 0.22,
+  commissionPct: 0.0015,
+
+  selectionCriteria({ stock, setIndex, date }) {
+    // Quality gate: positive free cash flow only
+    if (!stock.fcf || stock.fcf <= 0) return false
+    // Market regime: SET index must be above its EMA200
+    const idx = setIndex.dateIndex.get(date)
+    if (idx === undefined) return false
+    const setEma200 = setIndex.ema200[idx]
+    return setEma200 !== null && setIndex.closes[idx] > setEma200
+  },
+
+  entryCriteria({ indicators, closes, history, i }) {
+    if (i < 5) return false
+    const { ema200, vol20, rsi14 } = indicators
+    if (
+      ema200[i]     === null || ema200[i - 1] === null || ema200[i - 2] === null ||
+      ema200[i - 3] === null || ema200[i - 4] === null || ema200[i - 5] === null
+    ) return false
+
+    // Reclaim: today's close crosses above EMA200
+    if (closes[i] <= ema200[i]) return false
+
+    // Must have been below EMA200 for at least 5 consecutive days before reclaim
+    if (!(
+      closes[i - 1] < ema200[i - 1] && closes[i - 2] < ema200[i - 2] &&
+      closes[i - 3] < ema200[i - 3] && closes[i - 4] < ema200[i - 4] &&
+      closes[i - 5] < ema200[i - 5]
+    )) return false
+
+    // RSI in healthy range: not overbought, not in free-fall
+    if (rsi14[i] === null || rsi14[i] < 35 || rsi14[i] > 65) return false
+
+    // Volume surge confirms conviction on reclaim day
+    if (vol20[i] !== null && history[i].volume < vol20[i] * 1.2) return false
+
+    return true
+  },
+
+  exitCriteria({ indicators, closes, i }) {
+    if (i < 2) return false
+    const { ema200, ema50 } = indicators
+    // 2 consecutive closes below EMA200 (same as S3)
+    if (ema200[i] !== null && ema200[i - 1] !== null &&
+        closes[i] < ema200[i] && closes[i - 1] < ema200[i - 1]) return true
+    // Also exit if close drops below EMA50 (nearer-term trend broken)
+    if (ema50[i] !== null && closes[i] < ema50[i]) return true
+    return false
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * S18 · 52-Week High Breakout Enhanced
+ * Addresses S8's limited returns (~14%) with:
+ * 1. Universe expanded from SET100-only to ALL indices
+ * 2. EMA alignment (EMA20 > EMA50 > EMA200) confirms stock is in strong trend
+ * 3. Volume surge on breakout day (> 1.3× avg)
+ * 4. RSI 50–80 filter: momentum is real but not at extreme
+ * 5. Tighter 10% trailing stop (vs 12%) reduces drawdown
+ * 6. Exit when EMA20 crosses below EMA50 (earlier trend-break signal)
+ */
+const HIGH52W_BREAKOUT_ENHANCED = {
+  id:          'high52w_breakout_enhanced',
+  label:       'S18 · 52W Breakout Enhanced',
+  description: 'S8 improved: expands to ALL indices, adds EMA alignment filter (EMA20>EMA50>EMA200), volume confirmation, RSI 50–80 gate, and tighter 10% trailing stop.',
+  selectionNote: 'SET index above its EMA200 + EMA20 > EMA50 > EMA200 (confirmed uptrend)',
+  buyTrigger:    'New 52-week closing high + volume > 1.3× average + RSI between 50–80',
+  sellTrigger:   '10% trailing stop from peak close OR EMA20 crosses below EMA50',
+  universe:    'ALL',
+  maxPositions:  8,
+  stopLossPct:   0.08,
+  takeProfitPct: null,
+  commissionPct: 0.0015,
+
+  selectionCriteria({ indicators, closes, setIndex, date, i }) {
+    // Market regime: SET index above its EMA200
+    const setIdx = setIndex.dateIndex.get(date)
+    if (setIdx !== undefined) {
+      const setEma200 = setIndex.ema200[setIdx]
+      if (setEma200 !== null && setIndex.closes[setIdx] <= setEma200) return false
+    }
+    // EMA alignment: EMA20 > EMA50 > EMA200 (stock is in confirmed uptrend)
+    const { ema20, ema50, ema200 } = indicators
+    if (ema20[i] === null || ema50[i] === null || ema200[i] === null) return false
+    return ema20[i] > ema50[i] && ema50[i] > ema200[i]
+  },
+
+  entryCriteria({ closes, history, indicators, i }) {
+    if (i < 252) return false
+    // New 52-week closing high
+    const high52w = Math.max(...closes.slice(i - 252, i))
+    if (closes[i] <= high52w) return false
+
+    const { vol20, rsi14 } = indicators
+    // Volume surge confirms the breakout
+    if (vol20[i] !== null && history[i].volume < vol20[i] * 1.3) return false
+    // RSI: strong momentum, not overextended
+    if (rsi14[i] !== null && (rsi14[i] < 50 || rsi14[i] > 80)) return false
+
+    return true
+  },
+
+  exitCriteria({ closes, indicators, i }, pos) {
+    // Trailing stop: 10% from peak close (tighter than S8's 12%)
+    if (!pos.customState.peakClose) pos.customState.peakClose = pos.buyPrice
+    if (closes[i] > pos.customState.peakClose) pos.customState.peakClose = closes[i]
+    if (closes[i] < pos.customState.peakClose * 0.90) return true
+
+    // Exit when EMA20 crosses below EMA50 (trend alignment breaks)
+    if (i < 1) return false
+    const { ema20, ema50 } = indicators
+    if (ema20[i] === null || ema50[i] === null) return false
+    if (ema20[i - 1] === null || ema50[i - 1] === null) return false
+    return ema20[i] < ema50[i] && ema20[i - 1] >= ema50[i - 1]
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * S19 · EMA200 Reclaim × 52W Momentum Hybrid
+ * Combines the correction-entry logic of S3 with the trend-strength requirement of S8.
+ * The key filter: stock must be within 15% of its 52-week high at the time of reclaim.
+ * This means we only enter corrections in genuinely strong stocks (not deep bear recoveries).
+ * Also requires SET market bullish and volume on the reclaim candle.
+ * Uses trailing stop to protect gains like S8.
+ */
+const EMA200_RECLAIM_BREAKOUT_HYBRID = {
+  id:          'ema200_reclaim_breakout',
+  label:       'S19 · EMA200 Reclaim × 52W Momentum',
+  description: 'Hybrid: EMA200 reclaim (S3) only when the stock is within 15% of its 52-week high (S8 strength check). Enters corrections in strong stocks, not bear-market bottoms.',
+  selectionNote: 'SET index above its EMA200 (bull regime)',
+  buyTrigger:    'Price reclaims EMA200 after 3+ days below it + within 15% of 52-week high + volume > 1.1× average',
+  sellTrigger:   '12% trailing stop from peak close OR two consecutive closes below EMA200',
+  universe:    'ALL',
+  maxPositions:  5,
+  stopLossPct:   null,
+  takeProfitPct: 0.25,
+  commissionPct: 0.0015,
+
+  selectionCriteria({ setIndex, date }) {
+    // Only trade when SET market is in bull regime
+    const idx = setIndex.dateIndex.get(date)
+    if (idx === undefined) return false
+    const setEma200 = setIndex.ema200[idx]
+    return setEma200 !== null && setIndex.closes[idx] > setEma200
+  },
+
+  entryCriteria({ indicators, closes, history, i }) {
+    if (i < 252) return false
+    const { ema200, vol20 } = indicators
+    if (
+      ema200[i]     === null || ema200[i - 1] === null ||
+      ema200[i - 2] === null || ema200[i - 3] === null
+    ) return false
+
+    // EMA200 reclaim: today above, prior 3 days below
+    if (!(
+      closes[i]     > ema200[i]     &&
+      closes[i - 1] < ema200[i - 1] &&
+      closes[i - 2] < ema200[i - 2] &&
+      closes[i - 3] < ema200[i - 3]
+    )) return false
+
+    // 52W proximity check: stock must be within 15% of its 52-week high
+    // This separates "healthy correction" from "deep bear" setups
+    const high52w = Math.max(...closes.slice(i - 252, i))
+    if (closes[i] < high52w * 0.85) return false
+
+    // Volume confirmation on reclaim candle
+    if (vol20[i] !== null && history[i].volume < vol20[i] * 1.1) return false
+
+    return true
+  },
+
+  exitCriteria({ indicators, closes, i }, pos) {
+    // Trailing stop: 12% below peak close since entry
+    if (!pos.customState.peakClose) pos.customState.peakClose = pos.buyPrice
+    if (closes[i] > pos.customState.peakClose) pos.customState.peakClose = closes[i]
+    if (closes[i] < pos.customState.peakClose * 0.88) return true
+
+    // Also exit on 2 consecutive closes back below EMA200
+    if (i < 2) return false
+    const { ema200 } = indicators
+    if (ema200[i] === null || ema200[i - 1] === null) return false
+    return closes[i] < ema200[i] && closes[i - 1] < ema200[i - 1]
+  },
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * S20 · EMA220 Reclaim
+ * Identical in logic to S3 (EMA200 Reclaim) but uses EMA220 — a slower, smoother
+ * long-term trend line. Generates fewer signals but each represents a reclaim of
+ * a more significant trend level, potentially improving signal quality.
+ * EMA220 is already pre-computed by the backtesting engine.
+ */
+const EMA220_RECLAIM = {
+  id:          'ema220_reclaim',
+  label:       'S20 · EMA220 Reclaim',
+  description: 'Same logic as S3 (EMA200 Reclaim) but using the slower EMA220. Fewer signals than S3, but each reclaim of EMA220 represents a stronger long-term trend boundary.',
+  selectionNote: 'All stocks (no fundamental filter)',
+  buyTrigger:    'Price closes above EMA220 after 3+ consecutive days below it',
+  sellTrigger:   'Two consecutive closes below EMA220',
+  universe:    'ALL',
+  maxPositions:  5,
+  stopLossPct:   0.08,
+  takeProfitPct: null,
+  commissionPct: 0.0015,
+
+  selectionCriteria() { return true },
+
+  entryCriteria({ indicators, closes, i }) {
+    if (i < 3) return false
+    const { ema220 } = indicators
+    if (
+      ema220[i]     === null || ema220[i - 1] === null ||
+      ema220[i - 2] === null || ema220[i - 3] === null
+    ) return false
+    // Price closes above EMA220 after being below it for 3+ consecutive days
+    return (
+      closes[i]     > ema220[i]     &&
+      closes[i - 1] < ema220[i - 1] &&
+      closes[i - 2] < ema220[i - 2] &&
+      closes[i - 3] < ema220[i - 3]
+    )
+  },
+
+  exitCriteria({ indicators, closes, i }) {
+    if (i < 2) return false
+    const { ema220 } = indicators
+    if (ema220[i] === null || ema220[i - 1] === null) return false
+    // Close below EMA220 for 2 consecutive days
+    return closes[i] < ema220[i] && closes[i - 1] < ema220[i - 1]
+  },
+}
+
+// ── CATEGORY G — Breakout Systems ────────────────────────────────────────────
+
+/**
+ * S21 · EMA220 Trend + 52W High Breakout
+ * Five simultaneous technical filters identify stocks in a healthy uptrend that have
+ * experienced a recent controlled pullback. The entry fires only on a new 52-week
+ * CLOSING high — confirming the stock has recovered and is making new highs.
+ *
+ * Filters (all must be true on signal day):
+ *   1. SMA150 > EMA220      — long-term structure is bullish
+ *   2. SMA50 > SMA150       — intermediate trend aligned
+ *   3. Close > SMA50        — price is above short-term trend
+ *   4. Close > 1.25 × 52W low — not a dying/broken stock
+ *   5. Intraday Low dipped below EMA220 at least once in the past 90 trading days
+ *      (confirms a healthy shakeout and recovery)
+ *
+ * Trigger: new 52-week closing high on signal day.
+ * Entry: next trading day's opening price (no look-ahead).
+ * Exit: close falls below EMA220 OR 15% hard stop below entry price.
+ * Portfolio: up to 10 positions; if >10 signal simultaneously, first-past-post fills.
+ */
+const EMA220_TREND_52W_BREAKOUT = {
+  id:          'ema220_trend_52w_breakout',
+  label:       'S21 · EMA220 Trend + 52W Breakout',
+  description: 'Five-filter trend setup: SMA150 > EMA220, SMA50 > SMA150, Price > SMA50, Price > 1.25× 52W low, intraday low touched EMA220 within 90 days — triggered by a new 52-week CLOSING high. 15% hard stop + EMA220 trend exit.',
+  selectionNote: 'Stocks with 252+ days of price history',
+  buyTrigger:    'All 5 trend filters pass + new 52-week CLOSING high (price > all prior 252 closes)',
+  sellTrigger:   'Price closes below EMA220',
+  universe:    'ALL',
+  maxPositions:  10,
+  stopLossPct:   0.08,
+  takeProfitPct: null,
+  commissionPct: 0.0015,
+
+  selectionCriteria({ history }) {
+    return history.length >= 252
+  },
+
+  entryCriteria({ indicators, closes, history, i }) {
+    if (i < 252) return false
+    const { sma50, sma150, ema220 } = indicators
+    if (sma50[i] === null || sma150[i] === null || ema220[i] === null) return false
+
+    // 1: Long-term bullish structure
+    if (sma150[i] <= ema220[i]) return false
+    // 2: Intermediate trend aligned
+    if (sma50[i] <= sma150[i]) return false
+    // 3: Price above short-term trend
+    if (closes[i] <= sma50[i]) return false
+    // 4: Not a weak/dying stock — close > 1.25× trailing 52W low (using intraday lows)
+    let low52w = Infinity
+    for (let j = Math.max(0, i - 251); j <= i; j++) {
+      if (history[j].low < low52w) low52w = history[j].low
+    }
+    if (closes[i] <= low52w * 1.25) return false
+    // 5: Intraday low dipped below EMA220 at least once in the past 90 trading days
+    let hadPullback = false
+    for (let j = Math.max(0, i - 89); j <= i; j++) {
+      if (ema220[j] !== null && history[j].low < ema220[j]) { hadPullback = true; break }
+    }
+    if (!hadPullback) return false
+    // Trigger: new 52-week closing high (closes slice excludes today → prior 252 days)
+    const high52w = Math.max(...closes.slice(i - 252, i))
+    return closes[i] > high52w
+  },
+
+  exitCriteria({ indicators, closes, i }) {
+    const { ema220 } = indicators
+    if (ema220[i] === null) return false
+    // Trailing trend stop: close drops below EMA220
+    return closes[i] < ema220[i]
+  },
+}
+
 // ── Export ────────────────────────────────────────────────────────────────────
 
 /** @type {StrategyDef[]} */
@@ -701,6 +1087,13 @@ export const STRATEGIES = [
   // E — Market Timing / Regime
   SET_MARKET_TIMER,
   BOLL_SQUEEZE,
+  // F — Enhanced / Experimental
+  EMA200_RECLAIM_QUALITY,
+  HIGH52W_BREAKOUT_ENHANCED,
+  EMA200_RECLAIM_BREAKOUT_HYBRID,
+  EMA220_RECLAIM,
+  // G — Breakout Systems
+  EMA220_TREND_52W_BREAKOUT,
 ]
 
 export const STRATEGIES_MAP = Object.fromEntries(STRATEGIES.map(s => [s.id, s]))

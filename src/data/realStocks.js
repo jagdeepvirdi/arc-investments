@@ -21,41 +21,46 @@ import { STOCKS as MOCK_SSET   } from './mockSset.js'
 import { STOCKS as MOCK_MAI    } from './mockMai.js'
 
 /**
- * Merge: keep all mock stocks; overlay real fields where available.
- * Price fields are always taken from real data.
- * Fundamental fields are overlaid only when present in the real JSON —
- * missing/null fields silently fall back to mock values.
- * @param {object[]} realArr - fetched from Yahoo Finance
- * @param {object[]} mockArr - full mock list (all stocks)
+ * Real-data-first merge: iterate real tickers, use mock only as fallback for
+ * fields not available from Yahoo Finance / thaifin (volatility, sectorAvgPE).
+ * Tickers in mock but absent from real are excluded (stale index composition).
+ * Tickers in real but absent from mock are included with isRealData: true.
+ * @param {object[]} realArr - fetched from Yahoo Finance + thaifin
+ * @param {object[]} mockArr - mock list (fallback for volatility, sectorAvgPE)
  * @returns {object[]}
  */
 function buildStocks(realArr, mockArr) {
-  const realMap = Object.fromEntries(realArr.map(s => [s.ticker, s]))
+  const mockMap = Object.fromEntries(mockArr.map(s => [s.ticker, s]))
 
-  return mockArr.map(mock => {
-    const real = realMap[mock.ticker]
-    if (!real) return { ...mock, isRealData: false }
+  return realArr.map(real => {
+    const mock = mockMap[real.ticker] || {}
 
     return {
+      // Mock base supplies volatility + sectorAvgPE (not in real data)
       ...mock,
-      // Price / identity — always from real
-      name:         real.name         || mock.name,
-      sector:       real.sector       || mock.sector,
+      // Identity — real always wins
+      ticker:       real.ticker,
+      name:         real.name         || mock.name     || real.ticker,
+      sector:       real.sector       || mock.sector   || 'Other',
       ipoDate:      real.ipoDate      || mock.ipoDate,
       ipoPrice:     real.ipoPrice     || mock.ipoPrice,
+      // Price — always real
       currentPrice: real.currentPrice,
       change:       real.change,
       changePct:    real.changePct,
       volume:       real.volume,
+      // Market cap — real (from thaifin) when available, mock as fallback
+      ...(real.marketCap     != null ? { marketCap: real.marketCap }
+                                     : mock.marketCap != null ? { marketCap: mock.marketCap } : {}),
       // Fundamentals — real when present, mock as fallback
-      ...(real.pe            != null && { pe:            real.pe }),
-      ...(real.de            != null && { de:            real.de }),
-      ...(real.fcf           != null && { fcf:           real.fcf }),
-      ...(real.roe           != null && { roe:           real.roe }),
-      ...(real.dividendYield != null && { dividendYield: real.dividendYield }),
-      ...(real.payoutRatio   != null && { payoutRatio:   real.payoutRatio }),
-      ...(real.epsGrowth     != null && { epsGrowth:     real.epsGrowth }),
-      ...(real.revenueGrowth != null && { revenueGrowth: real.revenueGrowth }),
+      pe:            real.pe            ?? mock.pe,
+      de:            real.de            ?? mock.de,
+      fcf:           real.fcf           ?? mock.fcf,
+      roe:           real.roe           ?? mock.roe,
+      dividendYield: real.dividendYield ?? mock.dividendYield,
+      payoutRatio:   real.payoutRatio   ?? mock.payoutRatio,
+      epsGrowth:     real.epsGrowth     ?? mock.epsGrowth,
+      revenueGrowth: real.revenueGrowth ?? mock.revenueGrowth,
       isRealData: true,
     }
   })

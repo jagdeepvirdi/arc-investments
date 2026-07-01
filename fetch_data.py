@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Fetch real SET market data from Yahoo Finance:
-  • Chart API (v8)        — daily OHLCV candles, 5-year range
+  • Chart API (v8)        — daily OHLCV candles, full history (max range)
   • quoteSummary (v10)    — P/E, D/E, FCF, ROE, dividendYield,
                             payoutRatio, epsGrowth, revenueGrowth
 
@@ -18,7 +18,10 @@ Outputs:
   src/data/real/meta.json            — run stats ("Last updated")
 """
 
-import sys, io, warnings, requests, urllib3, json, os, time
+import sys, io, warnings, requests, urllib3, json, os, time, math
+import yfinance as yf
+from curl_cffi import requests as curl_req
+from thaifin import Stock as ThaiStock
 from datetime import datetime, timezone
 
 warnings.filterwarnings('ignore')
@@ -27,6 +30,7 @@ urllib3.disable_warnings()
 # Force UTF-8 on Windows Thai-locale terminals
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
 
+# requests.Session for the chart API (OHLCV)
 SESSION = requests.Session()
 SESSION.verify = False
 SESSION.headers.update({
@@ -40,26 +44,38 @@ SESSION.headers.update({
 })
 
 YF_CHART   = 'https://query1.finance.yahoo.com/v8/finance/chart/{symbol}'
-YF_SUMMARY = 'https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbol}'
+YF_SUMMARY = 'https://query2.finance.yahoo.com/v10/finance/quoteSummary/{symbol}'
 
 CRUMB = None  # populated by init_session()
+
+# curl_cffi session for yfinance (handles Yahoo Finance auth + SSL)
+YF_SESSION = curl_req.Session(impersonate='chrome', verify=False)
 
 # ── Ticker lists ──────────────────────────────────────────────────────────────
 
 SET100_TICKERS = [
-    'PTT','PTTEP','GULF','GPSC','BGRIM','BPP','RATCH','EGCO',
-    'IRPC','TOP','SPRC','PTTGC','BANPU','BCP','OR',
-    'KBANK','SCB','BBL','KTB','TTB','TISCO','KKP','TCAP',
-    'CPN','AWC','LH','SPALI','AP','QH','SC','ORI',
-    'NOBLE','ANAN','SIRI','LPN','PRUK','AMATA','WHA',
-    'ADVANC','TRUE','INTUCH',
-    'CPALL','HMPRO','CRC','BJC','COM7','DOHOME','CPAXT','GLOBAL','CBG','OSP',
-    'BDMS','BH','BCH','CHG','MEGA','VGI','DMK','RJH',
-    'SCC','IVL','SCGP','TPIPL','TASCO','HANA','DELTA','KCE','CCET','EASTW',
-    'CPF','TU','GFPT','BTG','MINT','ERW','CENTEL',
-    'AOT','BEM','BTS','AAV','BA','NOK','THAI','TTA',
-    'MAJOR','RS','WORK','JMART',
-    'MTC','SAWAD','AEONTS','ASK','GL','TIDLOR','THANI','TMT','KTC','TLI','JMT','PHOL',
+    # Official SET100 composition (source: set.or.th)
+    'AAV','ADVANC','AEONTS','AMATA','AOT','AP','AURA','AWC',
+    'BA','BAM','BANPU','BBL','BCH','BCP','BCPG','BDMS','BEM','BGRIM','BH',
+    'BJC','BLA','BTG','BTS',
+    'CBG','CCET','CENTEL','CHG','CK','COM7','CPALL','CPF','CPN','CRC',
+    'DELTA','DOHOME',
+    'EA','EGCO','ERW',
+    'GFPT','GLOBAL','GPSC','GULF','GUNKUL',
+    'HANA','HMPRO',
+    'ICHI','IRPC','IVL',
+    'JAS','JMART','JMT','JTS',
+    'KBANK','KCE','KKP','KTB','KTC',
+    'LH',
+    'M','MEGA','MINT','MOSHI','MTC',
+    'OR','OSP',
+    'PLANB','PR9','PRM','PTG','PTT','PTTEP','PTTGC',
+    'QH',
+    'RATCH','RCL',
+    'SAWAD','SCB','SCC','SCGP','SIRI','SISB','SJWD','SPALI','SPRC','STA','STECON','STGT',
+    'TASCO','TCAP','TFG','TIDLOR','TISCO','TLI','TOA','TOP','TRUE','TTB','TU',
+    'VGI',
+    'WHA',
 ]
 
 SSET_TICKERS = [
@@ -148,9 +164,33 @@ SECTOR_MAP = {
     'AOT':'Transport','BEM':'Transport','BTS':'Transport','AAV':'Transport',
     'BA':'Transport','NOK':'Transport','THAI':'Transport','TTA':'Transport',
     'MAJOR':'Tech / Media','RS':'Tech / Media','WORK':'Tech / Media','JMART':'Tech / Media',
-    'MTC':'Financials','SAWAD':'Financials','AEONTS':'Financials','ASK':'Financials',
-    'GL':'Financials','TIDLOR':'Financials','THANI':'Financials','TMT':'Financials',
-    'KTC':'Financials','TLI':'Financials','JMT':'Financials','PHOL':'Financials',
+    'MTC':'Financials','SAWAD':'Financials','AEONTS':'Financials',
+    'KTC':'Financials','TLI':'Financials','JMT':'Financials',
+    # SET100 additions (from official set.or.th list)
+    'AURA':'Consumer',          # Aurora Design – gold jewellery retail
+    'BAM':'Financials',         # Bangkok Asset Management – NPL/debt
+    'BCPG':'Energy',            # BCP Green – renewable energy (BCP subsidiary)
+    'BLA':'Financials',         # Bangkok Life Assurance – insurance
+    'CK':'Industry',            # Ch. Karnchang – heavy construction
+    'EA':'Energy',              # Energy Absolute – EV / solar / wind
+    'GUNKUL':'Energy',          # Gunkul Engineering – solar & wind power
+    'ICHI':'Consumer',          # Ichitan Group – RTD green tea beverages
+    'JAS':'Telecom',            # Jasmine International – fiber broadband
+    'JTS':'Financials',         # JTS (J Group) – digital finance services
+    'M':'Food & Agri',          # MK Restaurant Group – sukiyaki restaurants
+    'MOSHI':'Consumer',         # Moshi Moshi Retail – stationery / lifestyle
+    'PLANB':'Tech / Media',     # Plan B Media – out-of-home advertising
+    'PR9':'Property',           # Pruksa Real Estate (formerly PRUK)
+    'PRM':'Transport',          # Prima Marine – product tankers
+    'PTG':'Energy',             # PTG Energy – petrol stations / LPG retail
+    'RCL':'Transport',          # Regional Container Lines – container shipping
+    'SISB':'Services',          # Shrewsbury International School Bangkok
+    'SJWD':'Transport',         # SJ Worldwide Logistics
+    'STA':'Food & Agri',        # Sri Trang Agro-Industry – natural rubber
+    'STECON':'Industry',        # Sino-Thai Engineering and Construction
+    'STGT':'Industry',          # Sri Trang Gloves Thailand – medical gloves
+    'TFG':'Food & Agri',        # Thai Foods Group – processed pork / poultry
+    'TOA':'Industry',           # TOA Paint Thailand
     # sSET — Food & Beverage
     'ASIAN':'Food & Beverage','COCOCO':'Food & Beverage','KCG':'Food & Beverage',
     'MALEE':'Food & Beverage','RBF':'Food & Beverage','SAPPE':'Food & Beverage',
@@ -260,16 +300,21 @@ SECTOR_MAP = {
 # ── Session / crumb ────────────────────────────────────────────────────────────
 
 def init_session():
-    """Visit Yahoo Finance homepage to set cookies, then fetch the API crumb."""
+    """Warm up cookies via a real stock page, then fetch the API crumb."""
     global CRUMB
     try:
-        SESSION.get('https://finance.yahoo.com', timeout=12)
-        r = SESSION.get('https://query1.finance.yahoo.com/v1/test/getcrumb', timeout=12)
-        if r.ok and r.text.strip():
-            CRUMB = r.text.strip()
-            print(f'  Crumb obtained: {CRUMB[:12]}...')
-        else:
-            print('  No crumb — quoteSummary will try without it.')
+        # A real page visit (not just the homepage) sets the required cookies
+        SESSION.get('https://finance.yahoo.com/quote/PTT.BK', timeout=15)
+        time.sleep(0.6)
+        # query2 is more reliable than query1 for crumb nowadays
+        for base in ['https://query2.finance.yahoo.com', 'https://query1.finance.yahoo.com']:
+            r = SESSION.get(f'{base}/v1/test/getcrumb', timeout=12)
+            if r.ok and r.text.strip() and 'Unauthorized' not in r.text:
+                CRUMB = r.text.strip()
+                print(f'  Crumb obtained ({base.split(".")[1]}): {CRUMB[:16]}...')
+                break
+        if not CRUMB:
+            print('  No crumb obtained — fundamentals will fall back to mock data.')
     except Exception as e:
         print(f'  Session init warning: {e}')
 
@@ -293,11 +338,11 @@ def _raw(d, key):
 
 def fetch_chart(ticker, retries=3):
     """
-    Fetch 5y of daily candles + current price metadata via v8 chart API.
+    Fetch full history of daily candles + current price metadata via v8 chart API.
     Returns (stock_dict, candles_list) or (None, []) on failure.
     """
     symbol = f'{ticker}.BK'
-    params = {'range': '5y', 'interval': '1d', 'includePrePost': 'false'}
+    params = {'range': 'max', 'interval': '1d', 'includePrePost': 'false'}
 
     for attempt in range(retries):
         try:
@@ -380,17 +425,16 @@ def fetch_chart(ticker, retries=3):
         return None, []
 
 
-# ── Fundamentals fetch (quoteSummary) ────────────────────────────────────────
+# ── Fundamentals fetch (via yfinance — handles Yahoo auth automatically) ──────
 
-def fetch_fundamentals(ticker, retries=3):
+def fetch_fundamentals(ticker):
     """
-    Fetch fundamental data via Yahoo Finance quoteSummary v10.
-    Returns a dict with only the fields that were successfully retrieved
-    (missing/null fields are omitted so realStocks.js falls back to mock).
+    Fetch fundamental data using the yfinance library, which manages
+    Yahoo Finance cookie/crumb authentication automatically.
 
     Field notes (Yahoo Finance units → stored units):
       pe            trailingPE                 → as-is (ratio)
-      de            debtToEquity ÷ 100         → ratio  (Yahoo returns %, e.g. 120.5 = 1.205x)
+      de            debtToEquity ÷ 100         → ratio  (Yahoo returns %, e.g. 120.5 = 1.205×)
       fcf           freeCashflow ÷ 1e9         → THB billions
       roe           returnOnEquity × 100       → percent (Yahoo returns decimal, e.g. 0.098 = 9.8%)
       dividendYield dividendYield × 100        → percent (decimal in Yahoo)
@@ -398,73 +442,127 @@ def fetch_fundamentals(ticker, retries=3):
       epsGrowth     earningsGrowth × 100       → percent YoY TTM
       revenueGrowth revenueGrowth × 100        → percent YoY TTM
     """
-    symbol = f'{ticker}.BK'
-    params = {'modules': 'financialData,summaryDetail', 'formatted': 'true'}
-    if CRUMB:
-        params['crumb'] = CRUMB
-
-    for attempt in range(retries):
-        try:
-            r = SESSION.get(YF_SUMMARY.format(symbol=symbol), params=params, timeout=20)
-            if r.status_code == 429:
-                time.sleep(60 * (attempt + 1))
-                continue
-            if not r.ok:
-                return {}
-            data = r.json()
-            break
-        except Exception:
-            if attempt == retries - 1:
-                return {}
-            time.sleep(3)
-    else:
-        return {}
-
     try:
-        qs_result = data.get('quoteSummary', {}).get('result') or []
-        if not qs_result:
-            return {}
-        qs = qs_result[0]
-        fd = qs.get('financialData') or {}
-        sd = qs.get('summaryDetail') or {}
+        info = yf.Ticker(f'{ticker}.BK', session=YF_SESSION).info
+        out  = {}
 
-        out = {}
+        def _yf(v, scale=1.0):
+            """Return float or None; rejects NaN, Inf, and non-positive PE."""
+            if v is None:
+                return None
+            f = float(v) * scale
+            return None if not math.isfinite(f) else f
 
-        pe = _raw(sd, 'trailingPE')
+        pe = _yf(info.get('trailingPE'))
         if pe is not None and pe > 0:
-            out['pe'] = round(float(pe), 1)
+            out['pe'] = round(pe, 1)
 
-        de_raw = _raw(fd, 'debtToEquity')
+        de_raw = _yf(info.get('debtToEquity'), 1/100)
         if de_raw is not None:
-            out['de'] = round(de_raw / 100, 2)
+            out['de'] = round(de_raw, 2)
 
-        fcf_raw = _raw(fd, 'freeCashflow')
+        fcf_raw = _yf(info.get('freeCashflow'), 1/1e9)
         if fcf_raw is not None:
-            out['fcf'] = round(fcf_raw / 1e9, 2)
+            out['fcf'] = round(fcf_raw, 2)
 
-        roe_raw = _raw(fd, 'returnOnEquity')
+        roe_raw = _yf(info.get('returnOnEquity'), 100)
         if roe_raw is not None:
-            out['roe'] = round(roe_raw * 100, 1)
+            out['roe'] = round(roe_raw, 1)
 
-        dy_raw = _raw(sd, 'dividendYield')
+        dy_raw = _yf(info.get('dividendYield'))
+        # yfinance .info returns dividendYield already as a percentage (e.g. 5.96),
+        # unlike the old quoteSummary v10 which returned a decimal (0.0596)
         if dy_raw is not None:
-            out['dividendYield'] = round(dy_raw * 100, 2)
+            out['dividendYield'] = round(dy_raw, 2)
 
-        pr_raw = _raw(sd, 'payoutRatio')
+        pr_raw = _yf(info.get('payoutRatio'), 100)
         if pr_raw is not None:
-            out['payoutRatio'] = round(pr_raw * 100, 1)
+            out['payoutRatio'] = round(pr_raw, 1)
 
-        eg_raw = _raw(fd, 'earningsGrowth')
+        eg_raw = _yf(info.get('earningsGrowth'), 100)
         if eg_raw is not None:
-            out['epsGrowth'] = round(eg_raw * 100, 1)
+            out['epsGrowth'] = round(eg_raw, 1)
 
-        rg_raw = _raw(fd, 'revenueGrowth')
+        rg_raw = _yf(info.get('revenueGrowth'), 100)
         if rg_raw is not None:
-            out['revenueGrowth'] = round(rg_raw * 100, 1)
+            out['revenueGrowth'] = round(rg_raw, 1)
 
         return out
 
-    except Exception:
+    except Exception as e:
+        print(f' [fund-err:{e}]', end='', flush=True)
+        return {}
+
+
+# ── thaifin supplemental fetch (market cap + SET-sourced fundamentals) ────────
+
+def fetch_thaifin(ticker):
+    """
+    Fetch supplemental data from thaifin (sourced directly from SET).
+    Returns a dict with only successfully retrieved fields.
+
+    Fields retrieved:
+      marketCap     mkt_cap (latest year) ÷ 1e9   → THB billions
+      pe            price_earning_ratio             → as-is
+      roe           roe                             → percent (thaifin already %)
+      de            debt_to_equity                  → ratio (thaifin already ratio)
+      dividendYield dividend_yield                  → percent (thaifin already %)
+      epsGrowth     earning_per_share_yoy × 100     → percent YoY
+      revenueGrowth revenue_yoy                     → percent YoY
+    """
+    try:
+        import math
+        s  = ThaiStock(ticker)
+        df = s.yearly_dataframe
+        if df is None or df.empty:
+            return {}
+        row = df.iloc[-1]
+
+        def _val(key):
+            """Return float or None; treats pandas NaN as None."""
+            v = row.get(key)
+            if v is None:
+                return None
+            try:
+                f = float(v)
+                return None if math.isnan(f) or math.isinf(f) else f
+            except (TypeError, ValueError):
+                return None
+
+        out = {}
+
+        mc = _val('mkt_cap')
+        if mc is not None and mc > 0:
+            out['marketCap'] = round(mc / 1e9, 2)
+
+        pe = _val('price_earning_ratio')
+        if pe is not None and pe > 0:
+            out['pe'] = round(pe, 1)
+
+        roe = _val('roe')
+        if roe is not None:
+            out['roe'] = round(roe, 1)
+
+        de = _val('debt_to_equity')
+        if de is not None:
+            out['de'] = round(de, 2)
+
+        dy = _val('dividend_yield')
+        if dy is not None:
+            out['dividendYield'] = round(dy, 2)
+
+        eps_yoy = _val('earning_per_share_yoy')
+        if eps_yoy is not None:
+            out['epsGrowth'] = round(eps_yoy, 1)
+
+        rev_yoy = _val('revenue_yoy')
+        if rev_yoy is not None:
+            out['revenueGrowth'] = round(rev_yoy, 1)
+
+        return out
+
+    except Exception as e:
+        print(f' [thai-err:{e}]', end='', flush=True)
         return {}
 
 
@@ -490,18 +588,29 @@ def process(tickers, label, out_dir):
             time.sleep(0.3)
             continue
 
-        # Brief pause then fetch fundamentals
+        # 1. yfinance: pe, de, fcf, roe, dividendYield, payoutRatio, epsGrowth, revenueGrowth
         time.sleep(0.3)
         fund = fetch_fundamentals(ticker)
-        stock.update(fund)
+
+        # 2. thaifin: marketCap + fill any gaps Yahoo Finance left
+        time.sleep(0.2)
+        thai = fetch_thaifin(ticker)
+
+        # Merge: Yahoo Finance takes precedence; thaifin fills missing fields
+        merged = {**thai, **fund}   # yahoo wins on overlap
+        # marketCap only comes from thaifin (Yahoo chart API doesn't include it)
+        if 'marketCap' in thai:
+            merged['marketCap'] = thai['marketCap']
+        stock.update(merged)
 
         stocks_out.append(stock)
         history_out[ticker] = candles
 
-        pe_s  = f"pe={fund.get('pe', '?')}"
-        roe_s = f"roe={fund.get('roe', '?')}%"
-        dy_s  = f"dy={fund.get('dividendYield', '?')}%"
-        print(f' OK  {len(candles):>4}d  {stock["currentPrice"]} THB  {pe_s} {roe_s} {dy_s}')
+        pe_s  = f"pe={stock.get('pe', '?')}"
+        roe_s = f"roe={stock.get('roe', '?')}%"
+        dy_s  = f"dy={stock.get('dividendYield', '?')}%"
+        mc_s  = f"cap={stock.get('marketCap', '?')}B"
+        print(f' OK  {len(candles):>4}d  {stock["currentPrice"]} THB  {pe_s} {roe_s} {dy_s} {mc_s}')
 
         time.sleep(0.4)
 
