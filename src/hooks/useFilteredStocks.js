@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { INDICES_MAP } from '../data/indices.js'
 import { getStockHistory, getPriceAtDate } from '../data/mockPriceHistory.js'
-import { calcRSI, calcMACD, calcSMA, calcEMA } from '../data/indicators.js'
+import { calcRSI, calcMACD, calcSMA, calcEMA, calcStructureTrend } from '../data/indicators.js'
 import { getGrowthMetrics } from '../data/growthMetrics.js'
 
 function getYTDDate() {
@@ -35,8 +35,9 @@ function getSignals(stocks, indexId) {
   const map = new Map()
   for (const stock of stocks) {
     const history = getStockHistory(stock.ticker)
+    const structureTrend = calcStructureTrend(history, stock.ipoPrice)
     if (history.length < 30) {
-      map.set(stock.ticker, { rsiLast: 50, macdBullish: false, smaTrendSetupPass: false })
+      map.set(stock.ticker, { rsiLast: 50, macdBullish: false, smaTrendSetupPass: false, structureTrend })
       continue
     }
     const closes = history.map(c => c.close)
@@ -100,7 +101,7 @@ function getSignals(stocks, indexId) {
       )
     }
 
-    map.set(stock.ticker, { rsiLast, macdBullish, smaTrendSetupPass })
+    map.set(stock.ticker, { rsiLast, macdBullish, smaTrendSetupPass, structureTrend })
   }
   _signalCache.set(indexId, map)
   return map
@@ -169,7 +170,7 @@ export function useFilteredStocks({
     }
 
     let list = allStocks.map(stock => {
-      const sig    = signals.get(stock.ticker)  ?? { rsiLast: 50, macdBullish: false }
+      const sig    = signals.get(stock.ticker)  ?? { rsiLast: 50, macdBullish: false, structureTrend: 'Up' }
       const growth = growthMap.get(stock.ticker) ?? { epsGrowth: 0, revenueGrowth: 0, payoutRatio: 50 }
 
       const baseDate = trendHorizon === 'launch' ? stock.ipoDate : refDate
@@ -183,7 +184,7 @@ export function useFilteredStocks({
 
       // Spread growth first so real stock fields (epsGrowth, revenueGrowth, payoutRatio
       // from Yahoo Finance via realStocks.js) take priority over seeded mock values.
-      return { ...growth, ...stock, trend, trendBasePrice: basePrice ?? null, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish, smaTrendSetupPass: sig.smaTrendSetupPass ?? false }
+      return { ...growth, ...stock, trend, trendBasePrice: basePrice ?? null, rsiLast: sig.rsiLast, macdBullish: sig.macdBullish, smaTrendSetupPass: sig.smaTrendSetupPass ?? false, structureTrend: sig.structureTrend ?? 'Up' }
     })
 
     // Data quality

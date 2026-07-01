@@ -141,6 +141,52 @@ export function calcMACD(closes, fast, slow, signal) {
 }
 
 /**
+ * Market-structure trend ("Up"/"Down"), anchored at the launch (IPO) price.
+ *
+ * Starts Up with the launch price as the reference low. Whenever a candle's
+ * low trades below the current reference low, the trend flips Down and the
+ * reference high becomes the highest high reached since the last flip.
+ * Whenever a candle's high trades above the current reference high, the
+ * trend flips back Up and the reference low becomes the lowest low reached
+ * since that flip. This repeats for the whole series, so the trend can flip
+ * back and forth multiple times over a stock's life — it is not a one-time
+ * check against just the IPO price.
+ *
+ * @param {{high: number, low: number}[]} ohlcv
+ * @param {number} ipoPrice
+ * @returns {'Up'|'Down'}
+ */
+export function calcStructureTrend(ohlcv, ipoPrice) {
+  if (!ohlcv.length) return 'Up'
+
+  let trend = 'Up'
+  let refLow = ipoPrice
+  let refHigh = -Infinity
+  let runningHigh = ohlcv[0].high
+  let runningLow = Infinity
+
+  for (const c of ohlcv) {
+    if (trend === 'Up') {
+      if (c.high > runningHigh) runningHigh = c.high
+      if (c.low < refLow) {
+        trend = 'Down'
+        refHigh = runningHigh
+        runningLow = c.low
+      }
+    } else {
+      if (c.low < runningLow) runningLow = c.low
+      if (c.high > refHigh) {
+        trend = 'Up'
+        refLow = runningLow
+        runningHigh = c.high
+      }
+    }
+  }
+
+  return trend
+}
+
+/**
  * Support and Resistance levels (pivot-based, simple swing detection)
  * @param {{high: number, low: number, close: number}[]} ohlcv
  * @returns {{support: number[], resistance: number[]}}

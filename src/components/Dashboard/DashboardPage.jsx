@@ -24,6 +24,7 @@ const TOGGLEABLE_COLUMNS = [
   { key: 'de',             label: 'D/E' },
   { key: 'roe',            label: 'ROE' },
   { key: 'fcf',            label: 'FCF (B)' },
+  { key: 'structureTrend', label: 'Structure' },
 ]
 
 function ColumnPicker() {

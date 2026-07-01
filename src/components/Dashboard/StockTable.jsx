@@ -171,6 +171,20 @@ function buildColumns(trendHorizon, activeIndex) {
         )
       },
     },
+    {
+      key: 'structureTrend', label: 'Structure', align: 'right', sortable: true,
+      renderCell: (s) => {
+        const up = s.structureTrend === 'Up'
+        return (
+          <td className={`px-4 py-2.5 text-right font-price font-medium ${up ? 'text-bullish' : 'text-bearish'}`}>
+            <span className="inline-flex items-center justify-end gap-1">
+              {up ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
+              {s.structureTrend}
+            </span>
+          </td>
+        )
+      },
+    },
   )
 
   return cols
